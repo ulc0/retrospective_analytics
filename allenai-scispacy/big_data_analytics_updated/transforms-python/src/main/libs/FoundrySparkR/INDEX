@@ -1,0 +1,90 @@
+.start.spark.session    Deprecated: included for backcompat
+FileStatus              Create 'FileStatus' named object.
+FileSystem-class        [RC] General FileSystem
+FoundryFileSystem-class
+                        [RC] Foundry FileSystem
+FoundryManager-class    S4 class that represents a FoundryManager
+FoundryManager.startSpark
+                        Create and start a new Spark session.
+FoundryManager.startSparkContext
+                        Create and start a new Spark context.
+FoundryTransaction-class
+                        S4 class that represents a Foundry transaction
+FoundryTransformInput-class
+                        [RC] Foundry Transform Input
+FoundryTransformOutput-class
+                        [RC] Foundry Transform Output
+FoundryView-class       S4 class that represents a Foundry view
+FoundryViewOfProvenance
+                        Create a new FoundryView from provenance record
+abortTransaction,FoundryTransaction-method
+                        Aborts the provided transaction.
+addProvenanceRecord,FoundryTransaction-method
+                        Adds a new provenance record to this
+                        transaction.
+branchExists,FoundryManager-method
+                        Determines whether a branch exists on a given
+                        dataset.
+commitTransaction,FoundryTransaction-method
+                        Commits the provided transaction.
+createBranch,FoundryManager-method
+                        Create a new branch.
+createDataset,FoundryManager-method
+                        Creates a new Foundry dataset.
+datasetExists,FoundryManager-method
+                        Determines whether a dataset exists.
+getDatasetId,FoundryManager-method
+                        Get the Foundry RID for the given dataset.
+getReadOnlyBuffer,FoundryView-method
+                        Get ReadOnlyBuffer for operations
+getView,FoundryManager-method
+                        Get the dataset view.
+getViewFile,FoundryView-method
+                        Copy a file from the view to the local system
+getWriteReadBuffer,FoundryView-method
+                        Get WriteReadBuffer for operations
+listBranches,FoundryManager-method
+                        Get a list of branches for the provided
+                        dataset.
+listFiles,FoundryManager-method
+                        Get a list of files in the current view.
+listViewFileMetas,FoundryView-method
+                        Get a list of files metadata in the current
+                        view.
+listViewFiles,FoundryView-method
+                        Get a list of files in the current view.
+readDataFrame,FoundryManager-method
+                        Get the dataset contents as an R 'DataFrame'.
+                        Note that this will collect all of the data
+                        into memory and
+readDataset,FoundryManager-method
+                        Get the dataset contents as a 'SparkDataFrame'.
+readViewDataset,FoundryView-method
+                        Get the view contents as a 'SparkDataFrame'.
+readViewDatasetNoExtraAuth,FoundryView-method
+                        Get the view contents as a 'SparkDataFrame'
+                        assuming context is already authorized with
+                        Spark.
+saveDataFrame,FoundryManager-method
+                        Saves an R 'DataFrame' as a new dataset.
+saveDataset,FoundryManager-method
+                        Saves a 'SparkDataFrame' as a new dataset.
+saveFile,FoundryManager-method
+                        Saves a file to a dataset as a 'SNAPSHOT'
+                        transaction.
+saveTransactionDataset,FoundryTransaction-method
+                        Saves a 'SparkDataFrame' to the provided
+                        transaction.
+saveTransactionFile,FoundryTransaction-method
+                        Adds a file to the current transaction.
+setTransactionType,FoundryTransaction-method
+                        Sets the type of the current transaciton
+setViewTransactionType,FoundryView-method
+                        Set current txn type
+startTransaction,FoundryManager-method
+                        Starts a new transaction on the given dataset
+                        and branch.
+writeViewDatasetNoExtraAuth,FoundryView-method
+                        Get write a 'SparkDataFrame' to a dataset view
+                        assuming context is already authorized with
+                        Spark.

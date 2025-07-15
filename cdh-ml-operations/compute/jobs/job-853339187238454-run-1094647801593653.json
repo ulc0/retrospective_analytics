@@ -1,0 +1,91 @@
+{
+    "cluster_id": "1105-164410-41fbqx0o",
+    "creator_user_name": "7e2111aa-f76a-4193-9a76-a615728306be",
+    "driver": {
+        "private_ip": "172.18.16.105",
+        "public_dns": "",
+        "node_id": "82eb8b7a98034c9885f4d94663629bf2",
+        "instance_id": "6f41a868b0cb46ab84a6871ec10dce2c",
+        "start_timestamp": 1730825200051,
+        "node_attributes": {
+            "is_spot": false
+        },
+        "host_private_ip": "172.18.8.109"
+    },
+    "executors": [
+        {
+            "private_ip": "172.18.16.11",
+            "public_dns": "",
+            "node_id": "eb57fbad9e774670957aed2c6a71aa9b",
+            "instance_id": "2da5c4f0f61c49a09f2f108ffeb307f2",
+            "start_timestamp": 1730825200001,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.11"
+        }
+    ],
+    "spark_context_id": 4175942635783809402,
+    "driver_healthy": true,
+    "jdbc_port": 10000,
+    "cluster_name": "job-853339187238454-run-1094647801593653",
+    "spark_version": "14.3.x-scala2.12",
+    "spark_conf": {
+        "parquet.enable.summary-metadata": "true",
+        "spark.hadoop.fs.azure.account.auth.type.edavsynapsedatalake.dfs.core.windows.net": "OAuth",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.hadoop.fs.azure.account.oauth2.client.id.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-ncezid-cemb-prd/cemb-sp-id}}",
+        "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
+        "spark.hadoop.fs.azure.account.oauth2.client.secret.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-ncezid-cemb-prd/EDAV-NCEZID-CEMB-PRD-SP}}",
+        "spark.sql.sources.commitProtocolClass": "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol",
+        "spark.hadoop.fs.azure.account.oauth.provider.type.edavsynapsedatalake.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "spark.databricks.sql.initial.catalog.name": "edav_prd_ncezid",
+        "fs.permissions.umask-mode": "002",
+        "spark.hadoop.fs.azure.account.oauth2.client.endpoint.edavsynapsedatalake.dfs.core.windows.net": "https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+    },
+    "node_type_id": "Standard_D16ads_v5",
+    "driver_node_type_id": "Standard_D16ads_v5",
+    "spark_env_vars": {
+        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+    },
+    "autotermination_minutes": 0,
+    "enable_elastic_disk": true,
+    "disk_spec": {},
+    "cluster_source": "JOB",
+    "single_user_name": "7e2111aa-f76a-4193-9a76-a615728306be",
+    "enable_local_disk_encryption": false,
+    "instance_source": {
+        "node_type_id": "Standard_D16ads_v5"
+    },
+    "driver_instance_source": {
+        "node_type_id": "Standard_D16ads_v5"
+    },
+    "data_security_mode": "SINGLE_USER",
+    "effective_spark_version": "14.3.x-scala2.12",
+    "state": "RUNNING",
+    "state_message": "",
+    "start_time": 1730825050368,
+    "last_state_loss_time": 0,
+    "last_activity_time": 1730825234462,
+    "last_restarted_time": 1730825260413,
+    "num_workers": 1,
+    "cluster_memory_mb": 131072,
+    "cluster_cores": 32.0,
+    "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "7e2111aa-f76a-4193-9a76-a615728306be",
+        "ClusterName": "job-853339187238454-run-1094647801593653",
+        "ClusterId": "1105-164410-41fbqx0o",
+        "JobId": "853339187238454",
+        "RunName": "ADF_edav-prd-ncezid-cemb-adf_PL_TRANSFORMATION_Bronze_4614943e-3166-422f-8dfd-2a041fe0f371",
+        "center": "ocio",
+        "costid": "edavcustomer",
+        "division": "ocio"
+    },
+    "init_scripts_safe_mode": false
+}

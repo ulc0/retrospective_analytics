@@ -1,0 +1,178 @@
+{
+    "job_id": 699444870090451,
+    "creator_user_name": "run9@cdc.gov",
+    "run_as_user_name": "run9@cdc.gov",
+    "settings": {
+        "name": "cdh_or_nlp_classifier_dev",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "biobert_diseases_ner",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "unstructured/inference/cdh_ml_hf_batch_inference",
+                    "base_parameters": {
+                        "hftask": "token-classification",
+                        "model_version": "21",
+                        "aggregation": "average",
+                        "model_name": "alvaroalon2/biobert_diseases_ner",
+                        "input_table_name": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_text",
+                        "output_table": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "CDH_NER_Jobs_Cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "distilbert-base-uncased-ft-ncbi-disease",
+                "depends_on": [
+                    {
+                        "task_key": "biomedical-ner-all"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "unstructured/inference/cdh_ml_hf_batch_inference",
+                    "base_parameters": {
+                        "model_version": "9",
+                        "aggregation": "average",
+                        "model_name": "sarahmiller137/distilbert-base-uncased-ft-ncbi-disease",
+                        "input_table_name": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf",
+                        "output_table": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "CDH_NER_Jobs_Cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "bioformer-8L-ncbi-disease",
+                "depends_on": [
+                    {
+                        "task_key": "biobert_diseases_ner"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "unstructured/inference/cdh_ml_hf_batch_inference",
+                    "base_parameters": {
+                        "hftask": "token-classification",
+                        "model_version": "7",
+                        "aggregation": "average",
+                        "model_name": "bioformers/bioformer-8L-ncbi-disease",
+                        "input_table_name": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf",
+                        "output_table": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "CDH_NER_Jobs_Cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "biomedical-ner-all",
+                "depends_on": [
+                    {
+                        "task_key": "bioformer-8L-ncbi-disease"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "unstructured/inference/cdh_ml_hf_batch_inference",
+                    "base_parameters": {
+                        "hftask": "token-classification",
+                        "model_version": "21",
+                        "aggregation": "average",
+                        "model_name": "d4data/biomedical-ner-all",
+                        "input_table_name": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf",
+                        "output_table": "edav_prd_cdh.cdh_abfm_phi_ra.ft_abfm_notes_hf"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "CDH_NER_Jobs_Cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "CDH_NER_Jobs_Cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "15.2.x-cpu-ml-scala2.12",
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D64s_v3",
+                    "driver_node_type_id": "Standard_D16s_v3",
+                    "custom_tags": {
+                        "cluster_type": "center"
+                    },
+                    "spark_env_vars": {
+                        "HF_HOME": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/transformers/",
+                        "HF_DATASETS_IN_MEMORY_MAX_SIZE": "128",
+                        "HUGGINGFACE_HUB_CACHE": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/huggingface/",
+                        "MLFLOW_TRACKING_URI": "databricks",
+                        "SCISPACY_CACHE": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/scispacy/",
+                        "HF_DATASETS_CACHE": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/huggingface/data/",
+                        "MLFLOW_ENABLE_ARTIFACTS_PROGRESS_BAR": "0",
+                        "XPYTENSOR_FLAGS": "'allow_gc=False,floatX=float64'",
+                        "HF_HUB_DISABLE_PROGRESS_BARS": "1"
+                    },
+                    "enable_elastic_disk": true,
+                    "policy_id": "00176EE1B8F5BA62",
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "PHOTON",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 8
+                    }
+                }
+            }
+        ],
+        "git_source": {
+            "git_url": "https://www.github.com/cdcent/cdh-adv-methods",
+            "git_provider": "gitHub",
+            "git_branch": "nlp-classifier"
+        },
+        "tags": {
+            "costid": "OPHDST",
+            "reusable-nlp": ""
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1716228907695
+}

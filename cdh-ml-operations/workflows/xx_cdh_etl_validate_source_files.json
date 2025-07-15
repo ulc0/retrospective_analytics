@@ -1,0 +1,71 @@
+{
+    "job_id": 546061487947879,
+    "creator_user_name": "ptz9@cdc.gov",
+    "run_as_user_name": "ptz9@cdc.gov",
+    "settings": {
+        "name": "xx_cdh_etl_validate_source_files",
+        "email_notifications": {},
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 100,
+        "tasks": [
+            {
+                "task_key": "cdh_etl_validate_source_files",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "azure/databricks/etl/notebooks/validate_source_files",
+                    "source": "GIT"
+                },
+                "new_cluster": {
+                    "spark_version": "11.3.x-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.repl.allowedLanguages": "python,sql",
+                        "spark.databricks.service.server.enabled": "true",
+                        "spark.driver.maxResultSize": "16g",
+                        "spark.databricks.pyspark.enableProcessIsolation": "true",
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.databricks.acl.dfAclsEnabled": "true",
+                        "spark.databricks.passthrough.enabled": "true",
+                        "spark.databricks.cluster.profile": "serverless"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D8s_v3",
+                    "driver_node_type_id": "Standard_D8s_v3",
+                    "cluster_log_conf": {
+                        "dbfs": {
+                            "destination": "dbfs:/mnt/cluster-logs"
+                        }
+                    },
+                    "spark_env_vars": {
+                        "CDH_ENVIRONMENT": "PROD"
+                    },
+                    "enable_elastic_disk": true,
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 8
+                    }
+                },
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "description": "execute validate_source_files"
+            }
+        ],
+        "git_source": {
+            "git_url": "https://github.com/cdcent/cdc-datahub-engineering.git",
+            "git_provider": "gitHub",
+            "git_branch": "main"
+        },
+        "tags": {
+            "costid": "OPHDST",
+            "git_branch": "main",
+            "node_type": "Standard_D8s_v3",
+            "project": "CDH",
+            "spark_version": "11.3.x-scala2.12"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1688228160648
+}

@@ -1,0 +1,213 @@
+{
+    "job_id": 170252597982725,
+    "creator_user_name": "ulc0@cdc.gov",
+    "run_as_user_name": "run9@cdc.gov",
+    "settings": {
+        "name": "cdh_ok_xgboost_dev",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "similarity_xgboost_biobert_ner",
+                "depends_on": [
+                    {
+                        "task_key": "xgboost_sparse_classifier_biobert_ner"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/embedding_exploration",
+                    "base_parameters": {
+                        "model_name": "alvaroalon2/biobert_diseases_ner"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "xgboost_sparse_classifier_biomedical_ner",
+                "depends_on": [
+                    {
+                        "task_key": "xgboost_data_prep_biomedical_ner"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/xgboost_sparse_classifier",
+                    "base_parameters": {
+                        "model_name": "d4data/biomedical-ner-all"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "similarity_xgboost_biomedical_ner",
+                "depends_on": [
+                    {
+                        "task_key": "xgboost_sparse_classifier_biomedical_ner"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/embedding_exploration",
+                    "base_parameters": {
+                        "model_name": "d4data/biomedical-ner-all"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "xgboost_data_prep_biomedical_ner",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/xgboost_data_prep",
+                    "base_parameters": {
+                        "model_name": "d4data/biomedical-ner-all"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "xgboost_data_prep_biobert_ner",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/xgboost_data_prep",
+                    "base_parameters": {
+                        "model_name": "alvaroalon2/biobert_diseases_ner"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "xgboost_sparse_classifier_biobert_ner",
+                "depends_on": [
+                    {
+                        "task_key": "xgboost_data_prep_biobert_ner"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "sparkml/xgboost_sparse_classifier",
+                    "base_parameters": {
+                        "model_name": "alvaroalon2/biobert_diseases_ner"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "xgboost_sparse_classifier_cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "15.4.x-gpu-ml-scala2.12",
+                    "spark_conf": {
+                        "spark.task.resource.gpu.amount": "0.25",
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.rpc.message.maxSize": "512"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_NC6s_v3",
+                    "driver_node_type_id": "Standard_NC6s_v3",
+                    "custom_tags": {
+                        "cluster_type": "center",
+                        "vertical": "ddphss",
+                        "center": "cdh"
+                    },
+                    "cluster_log_conf": {
+                        "dbfs": {
+                            "destination": "dbfs:/mlgpu/cluster-logs"
+                        }
+                    },
+                    "spark_env_vars": {
+                        "HF_HOME": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/transformers/ XPYTENSOR_FLAGS='allow_gc=False,floatX=float64' ",
+                        "HF_DATASETS_IN_MEMORY_MAX_SIZE": "128 SCISPACY_CACHE=/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/scispacy/ MLFLOW_ENABLE_ARTIFACTS_PROGRESS_BAR=0 HUGGINGFACE_HUB_CACHE=/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/huggingface/ ",
+                        "HF_HUB_DISABLE_PROGRESS_BARS": "1 ",
+                        "MLFLOW_TRACKING_URI": "databricks HF_DATASETS_CACHE=/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/data/cache/huggingface/dat"
+                    },
+                    "enable_elastic_disk": true,
+                    "policy_id": "0011495B5DDB6085",
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "STANDARD",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 8
+                    }
+                }
+            }
+        ],
+        "git_source": {
+            "git_url": "https://www.github.com/cdcent/cdh-adv-methods",
+            "git_provider": "gitHub",
+            "git_branch": "nlp-classifier"
+        },
+        "tags": {
+            "CDH": "",
+            "CDH_AA": "",
+            "costid": "OPHDST",
+            "reusable-nlp": ""
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1718293032293
+}

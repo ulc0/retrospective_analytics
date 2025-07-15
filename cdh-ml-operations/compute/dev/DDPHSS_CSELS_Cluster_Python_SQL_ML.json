@@ -1,0 +1,45 @@
+{
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 4
+    },
+    "cluster_name": "DDPHSS_CSELS_Cluster_Python_SQL_ML",
+    "spark_version": "13.2.x-cpu-ml-scala2.12",
+    "spark_conf": {
+        "spark.databricks.repl.allowedLanguages": "python,sql",
+        "spark.databricks.cluster.profile": "serverless",
+        "spark.databricks.pyspark.enableProcessIsolation": "true",
+        "spark.databricks.delta.preview.enabled": "true"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_E4d_v4",
+    "driver_node_type_id": "Standard_E4d_v4",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "ResourceClass": "Serverless"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs"
+        }
+    },
+    "spark_env_vars": {},
+    "autotermination_minutes": 30,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_mlflow.sh"
+            }
+        }
+    ],
+    "policy_id": "60643F56F1001CBF",
+    "enable_local_disk_encryption": false,
+    "runtime_engine": "STANDARD",
+    "cluster_id": "0626-205300-ck2kxfjk"
+}

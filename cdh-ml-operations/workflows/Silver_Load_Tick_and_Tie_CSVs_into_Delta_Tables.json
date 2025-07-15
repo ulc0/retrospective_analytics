@@ -1,0 +1,117 @@
+{
+    "job_id": 670401587753157,
+    "creator_user_name": "tvl7@cdc.gov",
+    "run_as_user_name": "tvl7@cdc.gov",
+    "settings": {
+        "name": "Silver: Load Tick-and-Tie CSVs into Delta Tables",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "load_interval",
+                "depends_on": [
+                    {
+                        "task_key": "mount_setnet_adls"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/DDNID/NCBDDD/DBDID/SETNET/setnet-databricks/data_import/Load CSV Files into Delta Table",
+                    "base_parameters": {
+                        "csv_file_name_pattern": "Interval_*.csv",
+                        "database_name": "ncbddd_dbdid_setnet_stage_silver",
+                        "table_name": "sampling_interval",
+                        "setnet_folder_path": "FileProcessing/Sampling"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0524-175537-1fqv1knr",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "load_linelist",
+                "depends_on": [
+                    {
+                        "task_key": "mount_setnet_adls"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/DDNID/NCBDDD/DBDID/SETNET/setnet-databricks/data_import/Load CSV Files into Delta Table",
+                    "base_parameters": {
+                        "csv_file_name_pattern": "LineList_*.csv",
+                        "database_name": "ncbddd_dbdid_setnet_stage_silver",
+                        "table_name": "sampling_linelist",
+                        "setnet_folder_path": "FileProcessing/Sampling"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0524-175537-1fqv1knr",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "load_quickcheck",
+                "depends_on": [
+                    {
+                        "task_key": "mount_setnet_adls"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/DDNID/NCBDDD/DBDID/SETNET/setnet-databricks/data_import/Load CSV Files into Delta Table",
+                    "base_parameters": {
+                        "csv_file_name_pattern": "QuickCheck_*.csv",
+                        "database_name": "ncbddd_dbdid_setnet_stage_silver",
+                        "table_name": "sampling_quickcheck",
+                        "setnet_folder_path": "FileProcessing/Sampling"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0524-175537-1fqv1knr",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "mount_setnet_adls",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/DDNID/NCBDDD/DBDID/SETNET/setnet-databricks/dbfs/Mount SETNET ADLS Data",
+                    "base_parameters": {
+                        "setnet_adls_path": "abfss://ddnid-ncbddd@edavsynapsedatalake.dfs.core.windows.net/DBDID/SETNET/Staging/"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0524-175537-1fqv1knr",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1695406426509
+}

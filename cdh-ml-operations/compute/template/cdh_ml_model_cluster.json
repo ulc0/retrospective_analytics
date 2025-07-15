@@ -1,0 +1,19 @@
+{
+    "new_cluster": {
+      "spark_version": "7.3.x-scala2.12",
+      "num_workers": 1,
+      "node_type_id": "Standard_DS3_v2"
+    },
+    "libraries": [
+      {
+        "pypi": {
+          "package": "tensorflow"
+        }
+      },
+      {
+        "pypi": {
+           "package": "/dbfs/packages/wheels/mlflow-skinny-2.5.0-py3-none.whl"
+        }
+      }
+    ]
+  }

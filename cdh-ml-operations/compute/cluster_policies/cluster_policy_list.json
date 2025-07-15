@@ -1,0 +1,1483 @@
+{'policies': [
+        {'policy_id': '001849D5F1066DBA', 'name': 'CDH_Job_Only_Cluster - Engineering Legacy ACL', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 20,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                },
+                "custom_tags.ResourceClass": {
+                    "type": "fixed",
+                    "value": "Serverless"
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "true",
+                    "hidden": false
+                }
+            }', 'created_at_timestamp': 1699474946000, 'is_default': False
+        },
+        {'policy_id': '00027D6158502DDD', 'name': 'CDH_Job_Only_Cluster - Engineering UC', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 20,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                },
+                "custom_tags.ResourceClass": {
+                    "type": "fixed",
+                    "value": "Serverless"
+                }
+            }', 'created_at_timestamp': 1698686978000, 'is_default': False
+        },
+        {'policy_id': '001B0574C964C264', 'name': 'CDH_Job_Only_Cluster - ML CPU', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                }
+            }', 'created_at_timestamp': 1698680242000, 'is_default': False
+        },
+        {'policy_id': '0012ACE0C679A5FE', 'name': 'CDH_Job_Only_Cluster - ML GPU', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_NC6s_v3",
+                        "Standard_NC12s_v3"
+                    ],
+                    "defaultValue": "Standard_NC6s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_NC6s_v3",
+                        "Standard_NC12s_v3"
+                    ],
+                    "defaultValue": "Standard_NC6s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                }
+            }', 'created_at_timestamp': 1698680673000, 'is_default': False
+        },
+        {'policy_id': '000922804964AA2F', 'name': 'CDH_Sci_Spacy - ML CPU ', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                }
+            }', 'libraries': [
+                {'requirements': '/Volumes/edav_dev_cdh/cdh_ml/compute/scispacy_requirements.txt'
+                }
+            ], 'created_at_timestamp': 1715703170000, 'is_default': False
+        },
+        {'policy_id': '001336602D8A91CE', 'name': 'CDH_Spark_NLP - ML CPU', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D8s_v3",
+                        "Standard_D16s_v3",
+                        "Standard_D64s_v3"
+                    ],
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                }
+            }', 'libraries': [
+                {'requirements': '/Volumes/edav_dev_cdh/cdh_ml/compute/sparknlp_requirements.txt'
+                },
+                {'jar': '/Volumes/edav_dev_cdh/cdh_ml/compute/packages/jars/spark-nlp_2.12-5.4.2.jar'
+                }
+            ], 'created_at_timestamp': 1715703333000, 'is_default': False
+        },
+        {'policy_id': '6063781CC90027D0', 'name': 'Center_Job_Only_Cluster - General ', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D13_v2",
+                        "Standard_D14_v2",
+                        "Standard_D12_v2"
+                    ],
+                    "defaultValue": "Standard_D13_v2"
+                },
+                "driver_node_type_id": {
+                    "type": "allowlist",
+                    "values": [
+                        "Standard_D13_v2",
+                        "Standard_D14_v2",
+                        "Standard_D12_v2"
+                    ],
+                    "defaultValue": "Standard_D13_v2"
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                }
+            }', 'created_at_timestamp': 1670519680000, 'is_default': False
+        },
+        {'policy_id': '60610A1F34000552', 'name': 'Center_Job_Only_Cluster (ML)', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "instance_pool_id": {
+                    "type": "forbidden",
+                    "hidden": true
+                },
+                "autoscale.min_workers": {
+                    "type": "fixed",
+                    "value": 2,
+                    "hidden": false
+                },
+                "autoscale.max_workers": {
+                    "type": "fixed",
+                    "value": 8,
+                    "hidden": false
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_D13_v2",
+                    "hidden": false
+                },
+                "driver_node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_D13_v2",
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "fixed",
+                    "value": "8.0.x-cpu-ml-scala2.12",
+                    "hidden": false
+                },
+                "custom_tags.cluster_type": {
+                    "type": "fixed",
+                    "value": "center"
+                },
+                "spark_conf.spark.databricks.passthrough.enabled": {
+                    "type": "fixed",
+                    "value": "true"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "serverless"
+                },
+                "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                    "type": "fixed",
+                    "value": "true"
+                },
+                "custom_tags.ResourceClass": {
+                    "type": "fixed",
+                    "value": "Serverless"
+                }
+            }', 'created_at_timestamp': 1635272810000, 'is_default': False
+        },
+        {'policy_id': '00031CE80C8B9008', 'name': 'DBAcademy', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "autotermination_minutes": {
+                    "type": "range",
+                    "minValue": 1,
+                    "maxValue": 180,
+                    "defaultValue": 120,
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "singleNode",
+                    "hidden": false
+                },
+                "num_workers": {
+                    "type": "fixed",
+                    "value": 0,
+                    "hidden": false
+                },
+                "data_security_mode": {
+                    "type": "unlimited",
+                    "defaultValue": "SINGLE_USER"
+                },
+                "runtime_engine": {
+                    "type": "unlimited",
+                    "defaultValue": "STANDARD"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "defaultValue": "11.3.x-cpu-ml-scala2.12",
+                    "isOptional": true
+                },
+                "instance_pool_id": {
+                    "type": "fixed",
+                    "value": "0809-130017-would75-pool-8swxp4ma",
+                    "hidden": false
+                }
+            }', 'created_at_timestamp': 1691586018000, 'is_default': False
+        },
+        {'policy_id': '000D600792CF5C10', 'name': 'DBAcademy DLT', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "dlt"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "singleNode",
+                    "hidden": false
+                },
+                "num_workers": {
+                    "type": "fixed",
+                    "value": 0,
+                    "hidden": false
+                },
+                "custom_tags.dbacademy.lab_id": {
+                    "type": "fixed",
+                    "value": "UNKNOWN",
+                    "hidden": false
+                },
+                "custom_tags.dbacademy.description": {
+                    "type": "fixed",
+                    "value": "UNKNOWN",
+                    "hidden": false
+                },
+                "custom_tags.dbacademy.source": {
+                    "type": "fixed",
+                    "value": "UNKNOWN",
+                    "hidden": false
+                },
+                "custom_tags.dbacademy.org_id": {
+                    "type": "fixed",
+                    "value": "8219004871211837",
+                    "hidden": false
+                },
+                "custom_tags.dbacademy.workspace_name": {
+                    "type": "fixed",
+                    "value": "adb_8219004871211837_17_azuredatabricks_net",
+                    "hidden": false
+                }
+            }', 'created_at_timestamp': 1691586019000, 'is_default': False
+        },
+        {'policy_id': '000F194F78AEDD58', 'name': 'DBAcademy Jobs', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "job"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "singleNode",
+                    "hidden": false
+                },
+                "num_workers": {
+                    "type": "fixed",
+                    "value": 0,
+                    "hidden": false
+                },
+                "data_security_mode": {
+                    "type": "unlimited",
+                    "defaultValue": "SINGLE_USER"
+                },
+                "runtime_engine": {
+                    "type": "unlimited",
+                    "defaultValue": "STANDARD"
+                },
+                "spark_version": {
+                    "type": "unlimited",
+                    "defaultValue": "11.3.x-cpu-ml-scala2.12",
+                    "isOptional": true
+                },
+                "instance_pool_id": {
+                    "type": "fixed",
+                    "value": "0809-130017-would75-pool-8swxp4ma",
+                    "hidden": false
+                }
+            }', 'created_at_timestamp': 1691586018000, 'is_default': False
+        },
+        {'policy_id': '60643F56F1001CBF', 'name': 'HC Python SQL ML CPU S', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                    "type": "fixed",
+                    "value": "true",
+                    "hidden": false
+                },
+                "custom_tags.ResourceClass": {
+                    "type": "fixed",
+                    "value": "Serverless",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "serverless",
+                    "hidden": false
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 5
+                },
+                "node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_E4d_v4"
+                },
+                "driver_node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_E4d_v4"
+                }
+            }', 'created_at_timestamp': 1682618531000, 'is_default': False
+        },
+        {'policy_id': '60643F56F1001CC9', 'name': 'HC Python SQL ML GPU S', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                    "type": "fixed",
+                    "value": "true",
+                    "hidden": false
+                },
+                "custom_tags.ResourceClass": {
+                    "type": "fixed",
+                    "value": "Serverless",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "fixed",
+                    "value": "serverless",
+                    "hidden": false
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 30
+                },
+                "node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_NC4as_T4_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "fixed",
+                    "value": "Standard_NC4as_T4_v3"
+                }
+            }', 'created_at_timestamp': 1682619429000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F000588', 'name': 'SM ML L', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "forbidden",
+                    "hidden": false
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "false",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 20
+                },
+                "node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*",
+                    "defaultValue": "Standard_D16s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*"
+                }
+            }', 'created_at_timestamp': 1655929734000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F000587', 'name': 'SM ML M', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "forbidden",
+                    "hidden": false
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "false",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 10
+                },
+                "node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*",
+                    "defaultValue": "Standard_D8s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*"
+                }
+            }', 'created_at_timestamp': 1655929726000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F000586', 'name': 'SM ML S', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "forbidden",
+                    "hidden": false
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "false",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 5
+                },
+                "node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*",
+                    "defaultValue": "Standard_D4s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*"
+                }
+            }', 'created_at_timestamp': 1655929715000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F000589', 'name': 'SM ML XL', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "forbidden",
+                    "hidden": false
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "false",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 4
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 30
+                },
+                "node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*",
+                    "defaultValue": "Standard_D32s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*"
+                }
+            }', 'created_at_timestamp': 1655929755000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F00055E', 'name': 'SM ML XS', 'definition': '{
+                "cluster_type": {
+                    "type": "fixed",
+                    "value": "all-purpose"
+                },
+                "spark_conf.spark.databricks.cluster.profile": {
+                    "type": "forbidden",
+                    "hidden": false
+                },
+                "cluster_name": {
+                    "type": "regex",
+                    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                },
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "cluster_log_conf.type": {
+                    "type": "fixed",
+                    "value": "DBFS",
+                    "hidden": false
+                },
+                "cluster_log_conf.path": {
+                    "type": "fixed",
+                    "value": "dbfs:/mnt/cluster-logs",
+                    "hidden": false
+                },
+                "spark_conf.spark.databricks.acl.dfAclsEnabled": {
+                    "type": "fixed",
+                    "value": "false",
+                    "hidden": false
+                },
+                "autoscale.min_workers": {
+                    "type": "range",
+                    "defaultValue": 1
+                },
+                "autoscale.max_workers": {
+                    "type": "range",
+                    "defaultValue": 2
+                },
+                "dbus_per_hour": {
+                    "type": "range",
+                    "maxValue": 2.5
+                },
+                "node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*",
+                    "defaultValue": "Standard_D4s_v3"
+                },
+                "driver_node_type_id": {
+                    "type": "regex",
+                    "pattern": ".*"
+                }
+            }', 'created_at_timestamp': 1655908133000, 'is_default': False
+        },
+        {'policy_id': '60628DC03F0001FF', 'name': 'Standard Mode - ML CPU - Inference Endpoint', 'definition': '{
+                "spark_conf.spark.databricks.repl.allowedLanguages": {
+                    "type": "fixed",
+                    "value": "python,sql"
+                },
+                "autotermination_minutes": {
+                    "type": "fixed",
+                    "value": 30,
+                    "hidden": true
+                },
+                "num_workers": {
+                    "type": "fixed",
+                    "value": 1,
+                    "hidden": false
+                },
+                "spark_version": {
+                    "type": "regex",
+                    "pattern": "[a-zA-Z0-9.]*.x-cpu-ml-scala[a-zA-Z0-9.]*"
+                },
+                "node_type_id": {
+                    "type": "regex", 
+
+*** WARNING: max output size exceeded, skipping output. ***
+
+alue": "Standard_D8s_v3"  },  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "spark_version": {    "type": "unlimited",    "hidden": false  },  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"  },  "custom_tags.ResourceClass": {    "type": "fixed",    "value": "Serverless"  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "true",    "hidden": false  }}', 'created_at_timestamp': 1699474946000, 'is_default': False}, {'policy_id': '00027D6158502DDD', 'name': 'CDH_Job_Only_Cluster - Engineering UC', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "job"  },  "instance_pool_id": {    "type": "forbidden",    "hidden": true  },  "autoscale.min_workers": {    "type": "fixed",    "value": 2,    "hidden": false  },  "autoscale.max_workers": {    "type": "fixed",    "value": 20,    "hidden": false  },  "node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "spark_version": {    "type": "unlimited",    "hidden": false  },  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"  },  "custom_tags.ResourceClass": {    "type": "fixed",    "value": "Serverless"  }}', 'created_at_timestamp': 1698686978000, 'is_default': False}, {'policy_id': '001B0574C964C264', 'name': 'CDH_Job_Only_Cluster - ML CPU', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "job"  },  "instance_pool_id": {    "type": "forbidden",    "hidden": true  },  "autoscale.min_workers": {    "type": "fixed",    "value": 2,    "hidden": false  },  "autoscale.max_workers": {    "type": "fixed",    "value": 8,    "hidden": false  },  "node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3",      "Standard_D64s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3",      "Standard_D64s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "spark_version": {    "type": "unlimited",    "hidden": false  },  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"  }}', 'created_at_timestamp': 1698680242000, 'is_default': False}, {'policy_id': '0012ACE0C679A5FE', 'name': 'CDH_Job_Only_Cluster - ML GPU', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "job"  },  "instance_pool_id": {    "type": "forbidden",    "hidden": true  },  "autoscale.min_workers": {    "type": "fixed",    "value": 2,    "hidden": false  },  "autoscale.max_workers": {    "type": "fixed",    "value": 8,    "hidden": false  },  "node_type_id": {    "type": "allowlist",    "values": [      "Standard_NC6s_v3",      "Standard_NC12s_v3"    ],    "defaultValue": "Standard_NC6s_v3"  },  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_NC6s_v3",      "Standard_NC12s_v3"    ],    "defaultValue": "Standard_NC6s_v3"  },  "spark_version": {    "type": "unlimited",    "hidden": false  },  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"  }}', 'created_at_timestamp': 1698680673000, 'is_default': False}, {'policy_id': '000922804964AA2F', 'name': 'CDH_Sci_Spacy - ML CPU ', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "job"  },  "instance_pool_id": {    "type": "forbidden",    "hidden": true  },  "autoscale.min_workers": {    "type": "fixed",    "value": 2,    "hidden": false  },  "autoscale.max_workers": {    "type": "fixed",    "value": 8,    "hidden": false  },  "node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3",      "Standard_D64s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_D8s_v3",      "Standard_D16s_v3",      "Standard_D64s_v3"    ],    "defaultValue": "Standard_D8s_v3"  },  "spark_version": {    "type": "unlimited",    "hidden": false  },  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"  }}', 
+'libraries': [{'requirements': '/Volumes/edav_dev_cdh/cdh_ml/compute/scispacy_requirements.txt'}], 'created_at_timestamp': 1715703170000, 'is_default': False}, {'policy_id': '001336602D8A91CE', 'name': 'CDH_Spark_NLP - ML CPU', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "job"
+                            },
+                            "instance_pool_id": {
+                                "type": "forbidden",
+                                "hidden": true
+                            },
+                            "autoscale.min_workers": {
+                                "type": "fixed",
+                                "value": 2,
+                                "hidden": false
+                            },
+                            "autoscale.max_workers": {
+                                "type": "fixed",
+                                "value": 8,
+                                "hidden": false
+                            },
+                            "node_type_id": {
+                                "type": "allowlist",
+                                "values": [
+                                    "Standard_D8s_v3",
+                                    "Standard_D16s_v3",
+                                    "Standard_D64s_v3"
+                                ],
+                                "defaultValue": "Standard_D8s_v3"
+                            },
+                            "driver_node_type_id": {
+                                "type": "allowlist",
+                                "values": [
+                                    "Standard_D8s_v3",
+                                    "Standard_D16s_v3",
+                                    "Standard_D64s_v3"
+                                ],
+                                "defaultValue": "Standard_D8s_v3"
+                            },
+                            "spark_version": {
+                                "type": "unlimited",
+                                "hidden": false
+                            },
+                            "custom_tags.cluster_type": {
+                                "type": "fixed",
+                                "value": "center"
+                            }
+                        }', 
+                        'libraries': [
+                            {'requirements': '/Volumes/edav_dev_cdh/cdh_ml/compute/sparknlp_requirements.txt'
+                            },
+                            {'jar': '/Volumes/edav_dev_cdh/cdh_ml/compute/packages/jars/spark-nlp_2.12-5.3.2.jar'
+                            }
+                        ], 'created_at_timestamp': 1715703333000, 'is_default': False
+                    },
+                    {'policy_id': '6063781CC90027D0', 'name': 'Center_Job_Only_Cluster - General ', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "job"
+                            },
+                            "instance_pool_id": {
+                                "type": "forbidden",
+                                "hidden": true
+                            },
+                            "autoscale.min_workers": {
+                                "type": "fixed",
+                                "value": 2,
+                                "hidden": false
+                            },
+                            "autoscale.max_workers": {
+                                "type": "fixed",
+                                "value": 8,
+                                "hidden": false
+                            },
+                            "node_type_id": {
+                                "type": "allowlist",
+                                "values": [
+                                    "Standard_D13_v2",
+                                    "Standard_D14_v2",
+                                    "Standard_D12_v2"
+                                ],
+                                "defaultValue": "Standard_D13_v2"
+                            },
+                            "driver_node_type_id": {
+                                "type": "allowlist",
+                                "values": [
+                                    "Standard_D13_v2",
+                                    "Standard_D14_v2",
+                                    "Standard_D12_v2"
+                                ],
+                                "defaultValue": "Standard_D13_v2"
+                            },
+                            "custom_tags.cluster_type": {
+                                "type": "fixed",
+                                "value": "center"
+                            }
+                        }', 'created_at_timestamp': 1670519680000, 'is_default': False
+                    },
+                    {'policy_id': '60610A1F34000552', 'name': 'Center_Job_Only_Cluster (ML)', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "job"
+                            },
+                            "instance_pool_id": {
+                                "type": "forbidden",
+                                "hidden": true
+                            },
+                            "autoscale.min_workers": {
+                                "type": "fixed",
+                                "value": 2,
+                                "hidden": false
+                            },
+                            "autoscale.max_workers": {
+                                "type": "fixed",
+                                "value": 8,
+                                "hidden": false
+                            },
+                            "autotermination_minutes": {
+                                "type": "fixed",
+                                "value": 30,
+                                "hidden": false
+                            },
+                            "node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_D13_v2",
+                                "hidden": false
+                            },
+                            "driver_node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_D13_v2",
+                                "hidden": false
+                            },
+                            "spark_version": {
+                                "type": "fixed",
+                                "value": "8.0.x-cpu-ml-scala2.12",
+                                "hidden": false
+                            },
+                            "custom_tags.cluster_type": {
+                                "type": "fixed",
+                                "value": "center"
+                            },
+                            "spark_conf.spark.databricks.passthrough.enabled": {
+                                "type": "fixed",
+                                "value": "true"
+                            },
+                            "spark_conf.spark.databricks.repl.allowedLanguages": {
+                                "type": "fixed",
+                                "value": "python,sql"
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "serverless"
+                            },
+                            "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                                "type": "fixed",
+                                "value": "true"
+                            },
+                            "custom_tags.ResourceClass": {
+                                "type": "fixed",
+                                "value": "Serverless"
+                            }
+                        }', 'created_at_timestamp': 1635272810000, 'is_default': False
+                    },
+                    {'policy_id': '00031CE80C8B9008', 'name': 'DBAcademy', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "all-purpose"
+                            },
+                            "autotermination_minutes": {
+                                "type": "range",
+                                "minValue": 1,
+                                "maxValue": 180,
+                                "defaultValue": 120,
+                                "hidden": false
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "singleNode",
+                                "hidden": false
+                            },
+                            "num_workers": {
+                                "type": "fixed",
+                                "value": 0,
+                                "hidden": false
+                            },
+                            "data_security_mode": {
+                                "type": "unlimited",
+                                "defaultValue": "SINGLE_USER"
+                            },
+                            "runtime_engine": {
+                                "type": "unlimited",
+                                "defaultValue": "STANDARD"
+                            },
+                            "spark_version": {
+                                "type": "unlimited",
+                                "defaultValue": "11.3.x-cpu-ml-scala2.12",
+                                "isOptional": true
+                            },
+                            "instance_pool_id": {
+                                "type": "fixed",
+                                "value": "0809-130017-would75-pool-8swxp4ma",
+                                "hidden": false
+                            }
+                        }', 'created_at_timestamp': 1691586018000, 'is_default': False
+                    },
+                    {'policy_id': '000D600792CF5C10', 'name': 'DBAcademy DLT', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "dlt"
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "singleNode",
+                                "hidden": false
+                            },
+                            "num_workers": {
+                                "type": "fixed",
+                                "value": 0,
+                                "hidden": false
+                            },
+                            "custom_tags.dbacademy.lab_id": {
+                                "type": "fixed",
+                                "value": "UNKNOWN",
+                                "hidden": false
+                            },
+                            "custom_tags.dbacademy.description": {
+                                "type": "fixed",
+                                "value": "UNKNOWN",
+                                "hidden": false
+                            },
+                            "custom_tags.dbacademy.source": {
+                                "type": "fixed",
+                                "value": "UNKNOWN",
+                                "hidden": false
+                            },
+                            "custom_tags.dbacademy.org_id": {
+                                "type": "fixed",
+                                "value": "8219004871211837",
+                                "hidden": false
+                            },
+                            "custom_tags.dbacademy.workspace_name": {
+                                "type": "fixed",
+                                "value": "adb_8219004871211837_17_azuredatabricks_net",
+                                "hidden": false
+                            }
+                        }', 'created_at_timestamp': 1691586019000, 'is_default': False
+                    },
+                    {'policy_id': '000F194F78AEDD58', 'name': 'DBAcademy Jobs', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "job"
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "singleNode",
+                                "hidden": false
+                            },
+                            "num_workers": {
+                                "type": "fixed",
+                                "value": 0,
+                                "hidden": false
+                            },
+                            "data_security_mode": {
+                                "type": "unlimited",
+                                "defaultValue": "SINGLE_USER"
+                            },
+                            "runtime_engine": {
+                                "type": "unlimited",
+                                "defaultValue": "STANDARD"
+                            },
+                            "spark_version": {
+                                "type": "unlimited",
+                                "defaultValue": "11.3.x-cpu-ml-scala2.12",
+                                "isOptional": true
+                            },
+                            "instance_pool_id": {
+                                "type": "fixed",
+                                "value": "0809-130017-would75-pool-8swxp4ma",
+                                "hidden": false
+                            }
+                        }', 'created_at_timestamp': 1691586018000, 'is_default': False
+                    },
+                    {'policy_id': '60643F56F1001CBF', 'name': 'HC Python SQL ML CPU S', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "all-purpose"
+                            },
+                            "cluster_name": {
+                                "type": "regex",
+                                "defaultValue": "Vertical_Center_Cluster_Python_SQL_ML",
+                                "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_ML(|_.*)"
+                            },
+                            "spark_conf.spark.databricks.repl.allowedLanguages": {
+                                "type": "fixed",
+                                "value": "python,sql",
+                                "hidden": false
+                            },
+                            "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                                "type": "fixed",
+                                "value": "true",
+                                "hidden": false
+                            },
+                            "custom_tags.ResourceClass": {
+                                "type": "fixed",
+                                "value": "Serverless",
+                                "hidden": false
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "serverless",
+                                "hidden": false
+                            },
+                            "autotermination_minutes": {
+                                "type": "fixed",
+                                "value": 30,
+                                "hidden": false
+                            },
+                            "cluster_log_conf.type": {
+                                "type": "fixed",
+                                "value": "DBFS",
+                                "hidden": false
+                            },
+                            "cluster_log_conf.path": {
+                                "type": "fixed",
+                                "value": "dbfs:/mnt/cluster-logs",
+                                "hidden": false
+                            },
+                            "autoscale.min_workers": {
+                                "type": "range",
+                                "defaultValue": 1
+                            },
+                            "autoscale.max_workers": {
+                                "type": "range",
+                                "defaultValue": 4
+                            },
+                            "dbus_per_hour": {
+                                "type": "range",
+                                "maxValue": 5
+                            },
+                            "node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_E4d_v4"
+                            },
+                            "driver_node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_E4d_v4"
+                            }
+                        }', 'created_at_timestamp': 1682618531000, 'is_default': False
+                    },
+                    {'policy_id': '60643F56F1001CC9', 'name': 'HC Python SQL ML GPU S', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "all-purpose"
+                            },
+                            "cluster_name": {
+                                "type": "regex",
+                                "defaultValue": "Vertical_Center_Cluster_Python_SQL_ML",
+                                "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_ML(|_.*)"
+                            },
+                            "spark_conf.spark.databricks.repl.allowedLanguages": {
+                                "type": "fixed",
+                                "value": "python,sql",
+                                "hidden": false
+                            },
+                            "spark_conf.spark.databricks.pyspark.enableProcessIsolation": {
+                                "type": "fixed",
+                                "value": "true",
+                                "hidden": false
+                            },
+                            "custom_tags.ResourceClass": {
+                                "type": "fixed",
+                                "value": "Serverless",
+                                "hidden": false
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "fixed",
+                                "value": "serverless",
+                                "hidden": false
+                            },
+                            "autotermination_minutes": {
+                                "type": "fixed",
+                                "value": 30,
+                                "hidden": false
+                            },
+                            "cluster_log_conf.type": {
+                                "type": "fixed",
+                                "value": "DBFS",
+                                "hidden": false
+                            },
+                            "cluster_log_conf.path": {
+                                "type": "fixed",
+                                "value": "dbfs:/mnt/cluster-logs",
+                                "hidden": false
+                            },
+                            "autoscale.min_workers": {
+                                "type": "range",
+                                "defaultValue": 1
+                            },
+                            "autoscale.max_workers": {
+                                "type": "range",
+                                "defaultValue": 4
+                            },
+                            "dbus_per_hour": {
+                                "type": "range",
+                                "maxValue": 30
+                            },
+                            "node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_NC4as_T4_v3"
+                            },
+                            "driver_node_type_id": {
+                                "type": "fixed",
+                                "value": "Standard_NC4as_T4_v3"
+                            }
+                        }', 'created_at_timestamp': 1682619429000, 'is_default': False
+                    },
+                    {'policy_id': '60628DC03F000588', 'name': 'SM ML L', 'definition': '{
+                            "cluster_type": {
+                                "type": "fixed",
+                                "value": "all-purpose"
+                            },
+                            "spark_conf.spark.databricks.cluster.profile": {
+                                "type": "forbidden",
+                                "hidden": false
+                            },
+                            "cluster_name": {
+                                "type": "regex",
+                                "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",
+                                "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"
+                            },
+                            "spark_conf.spark.databricks.repl.allowedLanguages": {
+                                "type": "fixed",
+                                "value": "python,sql"
+                            },
+                            "autotermination_minutes": {
+                                "type": "fixed",
+                                "value": 30,
+                                "hidden": false
+                            },
+                            "spark_version": {
+                                "type": "regex",
+                                "defaultValue": "10.4.x-cpu-ml-scala2.12",
+                                "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "cluster_log_conf.type": {    "type": "fixed",    "value": "DBFS",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": false  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "false",    "hidden": false  },  "autoscale.min_workers": {    "type": "range",    "defaultValue": 1  },  "autoscale.max_workers": {    "type": "range",    "defaultValue": 4  },  "dbus_per_hour": {    "type": "range",    "maxValue": 20  },  "node_type_id": {    "type": "regex",    "pattern": ".*",    "defaultValue": "Standard_D16s_v3"  },  "driver_node_type_id": {    "type": "regex",    "pattern": ".*"  }}', 'created_at_timestamp': 1655929734000, 'is_default': False}, {'policy_id': '60628DC03F000587', 'name': 'SM ML M', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "all-purpose"  },  "spark_conf.spark.databricks.cluster.profile": {    "type": "forbidden",    "hidden": false  },  "cluster_name": {    "type": "regex",    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"  },  "spark_conf.spark.databricks.repl.allowedLanguages": {    "type": "fixed",    "value": "python,sql"  },  "autotermination_minutes": {    "type": "fixed",    "value": 30,    "hidden": false  },  "spark_version": {    "type": "regex",    "defaultValue": "10.4.x-cpu-ml-scala2.12",    "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "cluster_log_conf.type": {    "type": "fixed",    "value": "DBFS",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": false  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "false",    "hidden": false  },  "autoscale.min_workers": {    "type": "range",    "defaultValue": 1  },  "autoscale.max_workers": {    "type": "range",    "defaultValue": 4  },  "dbus_per_hour": {    "type": "range",    "maxValue": 10  },  "node_type_id": {    "type": "regex",    "pattern": ".*",    "defaultValue": "Standard_D8s_v3"  },  "driver_node_type_id": {    "type": "regex",    "pattern": ".*"  }}', 'created_at_timestamp': 1655929726000, 'is_default': False}, {'policy_id': '60628DC03F000586', 'name': 'SM ML S', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "all-purpose"  },  "spark_conf.spark.databricks.cluster.profile": {    "type": "forbidden",    "hidden": false  },  "cluster_name": {    "type": "regex",    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"  },  "spark_conf.spark.databricks.repl.allowedLanguages": {    "type": "fixed",    "value": "python,sql"  },  "autotermination_minutes": {    "type": "fixed",    "value": 30,    "hidden": false  },  "spark_version": {    "type": "regex",    "defaultValue": "10.4.x-cpu-ml-scala2.12",    "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "cluster_log_conf.type": {    "type": "fixed",    "value": "DBFS",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": false  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "false",    "hidden": false  },  "autoscale.min_workers": {    "type": "range",    "defaultValue": 1  },  "autoscale.max_workers": {    "type": "range",    "defaultValue": 4  },  "dbus_per_hour": {    "type": "range",    "maxValue": 5  },  "node_type_id": {    "type": "regex",    "pattern": ".*",    "defaultValue": "Standard_D4s_v3"  },  "driver_node_type_id": {    "type": "regex",    "pattern": ".*"  }}', 'created_at_timestamp': 1655929715000, 'is_default': False}, {'policy_id': '60628DC03F000589', 'name': 'SM ML XL', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "all-purpose"  },  "spark_conf.spark.databricks.cluster.profile": {    "type": "forbidden",    "hidden": false  },  "cluster_name": {    "type": "regex",    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"  },  "spark_conf.spark.databricks.repl.allowedLanguages": {    "type": "fixed",    "value": "python,sql"  },  "autotermination_minutes": {    "type": "fixed",    "value": 30,    "hidden": false  },  "spark_version": {    "type": "regex",    "defaultValue": "10.4.x-cpu-ml-scala2.12",    "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "cluster_log_conf.type": {    "type": "fixed",    "value": "DBFS",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": false  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "false",    "hidden": false  },  "autoscale.min_workers": {    "type": "range",    "defaultValue": 1  },  "autoscale.max_workers": {    "type": "range",    "defaultValue": 4  },  "dbus_per_hour": {    "type": "range",    "maxValue": 30  },  "node_type_id": {    "type": "regex",    "pattern": ".*",    "defaultValue": "Standard_D32s_v3"  },  "driver_node_type_id": {    "type": "regex",    "pattern": ".*"  }}', 'created_at_timestamp': 1655929755000, 'is_default': False}, {'policy_id': '60628DC03F00055E', 'name': 'SM ML XS', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "all-purpose"  },  "spark_conf.spark.databricks.cluster.profile": {    "type": "forbidden",    "hidden": false  },  "cluster_name": {    "type": "regex",    "defaultValue": "Vertical_Center_Cluster_Python_SQL_STANDARDMODE_ML",    "pattern": "(Vertical|DDNID|DDID|DDPHSS|DDPHSIS|OD)_(Center|NCCDPHP|NCIPC|NCBDDD|NCEHATSDR|NIOSH|NCIRD|NCEZID|NCHHSTP|OS|OLSS|CSELS|NCHS|OMHHE|CGH|CPR|CSTLTS|NCIRD|NCEZID|NCHHSTP|OD|CSPO|OCIO|OAS)_Cluster_Python_SQL_STANDARDMODE_ML(|_.*)"  },  "spark_conf.spark.databricks.repl.allowedLanguages": {    "type": "fixed",    "value": "python,sql"  },  "autotermination_minutes": {    "type": "fixed",    "value": 30,    "hidden": false  },  "spark_version": {    "type": "regex",    "defaultValue": "10.4.x-cpu-ml-scala2.12",    "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "cluster_log_conf.type": {    "type": "fixed",    "value": "DBFS",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": false  },  "spark_conf.spark.databricks.acl.dfAclsEnabled": {    "type": "fixed",    "value": "false",    "hidden": false  },  "autoscale.min_workers": {    "type": "range",    "defaultValue": 1  },  "autoscale.max_workers": {    "type": "range",    "defaultValue": 2  },  "dbus_per_hour": {    "type": "range",    "maxValue": 2.5  },  "node_type_id": {    "type": "regex",    "pattern": ".*",    "defaultValue": "Standard_D4s_v3"  },  "driver_node_type_id": {    "type": "regex",    "pattern": ".*"  }}', 'created_at_timestamp': 1655908133000, 'is_default': False}, {'policy_id': '60628DC03F0001FF', 'name': 'Standard Mode - ML CPU - Inference Endpoint', 'definition': '{  "spark_conf.spark.databricks.repl.allowedLanguages": {    "type": "fixed",    "value": "python,sql"  },  "autotermination_minutes": {    "type": "fixed",    "value": 30,    "hidden": true  },  "num_workers": {    "type": "fixed",    "value": 1,    "hidden": false  },  "spark_version": {    "type": "regex",    "pattern": "[a-zA-Z0-9.
+                            ]*.x-cpu-ml-scala[a-zA-Z0-9.
+                            ]*"  },  "node_type_id": {    "type": "regex",    "pattern": "(Standard_L[
+                                48
+                            ]+s[a-zA-Z0-9._
+                            ]*)|(Standard_L16+s[a-zA-Z0-9._
+                            ]*)|(Standard_L32+s[a-zA-Z0-9._
+                            ]*)|(Standard_D[
+                                0-8
+                            ]+[a-zA-Z0-9._
+                            ]*)",    "hidden": false  },  "driver_node_type_id": {    "type": "regex",    "pattern": "(Standard_L[
+                                48
+                            ]+s[a-zA-Z0-9._
+                            ]*)|(Standard_L16+s[a-zA-Z0-9._
+                            ]*)|(Standard_L32+s[a-zA-Z0-9._
+                            ]*)|(Standard_D[
+                                0-8
+                            ]+[a-zA-Z0-9._
+                            ]*)",    "hidden": false  },  "cluster_log_conf.path": {    "type": "fixed",    "value": "dbfs:/mnt/cluster-logs",    "hidden": true  }}', 'created_at_timestamp': 1654699388000, 'is_default': False}], 'total_count': 19}

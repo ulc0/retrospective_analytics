@@ -1,0 +1,48 @@
+{
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 5
+    },
+    "cluster_name": "CDH_ML_CPU_Cluster_AD_ACLs_Disabled ",
+    "spark_version": "14.3.x-cpu-ml-scala2.12",
+    "spark_conf": {
+        "spark.databricks.service.server.enabled": "true",
+        "spark.driver.maxResultSize": "16g",
+        "spark.databricks.delta.preview.enabled": "true"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_D64a_v4",
+    "driver_node_type_id": "Standard_DS5_v2",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "ML": "CPU",
+        "OriginalCreator": "qwo1@cdc.gov",
+        "x_vertical": "ddphss",
+        "Program": "DDPHSS_OD_CSELS_Datahub",
+        "x_center": "ophdst",
+        "Has_R": "True",
+        "ResourceClass": "Serverless"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs/mlcpu"
+        }
+    },
+    "spark_env_vars": {
+        "LIB_DIR": "dbfs:/FileStore/jars/",
+        "MLFLOW_TRACKING_URI": "databricks",
+        "MLFLOW_LOG_SYSTEM_METRICS": "true"
+    },
+    "autotermination_minutes": 45,
+    "enable_elastic_disk": true,
+    "init_scripts": [],
+    "single_user_name": "ulc0@cdc.gov",
+    "enable_local_disk_encryption": false,
+    "data_security_mode": "SINGLE_USER",
+    "runtime_engine": "STANDARD",
+    "cluster_id": "0427-171205-6qa2hhxn"
+}

@@ -1,0 +1,30 @@
+{
+    "job_id": 967049102508149,
+    "creator_user_name": "zfi4@cdc.gov",
+    "run_as_user_name": "zfi4@cdc.gov",
+    "settings": {
+        "name": "cdh_heda_process_analytics_dev",
+        "email_notifications": {},
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "cdh_heda_process_analytics_dev",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Repos/CDH_LAVA/cdh-lava-core-main/cdh_heda/_run_jobs_cdh_heda",
+                    "base_parameters": {
+                        "job_name": "process_analytics",
+                        "report_dd": "NA",
+                        "report_mm": "10",
+                        "report_yyyy": "2024"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0109-184947-l0ka6b1y",
+                "timeout_seconds": 0
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1729689992099
+}

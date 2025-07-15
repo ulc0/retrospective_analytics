@@ -1,0 +1,12 @@
+spark.databricks.cluster.profile serverless
+spark.databricks.passthrough.enabled true
+spark.databricks.delta.preview.enabled true
+spark.databricks.pyspark.enableProcessIsolation true
+spark.driver.maxResultSize 16g
+spark.databricks.repl.allowedLanguages python,sql
+spark.jsl.settings.onnx.gpuDeviceId 0
+spark.jsl.settings.onnx.intraOpNumThreads 10
+spark.jsl.settings.onnx.optimizationLevel ALL_OPT
+spark.jsl.settings.onnx.executionMode SEQUENTIAL
+spark.jsl.settings.pretrained.cache_folder ~/cache_pretrained
+spark.jsl.settings.annotator.log_folder ~/annotator_logs

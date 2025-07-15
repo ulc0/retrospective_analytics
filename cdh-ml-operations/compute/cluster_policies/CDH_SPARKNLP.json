@@ -1,0 +1,35 @@
+"libraries": [
+    {
+        "jar": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/jars/spark-nlp-gpu_2.12-5.3.2.jar"
+    },
+    {
+        "whl": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/spark_nlp-5.3.2-py2.py3-none-any.whl"
+    },
+    {
+        "pypi": {
+            "package": "mlflow-skinny==2.10.2",
+            "repo": "string"
+        }
+    },
+    {
+        "egg": "string"
+    },
+    {
+        "maven": {
+            "coordinates": "string",
+            "repo": "string",
+            "exclusions": [
+                "string"
+            ]
+        }
+    },
+    {
+        "cran": {
+            "package": "string",
+            "repo": "string"
+        }
+    },
+    {
+        "requirements": "string"
+    }
+],

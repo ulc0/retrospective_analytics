@@ -1,0 +1,52 @@
+{
+    "job_id": 575565887211284,
+    "creator_user_name": "ptz9@cdc.gov",
+    "run_as_user_name": "ptz9@cdc.gov",
+    "settings": {
+        "name": "PCC_Stage_WorkFlow",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "PCC_Stage_WorkFlow",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Datasets/PointClickCare/Stage/cdh_stageload_pcc_all_v2",
+                    "base_parameters": {
+                        "Test": ""
+                    },
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "Shared_job_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "Shared_job_cluster",
+                "new_cluster": {
+                    "spark_version": "10.4.x-scala2.12",
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_DS3_v2",
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "enable_elastic_disk": true,
+                    "data_security_mode": "LEGACY_SINGLE_USER_STANDARD",
+                    "runtime_engine": "STANDARD",
+                    "num_workers": 8
+                }
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1663584974239
+}

@@ -1,0 +1,18 @@
+# must use after requirements_pymc.txt
+# can we nest requirements?? We'll find out
+#/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/
+#scipy==1.10.1
+#pymc_bart==0.5.1
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/ydata_profiling-4.12.1-py2.py3-none-any.whl
+#numpy==1.25.2
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/numpy-1.25.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+#pymc==5.18
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/pymc-5.18.0-py3-none-any.whl
+#pymc-bart
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/pymc_bart-0.8.2-py3-none-any.whl
+#BART-Survival
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/bart_survival-0.1.1-py3-none-any.whl
+#lifelines
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/lifelines-0.30.0-py3-none-any.whl
+#scikit-survival
+/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/scikit_survival-0.23.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl

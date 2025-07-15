@@ -1,0 +1,206 @@
+{
+    "job_id": 495889894096992,
+    "creator_user_name": "lml9@cdc.gov",
+    "run_as_user_name": "a5d1e60f-c1b8-4172-8015-b964df84b958",
+    "settings": {
+        "name": "wf_school_closure_data_processing_pipeline_daily",
+        "email_notifications": {
+            "on_success": [
+                "lml9@cdc.gov"
+            ],
+            "on_failure": [
+                "lml9@cdc.gov"
+            ],
+            "no_alert_for_skipped_runs": false
+        },
+        "notification_settings": {
+            "no_alert_for_skipped_runs": false,
+            "no_alert_for_canceled_runs": false
+        },
+        "timeout_seconds": 0,
+        "schedule": {
+            "quartz_cron_expression": "1 50 4 * * ?",
+            "timezone_id": "America/New_York",
+            "pause_status": "UNPAUSED"
+        },
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "facebook_analyze",
+                "depends_on": [
+                    {
+                        "task_key": "facebook_filter"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/notebooks/nb_school_closure_facebook_analyze",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "facebook_extract",
+                "depends_on": [
+                    {
+                        "task_key": "facebook_analyze"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/notebooks/nb_school_closure_facebook_extract",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "facebook_filter",
+                "depends_on": [
+                    {
+                        "task_key": "facebook_ingest"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/notebooks/nb_school_closure_facebook_filter",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "facebook_ingest",
+                "depends_on": [
+                    {
+                        "task_key": "get_env_variables"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/notebooks/nb_school_closure_facebook_ingest",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "max_retries": 1,
+                "min_retry_interval_millis": 300000,
+                "retry_on_timeout": true,
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "facebook_report",
+                "depends_on": [
+                    {
+                        "task_key": "facebook_extract"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/notebooks/nb_school_closure_facebook_report",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "get_env_variables",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/OD/OCIO/ETDAB/SchoolClosures/utilities/nb_school_closure_utils_get_configurations",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "OD_OCIO_SchoolClosures_Job_Cluster_Python_SQL_UC",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "15.4.x-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.sql.initial.catalog.name": "edav_prd_od_ocio"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D8ads_v5",
+                    "driver_node_type_id": "Standard_D8ads_v5",
+                    "custom_tags": {
+                        "edav_center": "ocio",
+                        "school_closures_config_file_name": "cf_school_closure_config.json",
+                        "OriginalCreator": "lml9@cdc.gov",
+                        "edav_environment": "production",
+                        "cluster_type": "project",
+                        "edav_project": "schoolclosures",
+                        "edav_vertical": "od"
+                    },
+                    "cluster_log_conf": {
+                        "dbfs": {
+                            "destination": "dbfs:/mnt/cluster-logs"
+                        }
+                    },
+                    "enable_elastic_disk": true,
+                    "policy_id": "001EC253AA0B1754",
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "STANDARD",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 6
+                    }
+                }
+            }
+        ],
+        "tags": {
+            "edav_project": "schoolclosures"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1724210334817
+}

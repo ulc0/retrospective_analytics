@@ -1,0 +1,11 @@
+HF_HUB_CACHE=/Volumes/edav_dev_cdh/cdh_ml/metadata_data/caches/huggingface/
+HF_HUB_DISABLE_IMPLICIT_TOKEN=1
+HF_HUB_DISABLE_SYMLINKS_WARNING=1
+HF_HUB_DISABLE_PROGRESS_BARS=1
+HF_HUB_DISABLE_TELEMETRY=1
+HF_HOME=/Volumes/edav_dev_cdh/cdh_ml/metadata_data/cache/transformers/
+TOKENIZERS_PARALLELISM=0
+HF_ASSETS_CACHE=/Volumes/edav_dev_cdh/cdh_ml/metadata_data/caches/huggingface/
+HF_DATASETS_IN_MEMORY_MAX_SIZE=512
+HF_DATASETS_CACHE=/Volumes/edav_dev_cdh/cdh_ml/metadata_data/cache/huggingface/data/
+SCISPACY_CACHE=/Volumes/edav_dev_cdh/cdh_ml/metadata_data/caches/scispacy/

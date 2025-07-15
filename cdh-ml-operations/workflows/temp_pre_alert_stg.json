@@ -1,0 +1,78 @@
+{
+    "job_id": 853064769000795,
+    "creator_user_name": "uro9@cdc.gov",
+    "run_as_user_name": "uro9@cdc.gov",
+    "settings": {
+        "name": "temp_pre_alert_stg",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "arln_alert_notebook",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/DDID/NCEZID/DHQP/CEMB/STG/Alerts/notebooks/ARLN_silver_alerts",
+                    "base_parameters": {
+                        "alertTable": "arln_alerts",
+                        "env": "stg",
+                        "sourceTable": "arln_silver"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0404-152633-kzwo29s7",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "arln_alert_notebook_cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "14.3.x-scala2.12",
+                    "spark_conf": {
+                        "spark.hadoop.fs.azure.account.auth.type.edavsynapsedatalake.dfs.core.windows.net": "OAuth",
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "spark.hadoop.fs.s3a.secret.key": "{{secrets/dbs-scope-ncezid-cemb/awsdaartsecretaccesskey}}",
+                        "spark.hadoop.fs.s3a.access.key": "{{secrets/dbs-scope-ncezid-cemb/daartawsaccesskey}}",
+                        "spark.hadoop.fs.azure.account.oauth2.client.id.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-ncezid-cemb/cemb-sp-id}}",
+                        "spark.hadoop.fs.azure.account.oauth2.client.secret.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-ncezid-cemb/EDAV-NCEZID-CEMB-PRD-SP}}",
+                        "spark.hadoop.fs.azure.account.oauth.provider.type.edavsynapsedatalake.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+                        "spark.databricks.sql.initial.catalog.name": "edav_stg_ncezid",
+                        "spark.hadoop.fs.azure.account.oauth2.client.endpoint.edavsynapsedatalake.dfs.core.windows.net": "https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D4ds_v5",
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "enable_elastic_disk": true,
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "STANDARD",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 8
+                    }
+                }
+            }
+        ],
+        "format": "MULTI_TASK",
+        "queue": {
+            "enabled": true
+        }
+    },
+    "created_time": 1720009475317
+}

@@ -1,0 +1,38 @@
+{
+    "job_id": 753242210890916,
+    "creator_user_name": "rvz6@cdc.gov",
+    "run_as_user_name": "rvz6@cdc.gov",
+    "settings": {
+        "name": "Premier_data_dictionary_run",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "Premier_data_dictionary_run",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Premier/Projects/cdh-premier-core/DASHBOARD_DATA/data_dictionary_code",
+                    "base_parameters": {
+                        "NA": ""
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {
+                    "on_success": [
+                        "rvz6@cdc.gov"
+                    ],
+                    "on_failure": [
+                        "rvz6@cdc.gov"
+                    ]
+                }
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1664991558626
+}

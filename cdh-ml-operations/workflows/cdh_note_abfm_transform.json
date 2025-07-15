@@ -1,0 +1,128 @@
+{
+    "job_id": 417643672815313,
+    "creator_user_name": "ulc0@cdc.gov",
+    "run_as_user_name": "ulc0@cdc.gov",
+    "settings": {
+        "name": "cdh_note_abfm_transform",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "note_clean_acceptance_test",
+                "depends_on": [
+                    {
+                        "task_key": "note_sentence"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "tests/note_clean_acceptance_test",
+                    "source": "GIT"
+                },
+                "job_cluster_key": "MLCompute",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "note_sentence",
+                "depends_on": [
+                    {
+                        "task_key": "note_transform"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "note/etl/note_sentence",
+                    "base_parameters": {
+                        "INPUT_CSV": "PatientNote"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "0630-181430-yfox4zns",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "note_transform",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "note/etl/note_transform",
+                    "base_parameters": {
+                        "INPUT_CSV": "PatientNote"
+                    },
+                    "source": "GIT"
+                },
+                "job_cluster_key": "MLCompute",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "MLCompute",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "15.4.x-scala2.12",
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D16s_v3",
+                    "custom_tags": {
+                        "cluster_type": "center",
+                        "ResourceClass": "Serverless"
+                    },
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "enable_elastic_disk": true,
+                    "policy_id": "0004E4A64B47C0B4",
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "PHOTON",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 20
+                    }
+                }
+            }
+        ],
+        "git_source": {
+            "git_url": "https://www.github.com/cdcent/cdh-featurization",
+            "git_provider": "gitHub",
+            "git_branch": "master"
+        },
+        "tags": {
+            "ABFM": "",
+            "CDH": "",
+            "costid": "OPHDST",
+            "reusable-nlp": ""
+        },
+        "format": "MULTI_TASK",
+        "queue": {
+            "enabled": true
+        }
+    },
+    "created_time": 1724675463225
+}

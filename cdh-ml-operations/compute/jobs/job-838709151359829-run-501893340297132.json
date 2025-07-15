@@ -1,0 +1,87 @@
+{
+    "cluster_id": "1105-145015-ogq5pgkz",
+    "creator_user_name": "ptz9@cdc.gov",
+    "spark_context_id": 4005198334798974906,
+    "driver_healthy": true,
+    "cluster_name": "job-838709151359829-run-501893340297132",
+    "spark_version": "13.3.x-scala2.12",
+    "spark_conf": {
+        "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-client-secret}}",
+        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+        "fs.azure.account.auth.type": "OAuth",
+        "spark.databricks.delta.preview.enabled": "true",
+        "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-tenant-id-endpoint}}",
+        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-client-id}}",
+        "spark.databricks.sql.initial.catalog.name": "edav_prd_cdh"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+    },
+    "node_type_id": "Standard_D8s_v3",
+    "driver_node_type_id": "Standard_D8s_v3",
+    "custom_tags": {
+        "spark_version": "13.3.x-scala2.12",
+        "project": "CDH",
+        "node_type": "Standard_D8s_v3",
+        "git_branch": "main",
+        "x_costid": "OPHDST"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs"
+        }
+    },
+    "spark_env_vars": {
+        "CDH_ENVIRONMENT": "PROD",
+        "ETL_STORAGE_ACCOUNT": "edavcdhproddlmprd"
+    },
+    "autotermination_minutes": 0,
+    "enable_elastic_disk": true,
+    "disk_spec": {},
+    "cluster_source": "JOB",
+    "single_user_name": "ptz9@cdc.gov",
+    "enable_local_disk_encryption": false,
+    "instance_source": {
+        "node_type_id": "Standard_D8s_v3"
+    },
+    "driver_instance_source": {
+        "node_type_id": "Standard_D8s_v3"
+    },
+    "data_security_mode": "SINGLE_USER",
+    "effective_spark_version": "13.3.x-scala2.12",
+    "state": "TERMINATED",
+    "state_message": "Setting up 8 nodes.",
+    "start_time": 1730818215922,
+    "terminated_time": 1730818722188,
+    "last_state_loss_time": 0,
+    "last_activity_time": 1730818457942,
+    "last_restarted_time": 1730818453202,
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 20,
+        "target_workers": 9
+    },
+    "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "ptz9@cdc.gov",
+        "ClusterName": "job-838709151359829-run-501893340297132",
+        "ClusterId": "1105-145015-ogq5pgkz",
+        "JobId": "838709151359829",
+        "RunName": "cdh_etl_load_storage_inventory",
+        "center": "ocio",
+        "costid": "edavcustomer",
+        "division": "ocio"
+    },
+    "cluster_log_status": {
+        "last_attempted": 1730818542292,
+        "last_exception": "DatabricksServiceException: IO_ERROR: HTTP Error 401; url='https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token' AADToken: HTTP connection to https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token failed for getting token from AzureAD.; requestId='9a4b2b97-161a-4392-8ccb-5563471b5000'; contentType='application/json; charset=utf-8'; response '{\"error\":\"invalid_client\",\"error_description\":\"AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app '6b47b593-af0b-49fd-b83c-d5e01ab5e414'. Trace ID: 9a4b2b97-161a-4392-8ccb-5563471b5000 Correlation ID: 069809a6-79d6-46b3-a581-687a18125778 Timestamp: 2024-11-05 14:56:34Z\",\"error_codes\":[7000215],\"timestamp\":\"2024-11-05 14:56:34Z\",\"trace_id\":\"9a4b2b97-161a-4392-8ccb-5563471b5000\",\"correlation_id\":\"069809a6-79d6-46b3-a581-687a18125778\",\"error_uri\":\"https://login.microsoftonli"
+    },
+    "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+    },
+    "init_scripts_safe_mode": false
+}

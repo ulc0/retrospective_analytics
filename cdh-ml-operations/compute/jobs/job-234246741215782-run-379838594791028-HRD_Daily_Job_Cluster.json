@@ -1,0 +1,87 @@
+{
+    "cluster_id": "1105-153019-zx1zswv4",
+    "creator_user_name": "33b28e2e-27f8-4582-a9af-9d1ab51f993b",
+    "spark_context_id": 4946902491121073400,
+    "driver_healthy": true,
+    "cluster_name": "job-234246741215782-run-379838594791028-HRD_Daily_Job_Cluster",
+    "spark_version": "15.4.x-scala2.12",
+    "spark_conf": {
+        "parquet.enable.summary-metadata": "false",
+        "spark.hadoop.fs.azure.account.auth.type.edavsynapsedatalake.dfs.core.windows.net": "OAuth",
+        "spark.driver.maxResultSize": "8g",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.hadoop.fs.azure.account.oauth2.client.id.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-nhsn/SP-ID-Databricks-Prod}}",
+        "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
+        "spark.hadoop.fs.azure.account.oauth2.client.secret.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/dbs-scope-nhsn/EDAV-NHSN-PROD}}",
+        "spark.sql.sources.commitProtocolClass": "org.apache.spark.sql.execution.datasources.SQLHadoopMapReduceCommitProtocol",
+        "spark.hadoop.fs.azure.account.oauth.provider.type.edavsynapsedatalake.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "spark.databricks.sql.initial.catalog.name": "edav_prd_nhsn",
+        "fs.permissions.umask-mode": "002",
+        "spark.hadoop.fs.azure.account.oauth2.client.endpoint.edavsynapsedatalake.dfs.core.windows.net": "https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+    },
+    "node_type_id": "Standard_E4d_v4",
+    "driver_node_type_id": "Standard_E4d_v4",
+    "custom_tags": {
+        "edav_center": "NCEZID",
+        "edav_project": "HCS",
+        "edav_vertical": "DDID",
+        "x_costid": "NCEZID"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/overwatch_cluster_logs/"
+        }
+    },
+    "autotermination_minutes": 0,
+    "enable_elastic_disk": true,
+    "disk_spec": {},
+    "cluster_source": "JOB",
+    "single_user_name": "33b28e2e-27f8-4582-a9af-9d1ab51f993b",
+    "policy_id": "000F134C2C575CCC",
+    "enable_local_disk_encryption": false,
+    "instance_source": {
+        "node_type_id": "Standard_E4d_v4"
+    },
+    "driver_instance_source": {
+        "node_type_id": "Standard_E4d_v4"
+    },
+    "data_security_mode": "SINGLE_USER",
+    "runtime_engine": "PHOTON",
+    "effective_spark_version": "15.4.x-photon-scala2.12",
+    "state": "TERMINATED",
+    "state_message": "",
+    "start_time": 1730820619618,
+    "terminated_time": 1730821024038,
+    "last_state_loss_time": 0,
+    "last_activity_time": 1730820750537,
+    "last_restarted_time": 1730820698159,
+    "autoscale": {
+        "min_workers": 2,
+        "max_workers": 6,
+        "target_workers": 2
+    },
+    "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "33b28e2e-27f8-4582-a9af-9d1ab51f993b",
+        "ClusterName": "job-234246741215782-run-379838594791028-HRD_Daily_Job_Cluster",
+        "ClusterId": "1105-153019-zx1zswv4",
+        "JobId": "234246741215782",
+        "RunName": "NHSN HCS HRD Daily",
+        "center": "ocio",
+        "costid": "edavcustomer",
+        "division": "ocio"
+    },
+    "cluster_log_status": {
+        "last_attempted": 1730820964154
+    },
+    "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+    },
+    "init_scripts_safe_mode": false
+}

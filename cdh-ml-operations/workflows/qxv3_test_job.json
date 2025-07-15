@@ -1,0 +1,26 @@
+{
+    "job_id": 975373534706534,
+    "creator_user_name": "qxv3@cdc.gov",
+    "run_as_user_name": "qxv3@cdc.gov",
+    "settings": {
+        "name": "qxv3_test_job",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "qxv3_test_job",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Users/qxv3@cdc.gov/BI_test",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1651005024796
+}

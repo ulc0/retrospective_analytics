@@ -1,0 +1,84 @@
+{
+    "job_id": 230170259232178,
+    "creator_user_name": "ulc0@cdc.gov",
+    "run_as_user_name": "ulc0@cdc.gov",
+    "settings": {
+        "name": "test_mlflow_experiments",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "test_mlflow_create_experiment_jris",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "tests/test_mlflow_create_experiment_iris",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "0630-181015-713pi206",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "wine_flat_deep_16_2",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "tests/test_mlflow_create_experiment_wine",
+                    "base_parameters": {
+                        "MAX_DEPTH": "2",
+                        "MAX_LEAF_NODES": "16"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "0630-181015-713pi206",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "wine_wide_narrow_5_7",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "tests/test_mlflow_create_experiment_wine",
+                    "base_parameters": {
+                        "MAX_DEPTH": "5",
+                        "MAX_LEAF_NODES": "7"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "0630-181015-713pi206",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "git_source": {
+            "git_url": "https://www.github.com/cdcent/cdh-ml-operations",
+            "git_provider": "gitHub",
+            "git_branch": "master"
+        },
+        "tags": {
+            "reusable-nlp": ""
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1706549711936
+}

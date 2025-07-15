@@ -1,0 +1,50 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+[Databricks Connect for R](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-connect/r/) 
+### This can be set for every RStudio instead of running every time
+
+needs packages 
+Tools>Install from CRAN  
+
+sparklyr,pysparklyr,reticulate,usethis,dplyr,dbplyr 
+>> install.packages(c("sparklyr", "pysparklyr", "reticulate", "usethis", "dplyr", "dbplyr"))
+
+
+then in console  
+
+reticulate::install_python(version = "3.10")
+
+# Please add your Host to 'DATABRICKS_HOST' inside your .Renviron file.
+[databricks connetion for Rstudio](https://support.posit.co/hc/en-us/articles/115010915687-Using-RStudio-Connections-in-the-RStudio-I)
+cluster_id="0613-222509-q2qkl4bq"
+pysparklyr::install_databricks(cluster_id = "0613-222509-q2qkl4bq")
+
+```{python}
+
+```
+
+
+```{r}
+library(sparklyr)
+
+sc <- spark_connect(
+  cluster_id = "0613-222509-q2qkl4bq",
+  method = "databricks_connect"
+)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r}
+library(dplyr)
+library(dbplyr)
+
+# Read samples.nyctaxi.trips table with catalog.schema.table heirarchy
+trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
+trips
+```
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.

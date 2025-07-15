@@ -1,0 +1,25 @@
+  Downloading lifelines-0.28.0-py3-none-any.whl (349 kB)
+  Downloading formulaic-1.0.1-py3-none-any.whl (94 kB)
+Collecting autograd>=1.5
+  Downloading autograd-1.6.2-py3-none-any.whl (49 kB)0
+Collecting autograd-gamma>=0.3
+Collecting future>=0.15.2
+Collecting interface-meta>=1.2.0
+  Downloading interface_meta-1.3.0-py3-none-any.whl (14 kB)
+Collecting wrapt>=1.0
+  Downloading wrapt-1.16.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (80 kB)
+Building wheels for collected packages: autograd-gamma, future
+Installing collected packages: wrapt, interface-meta, future, autograd, formulaic, autograd-gamma, lifelines
+  Downloading scikit_survival-0.22.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.7 MB)
+  Downloading numexpr-2.9.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (375 kB)
+  Downloading ecos-2.0.12-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (220 kB)
+Collecting osqp!=0.6.0,!=0.6.1
+  Downloading osqp-0.6.4-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (298 kB)
+Collecting scikit-learn<1.4,>=1.3.0
+  Downloading scikit_learn-1.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.8 MB)
+  Downloading qdldl-0.1.7.post0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.1 MB)
+Installing collected packages: numexpr, scikit-learn, qdldl, ecos, osqp, scikit-survival
+  Attempting uninstall: scikit-learn
+    Found existing installation: scikit-learn 1.1.1
+    Not uninstalling scikit-learn at /databricks/python3/lib/python3.10/site-packages, outside environment /local_disk0/.ephemeral_nfs/envs/pythonEnv-60211ec3-4d38-4c7b-93ba-52ff7814d26a
+    Can't uninstall 'scikit-learn'. No files were found to uninstall.

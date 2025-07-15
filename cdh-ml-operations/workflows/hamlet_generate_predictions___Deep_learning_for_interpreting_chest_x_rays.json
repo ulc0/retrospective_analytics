@@ -1,0 +1,137 @@
+{
+    "job_id": 632439658239972,
+    "creator_user_name": "qdi3@cdc.gov",
+    "run_as_user_name": "fb128249-3959-4ad4-84dd-4524abbaa127",
+    "settings": {
+        "name": "hamlet_generate_predictions - Deep learning for interpreting chest x-rays",
+        "email_notifications": {
+            "on_success": [
+                "qdi3@cdc.gov"
+            ],
+            "on_failure": [
+                "qdi3@cdc.gov"
+            ],
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "hamlet_generate_predictions",
+                "run_if": "ALL_SUCCESS",
+                "spark_python_task": {
+                    "python_file": "/Repos/DDID-NCEZID-DGMQ/hamlet/generate_predictions.py",
+                    "parameters": [
+                        "--image_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/test_one_png/",
+                        "--output_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/",
+                        "--find_mod_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/hamlet_model_weights/findings/checkpoints/training/",
+                        "--ab_mod_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/hamlet_model_weights/abnormal/checkpoints/training/",
+                        "--abtb_mod_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/hamlet_model_weights/abnormal_tb/checkpoints/training/",
+                        "--single_GPU"
+                    ]
+                },
+                "job_cluster_key": "hamlet_generate_predictions_cluster_448GB",
+                "timeout_seconds": 0,
+                "email_notifications": {
+                    "on_success": [
+                        "qdi3@cdc.gov"
+                    ],
+                    "on_failure": [
+                        "qdi3@cdc.gov"
+                    ]
+                },
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "hamlet_generate_predictions_cluster_448GB",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "14.3.x-gpu-ml-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "fs.azure.account.oauth2.client.secret.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/edav-prd-hamlet/EDAVHAMLETProd-Secret-Id-Value}}",
+                        "fs.azure.account.oauth2.client.endpoint.edavsynapsedatalake.dfs.core.windows.net": "https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token",
+                        "fs.azure.account.oauth2.client.id.edavsynapsedatalake.dfs.core.windows.net": "fb128249-3959-4ad4-84dd-4524abbaa127",
+                        "spark.master": "local[*, 4]",
+                        "fs.azure.account.oauth.provider.type.edavsynapsedatalake.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+                        "fs.azure.account.auth.type.edavsynapsedatalake.dfs.core.windows.net": "OAuth",
+                        "spark.databricks.cluster.profile": "singleNode"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_NC24s_v3",
+                    "driver_node_type_id": "Standard_NC24s_v3",
+                    "custom_tags": {
+                        "ResourceClass": "SingleNode"
+                    },
+                    "cluster_log_conf": {
+                        "dbfs": {
+                            "destination": "dbfs:/cluster-logs"
+                        }
+                    },
+                    "enable_elastic_disk": true,
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "STANDARD",
+                    "num_workers": 0
+                }
+            },
+            {
+                "job_cluster_key": "hamlet_generate_predictions_cluster_880GB",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "14.3.x-gpu-ml-scala2.12",
+                    "spark_conf": {
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "fs.azure.account.oauth2.client.secret.edavsynapsedatalake.dfs.core.windows.net": "{{secrets/edav-prd-hamlet/EDAVHAMLETProd-Secret-Id-Value}}",
+                        "fs.azure.account.oauth2.client.endpoint.edavsynapsedatalake.dfs.core.windows.net": "https://login.microsoftonline.com/9ce70869-60db-44fd-abe8-d2767077fc8f/oauth2/token",
+                        "fs.azure.account.oauth2.client.id.edavsynapsedatalake.dfs.core.windows.net": "fb128249-3959-4ad4-84dd-4524abbaa127",
+                        "spark.master": "local[*, 4]",
+                        "fs.azure.account.oauth.provider.type.edavsynapsedatalake.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+                        "fs.azure.account.auth.type.edavsynapsedatalake.dfs.core.windows.net": "OAuth",
+                        "spark.databricks.cluster.profile": "singleNode"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_NC96ads_A100_v4",
+                    "driver_node_type_id": "Standard_NC96ads_A100_v4",
+                    "custom_tags": {
+                        "ResourceClass": "SingleNode"
+                    },
+                    "cluster_log_conf": {
+                        "dbfs": {
+                            "destination": "dbfs:/cluster-logs"
+                        }
+                    },
+                    "enable_elastic_disk": true,
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "STANDARD",
+                    "num_workers": 0
+                }
+            }
+        ],
+        "tags": {
+            "EDAVHAMLETProd": "",
+            "GitHub": "https://github.com/scotthlee/hamlet"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1683218406097
+}

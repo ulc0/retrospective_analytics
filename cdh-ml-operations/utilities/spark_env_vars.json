@@ -1,0 +1,8 @@
+    {"spark_env_vars": {
+        "HF_HUB_DISABLE_PROGRESS_BARS": "1",
+        "PYTENSOR_FLAGS": "'allow_gc=False,floatX=float64'",
+        "TRANSFORMERS_CACHE": "/dbfs/mnt/ml/transformers/cache/",
+        "SCISPACY_CACHE": "/dbfs/mnt/ml/scispacy_cache/",
+        "MLFLOW_TRACKING_URI": "databricks",
+        "HUGGINGFACE_HUB_CACHE": "/dbfs/mnt/ml/huggingface/cache/"}}
+    

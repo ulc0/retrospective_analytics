@@ -1,0 +1,602 @@
+{
+    "job_id": 506793304240224,
+    "creator_user_name": "twj8@cdc.gov",
+    "run_as_user_name": "twj8@cdc.gov",
+    "settings": {
+        "name": "pcc_multi_01",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "pcc_mult_setup",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_param",
+                    "base_parameters": {
+                        "tune": "50",
+                        "time_scale": "91.5",
+                        "weight": "1",
+                        "pdp_all": "False",
+                        "seed": "na",
+                        "cores": "6",
+                        "trees": "100",
+                        "sample_tst": "10000",
+                        "balance": "False",
+                        "chains": "6",
+                        "draws": "1000",
+                        "split_rules": "na",
+                        "sample_trn": "30000",
+                        "exp_id": "3495919782292575",
+                        "run_num": "6"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_BLD",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_mult_setup"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "BLD"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_CIR",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_BLD"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "CIR"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_DIG",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_CIR"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "DIG"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_EAR",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_DIG"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "EAR"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_END",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_EAR"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "END"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_EXT",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_END"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "EXT"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_EYE",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_EXT"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "EYE"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_FAC",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_EYE"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "FAC"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_GEN",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_FAC"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "GEN"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_INF",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_GEN"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "INF"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_INJ",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_INF"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "INJ"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_MAL",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_INJ"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "MAL"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_MBD",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_MAL"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "MBD"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_MUS",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_MBD"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "MUS"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_NEO",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_MUS"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "NEO"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_NVS",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_NEO"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "NVS"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_PNL",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_NVS"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "PNL"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_PRG",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_PNL"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "PRG"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_RSP",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_PRG"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "RSP"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_SKN",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_RSP"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "SKN"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "pcc_runner_SYM",
+                "depends_on": [
+                    {
+                        "task_key": "pcc_runner_SKN"
+                    }
+                ],
+                "run_if": "ALL_DONE",
+                "notebook_task": {
+                    "notebook_path": "cohort/03_twj8_bart_02_short",
+                    "base_parameters": {
+                        "seed": "na",
+                        "code": "SYM"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "git_source": {
+            "git_url": "https://github.com/twj8CDC/PYMC_BART/",
+            "git_provider": "gitHub",
+            "git_branch": "validation"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1702258016229
+}

@@ -1,0 +1,33 @@
+{
+    "job_id": 759463805983376,
+    "creator_user_name": "tyf7@cdc.gov",
+    "run_as_user_name": "tyf7@cdc.gov",
+    "settings": {
+        "name": "CDH VIS PowerBI Migration",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 50,
+        "tasks": [
+            {
+                "task_key": "CDH_VIS_Notebook_Migration",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Operations/How-Tos/Ops Migrate Vis PowerBI",
+                    "base_parameters": {
+                        "project": "",
+                        "data_source": "",
+                        "pbi_report_name": ""
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1676650938068
+}

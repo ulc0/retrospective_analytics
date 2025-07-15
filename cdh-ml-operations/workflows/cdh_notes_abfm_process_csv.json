@@ -1,0 +1,50 @@
+{
+    "job_id": 265500947584035,
+    "creator_user_name": "ulc0@cdc.gov",
+    "run_as_user_name": "ulc0@cdc.gov",
+    "settings": {
+        "name": "cdh_notes_abfm_process_csv",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "note_abfm_process_csv",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "unstructured/etl/abfm/notes_abfm_process_csv",
+                    "base_parameters": {
+                        "INPUT_CSV": "PatientNote"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "0304-155538-fjaee5ug",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "git_source": {
+            "git_url": "https://www.github.com/cdcent/cdh-featurization",
+            "git_provider": "gitHub",
+            "git_branch": "master"
+        },
+        "tags": {
+            "ABFM": "",
+            "CDH": "",
+            "costid": "OPHDST"
+        },
+        "format": "MULTI_TASK",
+        "queue": {
+            "enabled": true
+        }
+    },
+    "created_time": 1723661238589
+}

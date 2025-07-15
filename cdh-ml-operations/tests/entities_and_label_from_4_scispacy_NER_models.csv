@@ -1,0 +1,21 @@
+Entity,Label,Ner_model
+pneumothorax,DISEASE,bc5dr
+lymphadenopathy,DISEASE,bc5dr
+pleural effusion,DISEASE,bc5dr
+airway narrowing or obstruction,DISEASE,bc5dr
+CHEST/ABD/PEL W/CONTRAST,DISEASE,bc5dr
+esophageal abnormality,DISEASE,bc5dr
+DOB,CHEMICAL,bc5dr
+pneumothorax,DISEASE,bionlp13cg
+lymphadenopathy,DISEASE,bionlp13cg
+pleural effusion,DISEASE,bionlp13cg
+airway narrowing or obstruction,DISEASE,bionlp13cg
+CHEST/ABD/PEL W/CONTRAST,DISEASE,bionlp13cg
+esophageal abnormality,DISEASE,bionlp13cg
+DOB,CHEMICAL,bionlp13cg
+intravenous,CHEBI,craft
+mA,PROTEIN,jnlpa
+HBH,CELL_LINE,jnlpa
+7055405 CT,PROTEIN,jnlpa
+CT,PROTEIN,jnlpa
+CT CHEST/ABD/PEL W/CONTRAST,PROTEIN,jnlpa

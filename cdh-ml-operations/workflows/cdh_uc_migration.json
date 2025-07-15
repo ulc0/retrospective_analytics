@@ -1,0 +1,165 @@
+{
+    "job_id": 178217470459426,
+    "creator_user_name": "tyf7@cdc.gov",
+    "run_as_user_name": "tyf7@cdc.gov",
+    "settings": {
+        "name": "cdh_uc_migration",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 10,
+        "tasks": [
+            {
+                "task_key": "Post-Migration-Validation",
+                "depends_on": [
+                    {
+                        "task_key": "Grants_Migration"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/cdh_uc_post_migration_validation",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "Migration_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "Grants_Migration",
+                "depends_on": [
+                    {
+                        "task_key": "Migration"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/cdh_uc_grants_and_metadata",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "Migration_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "Pre-migration",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/cdh_uc_pre_migration",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0304-155538-fjaee5ug",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "Migration",
+                "depends_on": [
+                    {
+                        "task_key": "Transfer_Table_Ownership"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/cdh_uc_migration",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "Migration_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "Transfer_Table_Ownership",
+                "depends_on": [
+                    {
+                        "task_key": "Pre-migration"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/Transfer Table Ownership",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "Migration_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "Migration_cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "13.3.x-scala2.12",
+                    "spark_conf": {
+                        "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-client-secret}}",
+                        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+                        "fs.azure.account.auth.type": "OAuth",
+                        "spark.databricks.delta.preview.enabled": "true",
+                        "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-tenant-id-endpoint}}",
+                        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+                        "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-PROD-kv-CDH/cdh-adb-client-id}}"
+                    },
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D16s_v3",
+                    "driver_node_type_id": "Standard_D16s_v3",
+                    "custom_tags": {
+                        "cluster_type": "center",
+                        "ResourceClass": "Serverless"
+                    },
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "enable_elastic_disk": true,
+                    "policy_id": "0004E4A64B47C0B4",
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "PHOTON",
+                    "autoscale": {
+                        "min_workers": 2,
+                        "max_workers": 20
+                    }
+                }
+            }
+        ],
+        "tags": {
+            "costid": "OPHDST"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1707315890274
+}

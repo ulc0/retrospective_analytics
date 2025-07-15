@@ -1,0 +1,57 @@
+{
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 4
+    },
+    "cluster_name": "CDH_Cluster_Python_SQL_AD_ML_GPU",
+    "spark_version": "13.2.x-gpu-ml-scala2.12",
+    "spark_conf": {
+        "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-CDH/cdh-adb-client-id}}",
+        "spark.rpc.message.maxSize": "512",
+        "spark.logConf": "true",
+        "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-CDH/cdh-adb-tenant-id-endpoint}}",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+        "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-CDH/cdh-adb-client-secret}}"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_NC6s_v3",
+    "driver_node_type_id": "Standard_NC6s_v3",
+    "ssh_public_keys": [],
+    "custom_tags": {},
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs/mlgpu"
+        }
+    },
+    "spark_env_vars": {
+        "HF_HUB_DISABLE_PROGRESS_BARS": "1",
+        "TRANSFORMERS_CACHE": "/dbfs/mnt/ml/transformers/cache/",
+        "SCISPACY_CACHE": "/dbfs/mnt/ml/scispacy_cache/",
+        "MLFLOW_TRACKING_URI": "databricks",
+        "HUGGINGFACE_HUB_CACHE": "/dbfs/mnt/ml/huggingface/cache/"
+    },
+    "autotermination_minutes": 30,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_mlflow.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_scispacy.sh"
+            }
+        }
+    ],
+    "enable_local_disk_encryption": false,
+    "data_security_mode": "LEGACY_PASSTHROUGH",
+    "runtime_engine": "STANDARD",
+    "cluster_id": "0630-181430-yfox4zns"
+}

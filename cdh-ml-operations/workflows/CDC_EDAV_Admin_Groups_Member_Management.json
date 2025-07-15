@@ -1,0 +1,61 @@
+{
+    "job_id": 512268678233383,
+    "creator_user_name": "ueu8@cdc.gov",
+    "run_as_user_name": "ueu8@cdc.gov",
+    "settings": {
+        "name": "CDC EDAV Admin Groups Member Management",
+        "email_notifications": {
+            "on_failure": [
+                "ueu8@cdc.gov"
+            ],
+            "no_alert_for_skipped_runs": true
+        },
+        "timeout_seconds": 0,
+        "schedule": {
+            "quartz_cron_expression": "20 30 6 * * ?",
+            "timezone_id": "America/New_York",
+            "pause_status": "UNPAUSED"
+        },
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "CDC_EDAV_Admin_Groups_Member_Management",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Repos/ueu8@cdc.gov/EDAV_Platform_Reliability/scripts/Mike-Scripts/prd/ueu8@cdc.gov/CDC EDAV Admin Groups Member Management",
+                    "source": "WORKSPACE"
+                },
+                "job_cluster_key": "New_job_cluster",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "job_clusters": [
+            {
+                "job_cluster_key": "New_job_cluster",
+                "new_cluster": {
+                    "cluster_name": "",
+                    "spark_version": "15.0.x-scala2.12",
+                    "azure_attributes": {
+                        "first_on_demand": 1,
+                        "availability": "ON_DEMAND_AZURE",
+                        "spot_bid_max_price": -1.0
+                    },
+                    "node_type_id": "Standard_D16ads_v5",
+                    "enable_elastic_disk": true,
+                    "data_security_mode": "SINGLE_USER",
+                    "runtime_engine": "PHOTON",
+                    "num_workers": 8
+                }
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1706231324388
+}

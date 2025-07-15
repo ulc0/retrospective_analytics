@@ -1,0 +1,431 @@
+{'statuses': [
+        {'cluster_id': '1109-202014-a5ikla8v', 'library_statuses': [
+                {'library': {'whl': 'dbfs:/FileStore/jars/c6c5e3b8_87a8_4eaa_ab95_d9924151c935/striprtf-0.0.25-py3-none-any.whl'
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0304-043145-p29msw3y', 'library_statuses': [
+                {'library': {'pypi': {'package': 'azure-mgmt-resource'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-identity'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0127-203505-ekfdd1hl'
+        },
+        {'cluster_id': '1109-202014-po8zggde', 'library_statuses': [
+                {'library': {'whl': 'dbfs:/FileStore/jars/9033d976_73d7_4a52_909f_e99986d16ce0/patsylearn-0.0.1-py3-none-any.whl'
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'DatabricksAPI'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'databricks-api'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0422-203659-xlr2oquc'
+        },
+        {'cluster_id': '0124-192340-gul6e9y2', 'library_statuses': [
+                {'library': {'pypi': {'package': 'google-api-python-client'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'google-auth'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'user_agents'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '1109-202017-y39l9koa'
+        },
+        {'cluster_id': '0109-184947-l0ka6b1y'
+        },
+        {'cluster_id': '0615-132205-73xqyl8m', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'saurfang:spark-sas7bdat: 3.0.0-s_2.12'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-identity'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'requests'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'epiweeks'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'Jinja2'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'deidentify'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0728-200436-d3b6a7jr', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.13.7'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'great-expectations == 0.13.38'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0630-181430-yfox4zns', 'library_statuses': [
+                {'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/en_core_web_sm-3.6.0-py3-none-any.whl'
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/scispacy-0.5.3-py3-none-any.whl'
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/mlflow_skinny-2.9.2-py3-none-any.whl'
+                    }, 'status': 'UNINSTALL_ON_RESTART', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'mlflow-skinny==2.10.0'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0215-170927-zp3dyvmy'
+        },
+        {'cluster_id': '0419-163709-c4219oi0', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.13.5'
+                        }
+                    }, 'status': 'INSTALLED', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'fsspec'
+                        }
+                    }, 'status': 'PENDING', 'messages': ['Installing libraries on new cluster executors'
+                    ], 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pandas'
+                        }
+                    }, 'status': 'PENDING', 'messages': ['Installing libraries on new cluster executors'
+                    ], 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'mysql-connector-python'
+                        }
+                    }, 'status': 'PENDING', 'messages': ['Installing libraries on new cluster executors'
+                    ], 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '1019-170025-xkel4a8x'
+        },
+        {'cluster_id': '0302-200549-p7bjx2xu', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'saurfang:spark-sas7bdat: 3.0.0-s_2.12'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.14.0'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '1207-164207-v2upwwle'
+        },
+        {'cluster_id': '1110-155817-vw7u8cbu'
+        },
+        {'cluster_id': '1026-181831-4um5tm5u', 'library_statuses': [
+                {'library': {'pypi': {'package': 'chromadb'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '1109-202017-ti5qsauv', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.johnsnowlabs.nlp:spark-nlp_2.12: 4.1.0'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'mlflow-skinny==2.9.2'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'spark-nlp==5.2.3'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0802-170850-6l54abgr', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.13.5'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'maven': {'coordinates': 'saurfang:spark-sas7bdat: 3.0.0-s_2.12'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'whl': 'dbfs:/FileStore/jars/pytz-2022.1-py3-none-any.whl'
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'jar': 'dbfs:/FileStore/jars/parso_2_0_11.jar'
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'jar': 'dbfs:/FileStore/jars/spark_sas7bdat_3_0_0_s_2_12.jar'
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'delta-lake-reader'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'deltalake'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'epiweeks'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'fuzzywuzzy'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'ipfn'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'nltk'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'spark-nlp'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'sqlalchemy'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0624-130708-m6yd3q0u', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.14.0'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'maven': {'coordinates': 'saurfang:spark-sas7bdat: 3.0.0-s_2.12'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'xport'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pyreadstat'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0916-200302-wjz113xc', 'library_statuses': [
+                {'library': {'pypi': {'package': 'yarl'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'beautifulsoup4'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-ai-formrecognizer==3.2.1'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pandas[excel
+                            ]'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-core'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-identity'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'azure-storage-file-datalake'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'PyPDF2'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'Wand'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'xlrd>=1.0.0'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pydantic==1.10.13'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'openpyxl'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'whl': 'dbfs:/FileStore/jars/9b5765c7_030f_453f_a231_0cd829d2aa74/auklet-1.0.0-py3-none-any.whl'
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0427-152300-xz1ls0q0'
+        },
+        {'cluster_id': '0810-161358-3uzgknhn'
+        },
+        {'cluster_id': '0918-153848-4kdqsuvy'
+        },
+        {'cluster_id': '1109-202016-4robfel1'
+        },
+        {'cluster_id': '0907-214525-rjfuvv41'
+        },
+        {'cluster_id': '1207-210314-sr5sn94q'
+        },
+        {'cluster_id': '0918-154028-8peu82ef'
+        },
+        {'cluster_id': '0314-183625-y4eqqy19'
+        },
+        {'cluster_id': '0918-203855-qxc7fk1k', 'library_statuses': [
+                {'library': {'whl': 'dbfs:/FileStore/jars/e5873fde_6218_4a2b_8e4d_0756a9d30e53/ezdx_email_lib-0.0.4-py3-none-any.whl'
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'xlsxwriter'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0801-184901-2cfjx0ur'
+        },
+        {'cluster_id': '1207-210408-tafwi0f2'
+        },
+        {'cluster_id': '0217-175009-t50r31vf'
+        },
+        {'cluster_id': '0901-180109-uh3b1evn'
+        },
+        {'cluster_id': '0207-184304-31553en8'
+        },
+        {'cluster_id': '0419-164226-dv8j2vs4'
+        },
+        {'cluster_id': '1110-161401-uptv20if', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.13.7'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'bio'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'bioext'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'hivtrace'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'biopython'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'openpyxl == 3.0.9'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'great-expectations == 0.13.38'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0831-152854-r9qwhmzs', 'library_statuses': [
+                {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12: 0.13.6'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0428-174919-y5jr9ybx', 'library_statuses': [
+                {'library': {'pypi': {'package': 'spark-nlp'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'xport'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pyreadstat'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                }
+            ]
+        },
+        {'cluster_id': '0718-161502-wh5tc9fr', 'library_statuses': [
+                {'library': {'pypi': {'package': 'Faker'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'fsspec'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'geopy'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'numpy'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pandas'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pip'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'pymssql'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'ruamel.yaml'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'sodapy'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'great expectations'
+                        }
+                    }, 'status': 'PENDING', 'is_library_for_all_clusters': False
+                },
+                {'library': {'pypi': {'package': 'davt-dependencies-python==202302.0.11', 'repo': 'https: //test.pypi.org/simple/'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0801-200934-fh469tv1'}, {'cluster_id': '0524-175537-1fqv1knr', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.databricks:spark-xml_2.12:0.16.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1109-223036-v2pkcja5'}, {'cluster_id': '0301-204705-9fum0aap', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.microsoft.azure:spark-mssql-connector_2.12:1.2.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-storage-file-datalake'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure.identity'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'databricks-sql-connector'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0221-195102-fw35imq2', 'library_statuses': [{'library': {'maven': {'coordinates': 'org.gdal:gdal:3.6.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'openpyxl'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'fsspec'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'more_itertools'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0630-181015-713pi206', 'library_statuses': [{'library': {'maven': {'coordinates': 'ml.combust.mleap:mleap-spark_2.12:0.23.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1110-155648-jzl2k0en'}, {'cluster_id': '1110-011739-kvpu912d'}, {'cluster_id': '1207-210133-slkykyn1'}, {'cluster_id': '0118-185016-sw3wtqfm', 'library_statuses': [{'library': {'pypi': {'package': 'user_agents'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'google-auth'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'google-api-python-client'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1207-205929-6abv3e51'}, {'cluster_id': '0206-145343-ggmqnfvp', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.22'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0422-204013-51z9o5lx'}, {'cluster_id': '1109-202015-25ul7dyg', 'library_statuses': [{'library': {'pypi': {'package': 'azure-storage-blob'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-identity'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'databricksapi'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azurebatchload'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-cli'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1128-201155-5b5dc7st'}, {'cluster_id': '0221-195234-shn4hqa8', 'library_statuses': [{'library': {'maven': {'coordinates': 'HyukjinKwon:spark-xml:0.1.1-s_2.11'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'org.gdal:gdal:3.6.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'xarray'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.13.5'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1109-202015-ou5lhsv9'}, {'cluster_id': '0923-140918-90pcirua'}, {'cluster_id': '0131-170529-ixbrjk2b', 'library_statuses': [{'library': {'pypi': {'package': 'openpyxl'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'xlsxwriter'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1202-190551-trkrogig'}, {'cluster_id': '0511-174506-hchnumkw', 'library_statuses': [{'library': {'maven': {'coordinates': 'saurfang:spark-sas7bdat:3.0.0-s_2.12'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.14.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'xlrd'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'openpyxl'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'pyreadstat'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'xport'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0727-134944-t2von2lt', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.johnsnowlabs.nlp:spark-nlp_2.12:4.0.1'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'spark-nlp'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'spark-nlp-display'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'mlflow'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.13.5'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0207-184200-js0ohr9u'}, {'cluster_id': '1207-205828-wyw6s7r4'}, {'cluster_id': '1211-210552-vev6y5ha'}, {'cluster_id': '0916-195607-w41bi01h', 'library_statuses': [{'library': {'pypi': {'package': 'azure-ai-formrecognizer==3.2.1'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-core==1.26.4'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-storage-file-datalake'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-identity'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'databricks-sdk'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '1104-210351-iwlb813k'}, {'cluster_id': '1016-185408-yl0dnkug'}, {'cluster_id': '0810-161437-9mjwimue'}, {'cluster_id': '0817-225834-9eapn68x'}, {'cluster_id': '1104-210751-6c7o4mx5'}, {'cluster_id': '0925-195849-mz8s8u9a'}, {'cluster_id': '0624-131548-hqk1xhvs', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.johnsnowlabs.nlp:spark-nlp_2.12:4.1.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.14.0'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'spark-nlp'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'spark-nlp-display'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'great-expectations'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'bertopic'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'xlrd'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'openpyxl'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'azure-datalake-store'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'XlsxWriter'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0215-164227-w3tdpy3l'}, {'cluster_id': '1207-210028-s8h0tnzt'}, {'cluster_id': '0413-194146-blosalk1'}, {'cluster_id': '0905-171942-nb0bs0pt', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.13.5'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'fsspec'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'pandas'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0817-230443-vc939pvy'}, {'cluster_id': '0424-144217-no6h5kli'}, {'cluster_id': '0817-231108-7s9g0u1g'}, {'cluster_id': '1031-152448-s1jsj9gh', 'library_statuses': [{'library': {'pypi': {'package': 'google-api-python-client'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'google-auth'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'user_agents'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0817-231344-6gb6v6ox'}, {'cluster_id': '0208-200954-sjq7honi'}, {'cluster_id': '0116-192326-71vbrypr'}, {'cluster_id': '1010-201151-10b0inuy', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.crealytics:spark-excel_2.12:0.13.5'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'davt-dependencies-python==202302.0.11', 'repo': 'https://test.pypi.org/simple/'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'fsspec'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'geopy'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'numpy'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': 'pandas'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'pypi': {'package': ' pip'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'whl': 'dbfs:/FileStore/jars/f439a2e4_3dfd_417f_8b7c_f005de9b3d3f/davt_dependencies_python-202304.0.7-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0123-223027-zpcbgyhg'}, {'cluster_id': '0215-191851-6fhk59ox'}, {'cluster_id': '0215-163011-5qbsi3at'}, {'cluster_id': '0215-154045-gwmxhjrg'}, {'cluster_id': '0215-143058-1ri2o428', 'library_statuses': [{'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/mlflow_skinny-2.9.2-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0215-143110-c4dxxsam'}, {'cluster_id': '0215-100052-oa7lqai', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.21'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'org.scalaj:scalaj-http_2.12:2.4.2'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'jar': 'dbfs:/FileStore/jars/b256b288_57a8_4fbe_9db4_422b5f96fb01-overwatch_assembly_0_6_1_1_RC_5242022-8bd7d.jar'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0214-223940-ms6fe1u9'}, {'cluster_id': '0214-213524-eweawb45'}, {'cluster_id': '0214-211150-fnxxj7p7'}, {'cluster_id': '0214-210016-2z1ea3xt'}, {'cluster_id': '0214-191039-2kaeqc44'}, {'cluster_id': '0214-184035-g0vn9qof'}, {'cluster_id': '0214-100051-j0cx0i06', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.21'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'org.scalaj:scalaj-http_2.12:2.4.2'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'jar': 'dbfs:/FileStore/jars/b256b288_57a8_4fbe_9db4_422b5f96fb01-overwatch_assembly_0_6_1_1_RC_5242022-8bd7d.jar'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0213-100049-r6wd648s', 'library_statuses': [{'library': {'maven': {'coordinates': 'com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.21'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'maven': {'coordinates': 'org.scalaj:scalaj-http_2.12:2.4.2'}}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'jar': 'dbfs:/FileStore/jars/b256b288_57a8_4fbe_9db4_422b5f96fb01-overwatch_assembly_0_6_1_1_RC_5242022-8bd7d.jar'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0213-011303-uzhbv8mn'}, {'cluster_id': '0212-224841-dop6wkkb'}, {'cluster_id': '0212-181959-pwb89vot'}, {'cluster_id': '0212-181416-2bdugpxo'}, {'cluster_id': '0212-175924-vko4fur9'}, {'cluster_id': '0212-175334-x87f0nq7'}, {'cluster_id': '0212-174955-os7s0l4o'}, {'cluster_id': '0212-174420-iy6ow67g'}, {'cluster_id': '0212-173552-jgh2qn4m'}, {'cluster_id': '0212-173009-6czmb6vf'}, {'cluster_id': '0212-172008-vfl00cyi'}, {'cluster_id': '0212-171425-6l994p3j'}, {'cluster_id': '0212-163611-jfzjn5z5'}, {'cluster_id': '0212-163017-my8zo0t'}, {'cluster_id': '0212-152614-9owevo0c', 'library_statuses': [{'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/mlflow_skinny-2.9.2-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/pymc-5.9.2-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}, {'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/pymc_bart-0.5.4-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}, {'cluster_id': '0212-153158-rlxfwakb', 'library_statuses': [{'library': {'whl': '/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/mlflow_skinny-2.9.2-py3-none-any.whl'}, 'status': 'PENDING', 'is_library_for_all_clusters': False}]}]}

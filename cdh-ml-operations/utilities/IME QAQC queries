@@ -1,0 +1,1 @@
+"select distinct qaqc_runid,record_id ,site_number,qaqc_run_version\nfrom tbesc3_qaqc.ime_qaqc_validations\nwhere site_number=3\norder by site_number,record_id,qaqc_run_version\n\nselect * from tbesc3_qaqc.ime_qaqc_validations\n\nDESCRIBE HISTORY tbesc3_qaqc.ime_qaqc_validations\n\nRESTORE TABLE tbesc3_qaqc.ime_qaqc_validations TO VERSION AS OF 148;\n"

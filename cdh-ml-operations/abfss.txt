@@ -1,0 +1,10 @@
+https://adb-8219004871211837.17.azuredatabricks.net/browse/folders/1033072242503569?o=8219004871211837
+/CDH/MachineLearning/ClusterConfig/init_scripts
+storageexplorer://?v=2&tenantId=9ce70869-60db-44fd-abe8-d2767077fc8f&type=fileSystem&container=cdh&serviceEndpoint=https%3A%2F%2Fdavsynapseanalyticsdev.dfs.core.windows.net%2F
+
+Init script failure:
+Cluster scoped init script abfss://cdh@davsynapseanalyticsdev.dfs.core.windows.net/machinelearning/scripts/init_alteryx.sh failed: 
+Failure to initialize configuration for storage account davsynapseanalyticsdev.dfs.core.windows.net: 
+Invalid configuration value detected for fs.azure.account.key, 
+Caused by: Invalid configuration value detected for fs.azure.account.key
+

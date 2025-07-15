@@ -1,0 +1,155 @@
+{
+    "cluster_id": "1105-153016-m7zeqogn",
+    "creator_user_name": "ueu8@cdc.gov",
+    "driver": {
+        "private_ip": "172.18.16.147",
+        "public_dns": "",
+        "node_id": "c49f14dc987846d0b46eafec4d30b8f6",
+        "instance_id": "43f100b7e9224ccc94126907f8042886",
+        "start_timestamp": 1730820830761,
+        "node_attributes": {
+            "is_spot": false
+        },
+        "host_private_ip": "172.18.8.149"
+    },
+    "executors": [
+        {
+            "private_ip": "172.18.16.15",
+            "node_id": "c82fe8202cfb43e396135dc828f5b6bb",
+            "instance_id": "251fef35212847a79061c026c2e9bf1e",
+            "start_timestamp": 1730820830509,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.153"
+        },
+        {
+            "private_ip": "172.18.16.155",
+            "node_id": "a0f9a43b0364477cb0b7ad47fffb2ae0",
+            "instance_id": "f96f3c16f8894c8790367c176a4d157e",
+            "start_timestamp": 1730820830557,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.145"
+        },
+        {
+            "private_ip": "172.18.16.152",
+            "node_id": "a8eb5ca90ee54a5ea616b2a6e529ccc6",
+            "instance_id": "6b15062a07ac48839f0a6b15427dd36d",
+            "start_timestamp": 1730820830464,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.155"
+        },
+        {
+            "private_ip": "172.18.16.154",
+            "node_id": "f066b6174a3e47a9948a4acac4c7d550",
+            "instance_id": "9f238e546f624b1d9075e62cb0fa241b",
+            "start_timestamp": 1730820830710,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.150"
+        },
+        {
+            "private_ip": "172.18.16.138",
+            "public_dns": "",
+            "node_id": "ae7aee7b52ca4c4c8ce1aef8623efff5",
+            "instance_id": "59da823b2aa047a6b6bf060409e12c56",
+            "start_timestamp": 1730820830651,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.147"
+        },
+        {
+            "private_ip": "172.18.16.153",
+            "node_id": "891db1a0f69244888f6a5fd52e1c04ea",
+            "instance_id": "76af4adb6ea64ab7bd87848913ee64af",
+            "start_timestamp": 1730820830603,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.154"
+        },
+        {
+            "private_ip": "172.18.16.146",
+            "public_dns": "",
+            "node_id": "51fcc3c7a7044c1a93eebbc5eae29768",
+            "instance_id": "9c74b0b9e05d41f3b8d58671e735b74c",
+            "start_timestamp": 1730820830371,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.151"
+        },
+        {
+            "private_ip": "172.18.16.151",
+            "node_id": "7239126308ad4d5ca1f745c0ff11d533",
+            "instance_id": "cdce5e8bb6514e209793a8171eeb827b",
+            "start_timestamp": 1730820830418,
+            "node_attributes": {
+                "is_spot": false
+            },
+            "host_private_ip": "172.18.8.146"
+        }
+    ],
+    "spark_context_id": 7549555045442316843,
+    "driver_healthy": true,
+    "jdbc_port": 10000,
+    "cluster_name": "job-231885596716244-run-103037503764178-Job_cluster",
+    "spark_version": "14.3.x-scala2.12",
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+    },
+    "node_type_id": "Standard_D4ds_v5",
+    "driver_node_type_id": "Standard_D4ds_v5",
+    "custom_tags": {
+        "CostID": "ocio",
+        "x_center": "ocio",
+        "x_costid": "EDAVCustomer"
+    },
+    "spark_env_vars": {
+        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+    },
+    "autotermination_minutes": 0,
+    "enable_elastic_disk": true,
+    "disk_spec": {},
+    "cluster_source": "JOB",
+    "single_user_name": "ueu8@cdc.gov",
+    "enable_local_disk_encryption": false,
+    "instance_source": {
+        "node_type_id": "Standard_D4ds_v5"
+    },
+    "driver_instance_source": {
+        "node_type_id": "Standard_D4ds_v5"
+    },
+    "data_security_mode": "SINGLE_USER",
+    "runtime_engine": "PHOTON",
+    "effective_spark_version": "14.3.x-photon-scala2.12",
+    "state": "RUNNING",
+    "state_message": "",
+    "start_time": 1730820616831,
+    "last_state_loss_time": 0,
+    "last_activity_time": 1730820927389,
+    "last_restarted_time": 1730820905027,
+    "num_workers": 8,
+    "cluster_memory_mb": 147456,
+    "cluster_cores": 36.0,
+    "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "ueu8@cdc.gov",
+        "ClusterName": "job-231885596716244-run-103037503764178-Job_cluster",
+        "ClusterId": "1105-153016-m7zeqogn",
+        "JobId": "231885596716244",
+        "RunName": "VM ALERTS",
+        "center": "ocio",
+        "costid": "edavcustomer",
+        "division": "ocio"
+    },
+    "init_scripts_safe_mode": false
+}

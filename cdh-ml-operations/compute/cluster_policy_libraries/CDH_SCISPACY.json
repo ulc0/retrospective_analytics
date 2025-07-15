@@ -1,0 +1,17 @@
+{'policy_id': '0011495B5DDB6085', 'name': 'CDH_Job_Only_Cluster - ML GPU', 'definition': '{  "cluster_type": {    "type": "fixed",    "value": "job"
+},  "instance_pool_id": {    "type": "forbidden",    "hidden": true
+},  "autoscale.min_workers": {    "type": "fixed",    "value": 2,    "hidden": false
+},  "autoscale.max_workers": {    "type": "fixed",    "value": 8,    "hidden": false
+},  "node_type_id": {    "type": "allowlist",    "values": [      "Standard_NC6s_v3",      "Standard_NC12s_v3"
+  ],    "defaultValue": "Standard_NC6s_v3"
+},  "driver_node_type_id": {    "type": "allowlist",    "values": [      "Standard_NC6s_v3",      "Standard_NC12s_v3"
+  ],    "defaultValue": "Standard_NC6s_v3"
+},  "spark_version": {    "type": "unlimited",    "hidden": false
+},  "custom_tags.cluster_type": {    "type": "fixed",    "value": "center"
+},
+"libraries": [
+    {
+        "requirements": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/scispacy_requirements.txt"
+    },
+],
+}'

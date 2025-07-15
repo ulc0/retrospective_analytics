@@ -1,0 +1,13 @@
+Package: FoundrySparkR
+Version: 0.2.0
+Title: Provides access to Foundry via Spark.
+Author: Palantir <support@palantir.com>
+Maintainer: Palantir <support@palantir.com>
+License: file LICENSE
+Copyright: 2016 Palantir Technologies, Inc. All rights reserved.
+Depends: R (>= 2.4.0), methods, SparkR (>= 2.0.0)
+Description: FoundrySparkR allows R to connect to Foundry using SparkR.
+Collate: 'classes.R' 'fileSystems.R' 'generics.R' 'transaction.R'
+        'view.R' 'foundryManager.R' 'transformIo.R' 'utils.R'
+RoxygenNote: 7.3.2
+Built: R 4.3.3; ; 2025-04-01 21:16:13 UTC; unix

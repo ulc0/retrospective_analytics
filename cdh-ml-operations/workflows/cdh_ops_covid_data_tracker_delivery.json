@@ -1,0 +1,75 @@
+{
+    "job_id": 11607383267560,
+    "creator_user_name": "tyf7@cdc.gov",
+    "run_as_user_name": "tyf7@cdc.gov",
+    "settings": {
+        "name": "cdh_ops_covid_data_tracker_delivery",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 10,
+        "tasks": [
+            {
+                "task_key": "copy_to_delivery_zone",
+                "depends_on": [
+                    {
+                        "task_key": "generate_refreshed_data"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Operations/Covid_Data_Tracker",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "Update_Table_Owner",
+                "depends_on": [
+                    {
+                        "task_key": "copy_to_delivery_zone"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Operations/Apply Grants To Table",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "generate_refreshed_data",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Premier/Projects/cdh-premier-core/rvz6_COVID_Data_Tracker (updated)",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "tags": {
+            "costid": "OPHDST"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1684514081238
+}

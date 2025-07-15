@@ -1,0 +1,58 @@
+{
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 5
+    },
+    "cluster_name": "CDH_ML_CPU_Cluster_AD_ACLs_Disabled ",
+    "spark_version": "13.1.x-cpu-ml-scala2.12",
+    "spark_conf": {
+        "spark.databricks.cluster.profile": "serverless",
+        "spark.databricks.passthrough.enabled": "true",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.databricks.pyspark.enableProcessIsolation": "true",
+        "spark.driver.maxResultSize": "16g",
+        "spark.databricks.service.server.enabled": "true",
+        "spark.databricks.repl.allowedLanguages": "sql,python,scala,r"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_L32s_v2",
+    "driver_node_type_id": "Standard_DS5_v2",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "ResourceClass": "Serverless",
+        "Has_R": "True",
+        "Program": "DDPHSS_OD_CSELS_Datahub",
+        "OriginalCreator": "qwo1@cdc.gov",
+        "ML": "CPU"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs/mlcpu"
+        }
+    },
+    "spark_env_vars": {
+        "LIB_DIR": "dbfs:/FileStore/jars/"
+    },
+    "autotermination_minutes": 45,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_alteryx.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_pymc_bart.sh"
+            }
+        }
+    ],
+    "enable_local_disk_encryption": false,
+    "runtime_engine": "STANDARD",
+    "cluster_id": "0427-171205-6qa2hhxn"
+}

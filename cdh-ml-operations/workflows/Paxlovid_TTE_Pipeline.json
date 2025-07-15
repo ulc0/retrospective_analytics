@@ -1,0 +1,141 @@
+{
+    "job_id": 940357623199735,
+    "settings": {
+        "name": "Paxlovid_TTE_Pipeline",
+        "email_notifications": {
+            "on_success": [
+                "rvn4@cdc.gov"
+            ],
+            "on_failure": [
+                "rvn4@cdc.gov"
+            ],
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "HOSP_ADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "True",
+                        "outcome_date_column": "hospital_date"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HOSP_COVID_ADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "True",
+                        "outcome_date_column": "hospital_date_covid"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HOSP_COVID_NONADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "False",
+                        "outcome_date_column": "hospital_date_covid"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HOSP_NONADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "False",
+                        "outcome_date_column": "hospital_date"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "ICUIMV_ADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "True",
+                        "outcome_date_column": "icu_imv_date"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "ICUIMV_COVID_ADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "True",
+                        "outcome_date_column": "icu_imv_date_covid"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "ICUIMV_COVID_NONADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "False",
+                        "outcome_date_column": "icu_imv_date_covid"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "ICUIMV_NONADJ",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Race_Ethnicity_COVID/Projects/cdh-hv-race-ethnicity-covid-core/Paxlovid_TTE/0003_TTE_TimeVarying_Template",
+                    "base_parameters": {
+                        "adjusted": "False",
+                        "outcome_date_column": "icu_imv_date"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1666823266877
+}

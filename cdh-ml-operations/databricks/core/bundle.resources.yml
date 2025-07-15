@@ -1,0 +1,9 @@
+resources:
+  jobs:
+    hello-job:
+      name: hello-job
+      tasks:
+        - task_key: hello-task
+          existing_cluster_id: 1234-567890-abcde123
+          notebook_task:
+            notebook_path: ./hello.py

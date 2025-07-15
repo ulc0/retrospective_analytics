@@ -1,0 +1,58 @@
+{
+    "job_id": 715202539339107,
+    "settings": {
+        "name": "HV_SIGNAL_DETECTION_0001_POST_COVID_CREATE_COHORT",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "append_inpatient_status",
+                "depends_on": [
+                    {
+                        "task_key": "create_long_and_wide_tables"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0001.2_pcc_inpatient_p2_addendum",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_covid_indicators",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0001.0_create_covid_indicators",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_long_and_wide_tables",
+                "depends_on": [
+                    {
+                        "task_key": "create_covid_indicators"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0001.1_create_hvid_cssr_tte_table_all_individuals",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1661204989311
+}

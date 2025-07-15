@@ -1,0 +1,75 @@
+{
+    "job_id": 192687525854920,
+    "creator_user_name": "xvf2@cdc.gov",
+    "run_as_user_name": "xvf2@cdc.gov",
+    "settings": {
+        "name": "Hamlet_Image_Extraction_xvf2",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "hamlet_image_extraction_xvf2",
+                "run_if": "ALL_SUCCESS",
+                "spark_python_task": {
+                    "python_file": "/Repos/xvf2@cdc.gov/hamlet/image_extraction.py",
+                    "parameters": [
+                        "--dicom_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/chad_testing/siva_tests/small_batch_aug_12/dicom_input/",
+                        "--img_dir",
+                        "/Volumes/edav_prd_shared_catalog/ddid-ncezid-dgmq/hamlet/chad_testing/siva_tests/small_batch_aug_12/png_output/",
+                        "--no_error_report"
+                    ]
+                },
+                "existing_cluster_id": "0521-204414-ttxabh79",
+                "libraries": [
+                    {
+                        "pypi": {
+                            "package": "opencv-python==4.7.0.72"
+                        }
+                    },
+                    {
+                        "pypi": {
+                            "package": "scikit-image==0.20.0"
+                        }
+                    },
+                    {
+                        "pypi": {
+                            "package": "pydicom==2.3.1"
+                        }
+                    },
+                    {
+                        "pypi": {
+                            "package": "pytesseract==0.3.10"
+                        }
+                    },
+                    {
+                        "pypi": {
+                            "package": "pylibjpeg-libjpeg==1.3.4"
+                        }
+                    },
+                    {
+                        "pypi": {
+                            "package": "python-gdcm==3.0.22"
+                        }
+                    }
+                ],
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK",
+        "queue": {
+            "enabled": true
+        }
+    },
+    "created_time": 1717097200481
+}

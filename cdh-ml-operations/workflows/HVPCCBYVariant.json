@@ -1,0 +1,76 @@
+{
+    "job_id": 80995294454656,
+    "creator_user_name": "ruz4@cdc.gov",
+    "run_as_user_name": "ruz4@cdc.gov",
+    "settings": {
+        "name": "HVPCCBYVariant",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "CovPPPbyVariantOP",
+                "depends_on": [
+                    {
+                        "task_key": "HVPCCBYVariant"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Full_COVID/Projects/cdh-hv-full-covid-core/Post Covid Outcomes by Variant Period/0001 - HV Post Covid Conditions Real Final Outpatient",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HVPCCBYVariant",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Full_COVID/Projects/cdh-hv-full-covid-core/Post Covid Outcomes by Variant Period/0001 - HV Post Covid Conditions Real Final Inpatient",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HVPCCbyVariantDemosOP",
+                "depends_on": [
+                    {
+                        "task_key": "HVPCCDemos"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Full_COVID/Projects/cdh-hv-full-covid-core/Post Covid Outcomes by Variant Period/By Variant Counts Outpatient",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "HVPCCDemos",
+                "depends_on": [
+                    {
+                        "task_key": "CovPPPbyVariantOP"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/HV_Full_COVID/Projects/cdh-hv-full-covid-core/Post Covid Outcomes by Variant Period/By Variant Counts Inpatient",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1660927676587
+}

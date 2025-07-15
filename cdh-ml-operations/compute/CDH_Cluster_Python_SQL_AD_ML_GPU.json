@@ -1,0 +1,161 @@
+{
+    "cluster_id": "0630-181430-yfox4zns",
+    "creator_user_name": "ufk3@cdc.gov",
+    "spark_context_id": 6650394398873217000,
+    "driver_healthy": true,
+    "cluster_name": "CDH_Cluster_Python_SQL_AD_ML_GPU",
+    "spark_version": "14.1.x-gpu-ml-scala2.12",
+    "spark_conf": {
+        "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-CDH/cdh-adb-client-secret}}",
+        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+        "fs.azure.account.auth.type": "OAuth",
+        "spark.databricks.delta.preview.enabled": "true",
+        "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-CDH/cdh-adb-tenant-id-endpoint}}",
+        "spark.logConf": "true",
+        "spark.rpc.message.maxSize": "512",
+        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-CDH/cdh-adb-client-id}}"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "SPOT_WITH_FALLBACK_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_NC12s_v3",
+    "driver_node_type_id": "Standard_NC6s_v3",
+    "custom_tags": {
+        "vertical": "ddphss",
+        "center": "ophdst"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/cluster-logs/mlgpu"
+        }
+    },
+    "spark_env_vars": {
+        "HUGGINGFACE_HUB_CACHE": "/dbfs/ml/cache/huggingface/",
+        "MLFLOW_TRACKING_URI": "databricks",
+        "SCISPACY_CACHE": "/dbfs/ml/cache/scispacy/",
+        "TRANSFORMERS_CACHE": "/dbfs/ml/cache/transformers/",
+        "PYTENSOR_FLAGS": "floatX=float64",
+        "HF_HUB_DISABLE_PROGRESS_BARS": "1"
+    },
+    "autotermination_minutes": 30,
+    "enable_elastic_disk": true,
+    "disk_spec": {},
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/Developers/init_scripts/init_mlflow.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/Developers/init_scripts/init_scispacy.sh"
+            }
+        }
+    ],
+    "single_user_name": "ulc0@cdc.gov",
+    "enable_local_disk_encryption": false,
+    "instance_source": {
+        "node_type_id": "Standard_NC12s_v3"
+    },
+    "driver_instance_source": {
+        "node_type_id": "Standard_NC6s_v3"
+    },
+    "data_security_mode": "SINGLE_USER",
+    "runtime_engine": "STANDARD",
+    "effective_spark_version": "14.1.x-gpu-ml-scala2.12",
+    "state": "TERMINATED",
+    "state_message": "Termination requested by ulc0@cdc.gov",
+    "start_time": 1688148870675,
+    "terminated_time": 1698178348185,
+    "last_state_loss_time": 1698177777955,
+    "last_activity_time": 1698178316797,
+    "last_restarted_time": 1698177778011,
+    "autoscale": {
+        "min_workers": 1,
+        "max_workers": 16,
+        "target_workers": 1
+    },
+    "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "ufk3@cdc.gov",
+        "ClusterName": "CDH_Cluster_Python_SQL_AD_ML_GPU",
+        "ClusterId": "0630-181430-yfox4zns"
+    },
+    "cluster_log_status": {
+        "last_attempted": 1698178068328
+    },
+    "termination_reason": {
+        "code": "USER_REQUEST",
+        "type": "SUCCESS",
+        "parameters": {
+            "username": "ulc0@cdc.gov"
+        }
+    },
+    "pinned_by_user_name": "822935616889495",
+    "init_scripts_safe_mode": false,
+    "spec": {
+        "cluster_name": "CDH_Cluster_Python_SQL_AD_ML_GPU",
+        "spark_version": "14.1.x-gpu-ml-scala2.12",
+        "spark_conf": {
+            "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-CDH/cdh-adb-client-secret}}",
+            "spark.databricks.delta.preview.enabled": "true",
+            "spark.rpc.message.maxSize": "512",
+            "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-CDH/cdh-adb-tenant-id-endpoint}}",
+            "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+            "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-CDH/cdh-adb-client-id}}",
+            "spark.logConf": "true",
+            "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+            "fs.azure.account.auth.type": "OAuth"
+        },
+        "azure_attributes": {
+            "first_on_demand": 1,
+            "availability": "SPOT_WITH_FALLBACK_AZURE",
+            "spot_bid_max_price": -1
+        },
+        "node_type_id": "Standard_NC12s_v3",
+        "driver_node_type_id": "Standard_NC6s_v3",
+        "custom_tags": {
+            "vertical": "ddphss",
+            "center": "ophdst"
+        },
+        "cluster_log_conf": {
+            "dbfs": {
+                "destination": "dbfs:/cluster-logs/mlgpu"
+            }
+        },
+        "spark_env_vars": {
+            "HUGGINGFACE_HUB_CACHE": "/dbfs/ml/cache/huggingface/",
+            "MLFLOW_TRACKING_URI": "databricks",
+            "SCISPACY_CACHE": "/dbfs/ml/cache/scispacy/",
+            "TRANSFORMERS_CACHE": "/dbfs/ml/cache/transformers/",
+            "PYTENSOR_FLAGS": "'allow_gc=False,floatX=float64'",
+            "HF_HUB_DISABLE_PROGRESS_BARS": "1"
+        },
+        "autotermination_minutes": 30,
+        "enable_elastic_disk": true,
+        "init_scripts": [
+            {
+                "workspace": {
+                    "destination": "/CDH/Developers/init_scripts/init_mlflow.sh"
+                }
+            },
+            {
+                "workspace": {
+                    "destination": "/CDH/Developers/init_scripts/init_scispacy.sh"
+                }
+            }
+        ],
+        "single_user_name": "ulc0@cdc.gov",
+        "enable_local_disk_encryption": false,
+        "data_security_mode": "SINGLE_USER",
+        "runtime_engine": "STANDARD",
+        "autoscale": {
+            "min_workers": 1,
+            "max_workers": 16
+        }
+    }
+}

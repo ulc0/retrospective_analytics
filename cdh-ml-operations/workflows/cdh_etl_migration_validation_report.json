@@ -1,0 +1,41 @@
+{
+    "job_id": 49238221348244,
+    "creator_user_name": "tyf7@cdc.gov",
+    "run_as_user_name": "tyf7@cdc.gov",
+    "settings": {
+        "name": "cdh_etl_migration_validation_report",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 10,
+        "tasks": [
+            {
+                "task_key": "run_validation_notebook",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Datasets/POC/2.0_migration/validation",
+                    "base_parameters": {
+                        "source_database": "cdh_smart",
+                        "destination_database": "",
+                        "email_to": "DDPHSSCSELSDHISPEBcdhengineering@cdc.gov"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            }
+        ],
+        "tags": {
+            "costid": "OPHDST"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1682097380592
+}

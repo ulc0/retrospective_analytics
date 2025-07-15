@@ -1,0 +1,7 @@
+---
+mappings:
+- alias: "/1CDP-Training-736bf7/1CDP Training Playground/cdh_sandbox/data/output/analysis/testoutput"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.2f5f999b-386e-4a14-b046-fefba61493da"

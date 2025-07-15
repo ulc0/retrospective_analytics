@@ -1,0 +1,10 @@
+#sudo apt-get install -y python3-dev graphviz libgraphviz-dev pkg-config
+#python3-dev
+#libgraphviz-dev
+#pkg-config
+#pygraphviz
+arviz 
+###pip install -U --no-deps pymc-5.7.2-py3-none-any.whl
+###pip install -U --no-deps pymc_bart-0.5.1-py3-none-any.whl
+pymc==5.9.0
+bambi

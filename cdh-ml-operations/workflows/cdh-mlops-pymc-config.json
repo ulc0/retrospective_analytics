@@ -1,0 +1,14 @@
+{
+    "job_id": 145948581493338,
+    "creator_user_name": "ulc0@cdc.gov",
+    "settings": {
+        "name": "cdh-mlops-pymc-config",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1696944811766
+}

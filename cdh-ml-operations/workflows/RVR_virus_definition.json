@@ -1,0 +1,80 @@
+{
+    "job_id": 31120767793086,
+    "creator_user_name": "qyc9@cdc.gov",
+    "run_as_user_name": "qyc9@cdc.gov",
+    "settings": {
+        "name": "RVR virus definition",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "covid_definition",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/Users/qyc9@cdc.gov/Truveta/Respiratory Virus Response/Virus definitions",
+                    "base_parameters": {
+                        "respiratory_virus": "covid"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0109-184947-l0ka6b1y",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "flu_definition",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/Users/qyc9@cdc.gov/Truveta/Respiratory Virus Response/Virus definitions",
+                    "base_parameters": {
+                        "respiratory_virus": "flu"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0109-184947-l0ka6b1y",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            },
+            {
+                "task_key": "rsv_definition",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/Workspace/Users/qyc9@cdc.gov/Truveta/Respiratory Virus Response/Virus definitions",
+                    "base_parameters": {
+                        "respiratory_virus": "rsv"
+                    },
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "0109-184947-l0ka6b1y",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK",
+        "queue": {
+            "enabled": true
+        }
+    },
+    "created_time": 1722442594333
+}

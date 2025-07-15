@@ -1,0 +1,7 @@
+{
+    "0010CC6D4222562F": "CDH_Job_Only_Cluster - ML CPU",
+    "00135D24A265D1A5": "CDH_Sci_Spacy - ML CPU ",
+    "001A7690453326E5": "CDH_Spark_NLP - ML CPU",
+    "001C4674EAF97CBD": "CDH_Sparkml - ML CPU ",
+    "0002E6099B23C3DF": "CDH_t4_Job_Only_Cluster - ML GPU "
+}

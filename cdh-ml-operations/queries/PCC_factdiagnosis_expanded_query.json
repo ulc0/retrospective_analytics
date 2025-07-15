@@ -1,0 +1,1 @@
+"SELECT\nDiagnosisId,FactDiagnosisId,FacilityId,ResolvedDateId,ResolvedDateTime,OnsetDateId,OnsetDateTime,ResidentId,ClientId \n FROM factdiagnosis WHERE DiagnosisId = 56263 OR DiagnosisId = 56344 ORDER BY DiagnosisId"

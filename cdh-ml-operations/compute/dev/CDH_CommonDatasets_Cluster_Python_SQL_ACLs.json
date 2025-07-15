@@ -1,0 +1,47 @@
+{
+    "autoscale": {
+        "min_workers": 2,
+        "max_workers": 25
+    },
+    "cluster_name": "CDH_CommonDatasets_Cluster_Python_SQL_ACLs",
+    "spark_version": "9.1.x-scala2.12",
+    "spark_conf": {
+        "fs.azure.account.oauth2.client.secret": "{{secrets/dbs-scope-CDH/cdh-adb-client-secret}}",
+        "spark.databricks.delta.preview.enabled": "true",
+        "fs.azure.account.oauth2.client.endpoint": "{{secrets/dbs-scope-CDH/cdh-adb-tenant-id-endpoint}}",
+        "spark.databricks.queryWatchdog.enabled": "true",
+        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+        "fs.azure.account.oauth2.client.id": "{{secrets/dbs-scope-CDH/cdh-adb-client-id}}",
+        "spark.databricks.repl.allowedLanguages": "python,sql",
+        "spark.databricks.acl.dfAclsEnabled": "true",
+        "spark.databricks.cluster.profile": "serverless",
+        "spark.databricks.queryWatchdog.outputRatioThreshold": "1000",
+        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "fs.azure.account.auth.type": "OAuth"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_DS14_v2",
+    "driver_node_type_id": "Standard_E8ds_v4",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "OriginalCreator": "qwo1@cdc.gov",
+        "ResourceClass": "Serverless"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs"
+        }
+    },
+    "spark_env_vars": {},
+    "autotermination_minutes": 0,
+    "enable_elastic_disk": true,
+    "cluster_source": "API",
+    "init_scripts": [],
+    "enable_local_disk_encryption": false,
+    "runtime_engine": "STANDARD",
+    "cluster_id": "1109-202014-a5ikla8v"
+}

@@ -1,0 +1,37 @@
+{
+    "job_id": 637305693823099,
+    "creator_user_name": "tyf7@cdc.gov",
+    "run_as_user_name": "tyf7@cdc.gov",
+    "settings": {
+        "name": "cdh_uc_remove_hive_permission",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 100,
+        "tasks": [
+            {
+                "task_key": "remove_hive_permission",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Developers/Unity_Catalog/revoke_hive_permissions",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-a5ikla8v",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                },
+                "webhook_notifications": {}
+            }
+        ],
+        "tags": {
+            "costid": "OPHDST"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1708022792954
+}

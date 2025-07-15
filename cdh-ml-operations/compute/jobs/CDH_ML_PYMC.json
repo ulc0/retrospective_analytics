@@ -1,0 +1,47 @@
+{
+    "autoscale": {
+        "min_workers": 2,
+        "max_workers": 8
+    },
+    "cluster_name": "",
+    "spark_version": "10.4.x-scala2.12",
+    "spark_conf": {
+        "spark.databricks.passthrough.enabled": "true",
+        "spark.databricks.pyspark.enableProcessIsolation": "false",
+        "spark.databricks.cluster.profile": "serverless",
+        "spark.databricks.repl.allowedLanguages": "python,sql"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_D14_v2",
+    "driver_node_type_id": "Standard_D14_v2",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "cluster_type": "center",
+        "ResourceClass": "Serverless"
+    },
+    "spark_env_vars": {},
+    "enable_elastic_disk": true,
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/Developers/init_scripts/init_mlflow.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/Developers/init_scripts/init_pymc.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/Developers/init_scripts/init_pymc_bart.sh"
+            }
+        }
+    ],
+    "policy_id": "6063781CC900251C",
+    "runtime_engine": "STANDARD"
+}

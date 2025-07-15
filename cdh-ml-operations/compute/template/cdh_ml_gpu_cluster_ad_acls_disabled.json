@@ -1,0 +1,57 @@
+{
+    "num_workers": 8,
+    "cluster_name": "CDH_ML_GPU_Cluster_AD_ACLs_Disabled ",
+    "spark_version": "13.2.x-gpu-ml-scala2.12",
+    "spark_conf": {
+        "spark.databricks.cluster.profile": "serverless",
+        "spark.rpc.message.maxSize": "512",
+        "spark.logConf": "true",
+        "spark.databricks.delta.preview.enabled": "true",
+        "spark.databricks.adaptive.autoOptimizeShuffle.enabled": "true",
+        "spark.databricks.repl.allowedLanguages": "sql,python,r,scala"
+    },
+    "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1
+    },
+    "node_type_id": "Standard_NC12s_v3",
+    "driver_node_type_id": "Standard_NC12s_v3",
+    "ssh_public_keys": [],
+    "custom_tags": {
+        "ResourceClass": "Serverless",
+        "x_center": "csels",
+        "Program": "DDPHSS_OD_CSELS_Datahub",
+        "x_vertical": "ddphss",
+        "OriginalCreator": "qwo1@cdc.gov",
+        "ML": "GPU"
+    },
+    "cluster_log_conf": {
+        "dbfs": {
+            "destination": "dbfs:/mnt/cluster-logs/mlgpus"
+        }
+    },
+    "spark_env_vars": {
+        "TRANSFORMERS_CACHE": "/dbfs/hugging_face_transformers_cache/",
+        "SPARK_NICENESS": "0",
+        "LIB_DIR": "dbfs:/FileStore/jars/"
+    },
+    "autotermination_minutes": 45,
+    "enable_elastic_disk": true,
+    "cluster_source": "UI",
+    "init_scripts": [
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_mlflow.sh"
+            }
+        },
+        {
+            "workspace": {
+                "destination": "/CDH/init_scripts/init_scispacy.sh"
+            }
+        }
+    ],
+    "enable_local_disk_encryption": false,
+    "runtime_engine": "STANDARD",
+    "cluster_id": "0427-171812-3nvg7jah"
+}

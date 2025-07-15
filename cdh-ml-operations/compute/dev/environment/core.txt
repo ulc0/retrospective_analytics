@@ -1,0 +1,10 @@
+XDG_CACHE_HOME=Volumes/edav_dev_cdh/cdh_ml/metadata_data/caches/xdg/
+MLFLOW_TRACKING_URI=databricks
+SPARK_NICENESS=0
+MLFLOW_ENABLE_ARTIFACTS_PROGRESS_BAR=0
+PYTENSOR_FLAGS='allow_gc=False,floatX=float64'
+SPARK_NICENESS=0
+C_INCLUDE_PATH=/usr/include/gdal
+CPLUS_INCLUDE_PATH=/usr/include/gdal
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+PYSPARK_PIN_THREAD=0

@@ -1,0 +1,93 @@
+{
+    "job_id": 69743056707433,
+    "settings": {
+        "name": "HV_SIGNAL_DETECTION_0002_RECREATE_FINAL_TABLE",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "create_charlson",
+                "depends_on": [
+                    {
+                        "task_key": "create_exposed_unexposed_matches"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0004_create_charlson_comorbidity_index",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_exposed_unexposed_matches",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0002_case_control_match",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_final_cohort",
+                "depends_on": [
+                    {
+                        "task_key": "create_hosp"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0007-create-final-cohort-df",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_hosp",
+                "depends_on": [
+                    {
+                        "task_key": "create_charlson"
+                    },
+                    {
+                        "task_key": "create_pmca"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0006_create_hospitalization",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "create_pmca",
+                "depends_on": [
+                    {
+                        "task_key": "create_exposed_unexposed_matches"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0005_create_pmca",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1664389921834
+}

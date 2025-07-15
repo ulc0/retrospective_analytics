@@ -1,0 +1,19 @@
+{
+  "libraries": [
+    {
+      "jar": "string",
+      "maven": {
+        "coordinates": "string",
+        "repo": "string",
+        "exclusions": [
+          "string"
+        ]
+      },
+      "cran": {
+        "package": "string",
+        "repo": "string"
+      },
+      "whl": "string"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+    "job_id": 266160907964518,
+    "settings": {
+        "name": "HV_SIGNAL_DETECTION_0003_ANALYZE_RATES_FINAL_TABLE",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "task_key": "calculate_incidence_rates",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0003_create_incidence_rates",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            },
+            {
+                "task_key": "generate_cohort_metrics",
+                "depends_on": [
+                    {
+                        "task_key": "calculate_incidence_rates"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "/CDH/Analytics/Common_Functions/Health_Verity/post_covid_conditions_signal_detection/notebook/0008-generate-final-cohort-metrics",
+                    "source": "WORKSPACE"
+                },
+                "existing_cluster_id": "1109-202014-po8zggde",
+                "timeout_seconds": 0,
+                "email_notifications": {}
+            }
+        ],
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1664390006026
+}

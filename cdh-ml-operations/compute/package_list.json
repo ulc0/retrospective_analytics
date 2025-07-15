@@ -1,0 +1,386 @@
+[
+    {
+        "maven": {
+            "coordinates": "com.johnsnowlabs.nlp:spark-nlp_2.12:4.2.8"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "jar": "/Volumes/edav_prd_oc/oadc/jars/neo4j-connector-apache-spark_2.12-5.0.1_for_spark_3 (1).jar"
+    },
+    {
+        "pypi": {
+            "package": "mlflow-skinny==2.9.2"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "saurfang:spark-sas7bdat:3.0.0-s_2.12"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "saurfang:spark-sas7bdat:3.0.0-s_2.12"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "saurfang:spark-sas7bdat:3.0.0-s_2.12"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "pypi": {
+            "package": "chromadb"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.14.0"
+        }
+    },
+    {
+        "whl": "dbfs:/FileStore/jars/c6c5e3b8_87a8_4eaa_ab95_d9924151c935/striprtf-0.0.25-py3-none-any.whl"
+    },
+    {
+        "pypi": {
+            "package": "yarl"
+        }
+    },
+    {
+        "whl": "/Volumes/edav_dev_cdh_test/dev_cdh_ml_test/compute/packages/wheels/mlflow_skinny-2.10.2-py3-none-any.whl"
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.databricks.labs:overwatch_2.12:0.8.0.1"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "saurfang:spark-sas7bdat:3.0.0-s_2.12"
+        }
+    },
+    {
+        "whl": "dbfs:/FileStore/jars/e5873fde_6218_4a2b_8e4d_0756a9d30e53/ezdx_email_lib-0.0.4-py3-none-any.whl"
+    },
+    {
+        "whl": "dbfs:/FileStore/jars/9033d976_73d7_4a52_909f_e99986d16ce0/patsylearn-0.0.1-py3-none-any.whl"
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.7"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.6"
+        }
+    },
+    {
+        "pypi": {
+            "package": "spark-nlp"
+        }
+    },
+    {
+        "jar": "/Volumes/edav_prd_oc/oadc/jars/neo4j-connector-apache-spark_2.12-5.0.1_for_spark_3 (1).jar"
+    },
+    {
+        "maven": {
+            "coordinates": "com.databricks.labs:overwatch_2.12:0.8.0.1"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "pypi": {
+            "package": "Faker"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.databricks:spark-xml_2.12:0.16.0"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.microsoft.azure:spark-mssql-connector_2.12:1.2.0"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "org.gdal:gdal:3.6.0"
+        }
+    },
+    {
+        "requirements": "/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/requirements_mlflow.txt"
+    },
+    {
+        "jar": "/Volumes/edav_prd_oc/oadc/jars/neo4j-connector-apache-spark_2.12-5.0.1_for_spark_3 (1).jar"
+    },
+    {
+        "pypi": {
+            "package": "user_agents"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.22"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.7"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "HyukjinKwon:spark-xml:0.1.1-s_2.11"
+        }
+    },
+    {
+        "pypi": {
+            "package": "opencv-python==4.7.0.72"
+        }
+    },
+    {
+        "pypi": {
+            "package": "mlflow-skinny==2.9.2"
+        }
+    },
+    {
+        "pypi": {
+            "package": "openpyxl"
+        }
+    },
+    {
+        "pypi": {
+            "package": "odbc"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "saurfang:spark-sas7bdat:3.0.0-s_2.12"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.johnsnowlabs.nlp:spark-nlp_2.12:4.0.1"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "pypi": {
+            "package": "azure-ai-formrecognizer==3.2.1"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "whl": "/Volumes/edav_prd_cdh/cdh_ml/metadata_compute/packages/wheels/spark_nlp-5.4.1-py2.py3-none-any.whl"
+    },
+    {
+        "whl": "dbfs:/FileStore/jars/630e7662_932d_4b66_af34_18cebe4d01ab/mpincdev-1.1.1rc3-py3-none-any.whl"
+    },
+    {
+        "pypi": {
+            "package": "great_expectations==0.18.16"
+        }
+    },
+    {
+        "pypi": {
+            "package": "great-expectations==0.18.19"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.7"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "graphframes:graphframes:0.8.2-spark3.0-s_2.12"
+        }
+    },
+    {
+        "pypi": {
+            "package": "spark-nlp"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyreadstat"
+        }
+    },
+    {
+        "whl": "/Volumes/edav_prd_od_ocio/schoolclosure_adl/libs/tqdm-4.66.5-py3-none-any.whl"
+    },
+    {
+        "pypi": {
+            "package": "graphframes==0.6"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "pypi": {
+            "package": "graphframes==0.6"
+        }
+    },
+    {
+        "pypi": {
+            "package": "google-api-python-client"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.microsoft.azure:synapseml_2.12:1.0.4",
+            "repo": "https://mmlspark.azureedge.net/maven"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:0.13.5"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "maven": {
+            "coordinates": "com.crealytics:spark-excel_2.12:3.5.0_0.20.3"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    },
+    {
+        "pypi": {
+            "package": "pyyaml"
+        }
+    }
+]
