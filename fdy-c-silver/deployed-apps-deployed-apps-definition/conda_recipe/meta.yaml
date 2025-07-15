@@ -1,0 +1,21 @@
+package:
+  name: conda-deployed-app
+  version: '{{ PACKAGE_VERSION }}'
+source:
+  path: ../src
+requirements:
+  build:
+  - python 3.11.*
+  - setuptools
+  run:
+  - transforms
+  - pyspark
+  - python 3.11.*
+  - compute-modules
+  - setuptools
+  - openjdk
+build:
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+  noarch: python
+about:
+  license_file: LICENSE.txt

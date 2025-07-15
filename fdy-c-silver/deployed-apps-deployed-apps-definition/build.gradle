@@ -1,0 +1,42 @@
+/*
+ * (c) Copyright 2022 Palantir Technologies Inc. All rights reserved.
+ */
+
+// DO NOT MODIFY THIS FILE
+buildscript {
+    repositories {
+        maven {
+            credentials {
+                username ''
+                password project.bearerToken
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+            url project.mavenProxyRepoUri
+        }
+    }
+
+    dependencies {
+        classpath "com.palantir.deployed-apps:deployed-apps-gradle-plugins:${deployedAppsVersion}"
+    }
+}
+
+apply plugin: 'com.palantir.deployed-apps-definition'
+
+tasks.publishPythonDeployedApp.dependsOn tasks.runRequires
+
+// Please see gradle.properties in the root dir to change any relevant fields
+tasks.publishPythonDeployedApp {
+    registry = dockerRegistry
+    repositoryRid = repoRid
+    bearerToken = project.bearerToken
+    baseImage = baseImageName
+    baseImageVersion = baseImageTag
+    imageName = userImageName
+    targetArtifactRid = repoRid 
+    imageVersion = gitVersion()
+}
+
+publishPythonDeployedApp.onlyIf(_task -> versionDetails().commitDistance == 0)
+

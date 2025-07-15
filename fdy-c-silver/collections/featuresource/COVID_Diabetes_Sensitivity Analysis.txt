@@ -1,0 +1,1324 @@
+# Databricks notebook source
+#%pip install git+https://github.com/amueller/patsylearn
+dbutils.library.installPyPI('lifelines')
+dbutils.library.installPyPI('mlflow')
+dbutils.library.restartPython()
+
+# COMMAND ----------
+
+import pandas as pd 
+import numpy as np
+import patsy
+from patsylearn import PatsyModel, PatsyTransformer
+
+from lifelines.fitters.coxph_fitter import CoxPHFitter
+from lifelines.statistics import proportional_hazard_test
+
+from mlflow import sklearn
+import shutil
+
+# COMMAND ----------
+
+df_survival = spark.sql(f"""
+with covid_pos as (
+    select 
+        f.hvid, 
+        neg_hvid_match,
+        1 as covid_positive,
+        case 
+            when coalesce(claim_dm_31) = 'T' and coalesce(claim_dm) is null then 1
+            else 0
+            end as new_dm,
+        case
+            when age_group = '00-04' or age_group = '05-11' then '00_11'
+            when age_group = '12-15' or age_group = '16-17' then '12_17'
+        end as age_grp, 
+         case
+            when gender = 'U' and (lab_gender = 'M' or lab_gender = 'F')  then lab_gender
+            when gender = 'U' and (claim_gender = 'M' or claim_gender ='F')  then claim_gender
+        else gender
+        end as gender,
+        datediff(coalesce(ndd_dt,'2021-07-31'), first_covid_dt) as person_days
+    from  
+        cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc f
+    left join
+        cdh_hv_full_covid_exploratory.covid_full_hvids_demographics d on f.hvid = d.hvid
+    where claim_covid ='T'
+),
+covid_neg as (
+    select
+        f.hvid,
+        neg_hvid_match,
+        0 as covid_positive,
+        case 
+            when coalesce(f.claim_dm_31) = 'T' and coalesce(f.claim_dm) is null then 1
+            else 0
+        end as new_dm,
+        case
+            when f.age_group = '00-04' or f.age_group = '05-11' then '00_11'
+            when f.age_group = '12-15' or f.age_group = '16-17' then '12_17'
+        end as age_grp, 
+        case
+            when f.gender = 'U' and (lab_gender = 'M' or lab_gender = 'F')  then lab_gender
+            when f.gender = 'U' and (claim_gender = 'M' or claim_gender ='F')  then claim_gender
+        else f.gender
+        end as gender,
+        datediff(coalesce(f.ndd_dt,'2021-07-31'), f.claim_dt) as person_days
+    from  
+        cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_inc f
+    left join
+        cdh_hv_full_covid_exploratory.covid_full_hvids_demographics d on f.hvid = d.hvid
+    join 
+        covid_pos cp on cp.neg_hvid_match = f.hvid 
+),
+final as (
+    select hvid, covid_positive, new_dm, age_grp, gender, person_days from covid_pos
+    union
+    select hvid, covid_positive, new_dm, age_grp, gender, person_days from covid_neg
+)
+select * from final
+""").toPandas()
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select count(distinct hvid) from  cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc where claim_covid ='T'
+
+# COMMAND ----------
+
+encoded_pd = pd.get_dummies(
+    df_survival,
+    columns=['age_grp', 'gender'], 
+    prefix=['age_grp', 'gender'],
+    drop_first=False
+    )
+
+encoded_pd.head()
+
+# COMMAND ----------
+
+# drop unnecessary (baseline) fields
+survival_pd_overall = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+survival_pd_00_11 = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','gender_M'], axis=1)
+survival_pd_12_17 = encoded_pd.drop(['gender_F','hvid','gender_M','age_grp_00_11'], axis=1)
+survival_pd_M = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','age_grp_00_11','age_grp_12_17'], axis=1)
+survival_pd_F = encoded_pd.drop(['age_grp_12_17', 'hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+survival_pd_int_age = encoded_pd.drop(['age_grp_12_17', 'hvid','gender_F','gender_M'], axis=1)
+survival_pd_int_gender = encoded_pd.drop(['age_grp_00_11','age_grp_12_17', 'hvid','gender_M'], axis=1)
+# review dataset
+survival_pd_M.head(10)
+
+# COMMAND ----------
+
+cph2 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph2.fit(survival_pd_overall, 'person_days', 'new_dm')
+cph2.summary
+
+# COMMAND ----------
+
+survival_pd_00_11_only = encoded_pd[encoded_pd["age_grp_00_11"] == 1]
+survival_pd_00_11_final = survival_pd_00_11_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_00_11 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_00_11.fit(survival_pd_00_11_final, 'person_days', 'new_dm')
+cph_00_11.summary
+
+# COMMAND ----------
+
+survival_pd_12_17_only = encoded_pd[encoded_pd["age_grp_12_17"] == 1]
+survival_pd_12_17_final = survival_pd_12_17_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_12_17 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_12_17.fit(survival_pd_12_17_final, 'person_days', 'new_dm')
+cph_12_17.summary
+
+# COMMAND ----------
+
+survival_pd_M_only = encoded_pd[encoded_pd["gender_M"] == 1]
+survival_pd_M_final = survival_pd_M_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_M = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_M.fit(survival_pd_M_final, 'person_days', 'new_dm')
+cph_M.summary
+
+# COMMAND ----------
+
+survival_pd_F_only = encoded_pd[encoded_pd["gender_F"] == 1]
+survival_pd_F_final = survival_pd_F_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_F = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_F.fit(survival_pd_F_final, 'person_days', 'new_dm')
+cph_F.summary
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Match from General COVID(-) Cohort
+
+# COMMAND ----------
+
+neg_cohort = 'covid_negative_only_pediatric'
+positive_cross_join = spark.sql(f"""
+with negative as (
+      select distinct
+        med.hvid,
+        neg.gender,
+        date_format(date_service, 'yyyy-MM') as claim_mo,
+        date_format(date_service, 'yyyy-MM-dd') as claim_dt,
+        year(date_service)- (birth_yr) as age_at_enc
+      from 
+        cdh_hv_full_covid.medical_claims med
+      join 
+        cdh_hv_full_covid_exploratory.{neg_cohort} neg on med.hvid = neg.hvid
+      where
+          year(date_service)- (birth_yr) < 18 and has_claim_excl_cd is null and has_diag_excl_cd is null
+), 
+final as (
+    select
+        distinct
+        pos.hvid as pos_hvid,
+        cl.hvid as neg_hvid,
+        pos.gender,
+        pos.age_at_covid,
+         -- claim_dt,
+         claim_mo,
+         -- first_covid_dt,
+        date_format(first_covid_dt, 'yyyy-MM') as first_covid_mo,        
+        row_number()over(partition by pos.hvid order by cl.hvid asc) AS r_pos
+    from 
+       cdh_hv_full_covid_exploratory.covid_positive_only_pediatric pos
+    left join
+       negative cl on pos.age_at_covid = cl.age_at_enc and pos.gender = cl.gender and cl.claim_dt = first_covid_dt
+    where
+        pos.hvid is not null and pos.hvid not in ('', ' ') and
+        cl.hvid is not null and cl.hvid not in ('', ' ') and
+        claim_covid = 'T'
+),
+all_h as (
+    select 
+        *,
+        row_number()over(partition by pos_hvid order by r_pos desc) AS r_pos_max_combos
+    from final
+), 
+max_combo as( 
+    select 
+        r_pos as r_pos_max,
+        pos_hvid
+    from 
+        all_h 
+    where 
+        r_pos_max_combos = 1 order by r_pos asc
+)
+select 
+    final.*, 
+    r_pos_max
+from final
+left join max_combo on final.pos_hvid = max_combo.pos_hvid
+"""
+)
+
+
+positive_cross_join.printSchema()
+
+# COMMAND ----------
+
+spark.conf.set("spark.sql.shuffle.partitions", 20000)
+spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.all_pos_neg_1_to_1_combos_no_test""")
+positive_cross_join.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.all_pos_neg_1_to_1_combos_no_test")
+
+# COMMAND ----------
+
+display(spark.sql('select * from cdh_hv_full_covid_exploratory.all_pos_neg_1_to_1_combos_no_test'))
+
+# COMMAND ----------
+
+
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Matching COVID(+) to COVID(-)
+
+# COMMAND ----------
+
+combo_table = 'all_pos_neg_1_to_1_combos_no_test'
+ratio = 3
+starting_set_sdf = spark.sql(f"""
+with main_table as (
+    select 
+       *,
+       row_number()over(partition by neg_hvid order by r_pos_max asc) AS r_neg_priority
+    from cdh_hv_full_covid_exploratory.{combo_table} all_c
+    where r_pos <= {ratio}
+),
+get_dupes as (
+    select 
+        neg_hvid,
+        count(pos_hvid) as dupe_count
+    from 
+        main_table main
+    group by
+        neg_hvid
+),
+final as (
+    select distinct
+        m.pos_hvid,
+        r_pos,
+        r_pos_max,
+        cast(null as long) as ratio,
+        dupe_count as dupes,
+        r_neg_priority,
+        case
+            when dupe_count = 1 then m.neg_hvid
+            when dupe_count > 1 and r_neg_priority = 1 then m.neg_hvid
+            else null
+        end as neg_hvid,
+        cast(null as string) as complete
+                
+    from 
+        main_table m
+    left join 
+        get_dupes d on d.neg_hvid = m.neg_hvid
+
+),
+get_ratio as (
+    select 
+        pos_hvid,
+        count(distinct neg_hvid) as ratio
+    from 
+        final
+    group by
+        pos_hvid
+)
+select 
+        final.pos_hvid,
+        r_pos,
+        r_pos_max,
+        g.ratio,
+        dupes,
+        r_neg_priority,
+        neg_hvid,
+        case
+            when g.ratio = {ratio} and dupes = 1 then 'T'
+            else null
+        end as complete
+from
+    final 
+left join
+    get_ratio g on g.pos_hvid = final.pos_hvid
+order by 
+    final.pos_hvid, r_pos
+"""
+)
+starting_set_sdf.printSchema()
+
+# COMMAND ----------
+
+display(starting_set_sdf)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from cdh_hv_full_covid_exploratory.match_sdf_1_to_1_no_test
+
+# COMMAND ----------
+
+spark.sql("DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.match_sdf_1_to_1_no_test")
+starting_set_sdf.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.match_sdf_1_to_1_no_test")
+
+# COMMAND ----------
+
+match_store_table = 'match_sdf_1_to_1_no_test'
+combo_table = 'all_pos_neg_1_to_1_combos_no_test'
+ratio = 1
+for r in range(1,30):
+    random_matching_sdf = spark.sql(f"""
+    with repartition as (
+       select 
+           pos_hvid,
+           neg_hvid,     
+           row_number()over(partition by pos_hvid order by rand(3) asc nulls last) AS r_pos
+        from 
+            cdh_hv_full_covid_exploratory.{combo_table} all_h
+        where not exists (select 1 from cdh_hv_full_covid_exploratory.{match_store_table} m where all_h.neg_hvid = m.neg_hvid ) 
+        and not exists (select 1 from cdh_hv_full_covid_exploratory.{match_store_table} m where all_h.pos_hvid = m.pos_hvid and complete = 'T')
+    ),
+    r_selection as (
+        select 
+                *
+        from 
+            repartition
+        where r_pos <= {ratio} 
+    ),
+    main_table as ( 
+        select 
+            m.pos_hvid,
+            r_select.r_pos,
+            r_pos_max,
+            ratio,
+            dupes,
+            r_neg_priority,
+            coalesce(m.neg_hvid, r_select.neg_hvid) as neg_hvid, -- keep macthes from previous loop, add the ones selected randomly
+            complete
+        from 
+             cdh_hv_full_covid_exploratory.{match_store_table} m
+        left join
+            r_selection r_select on m.pos_hvid = r_select.pos_hvid and r_select.r_pos = m.r_pos   
+    ),
+    get_dupes as (
+        select 
+            neg_hvid,
+            count(pos_hvid) as dupe_count
+        from 
+            main_table main
+        group by
+            neg_hvid
+    ),
+    get_priority as (
+        select
+            m.pos_hvid,
+            r_pos,
+            r_pos_max,
+            ratio,
+            dupe_count as dupes,
+            row_number()over(partition by m.neg_hvid order by r_pos_max asc) AS r_neg_priority,
+            m.neg_hvid,
+            complete
+        from 
+            main_table m
+        left join 
+            get_dupes d on d.neg_hvid = m.neg_hvid
+    ),
+    final as (
+        select
+            pos_hvid,
+            r_pos,
+            r_pos_max,
+            ratio,
+            dupes,
+            r_neg_priority,
+            case
+                when complete = 'T' then neg_hvid
+                when dupes = 1 then neg_hvid
+                when dupes > 1 and r_neg_priority = 1 then neg_hvid
+                else null
+            end as neg_hvid,
+            complete
+        from 
+            get_priority  
+    ),
+        get_ratio as (
+        select 
+            pos_hvid,
+            count(distinct neg_hvid) as ratio
+        from 
+            final
+        group by
+            pos_hvid
+    ),
+    output as (
+    select 
+            final.pos_hvid,
+            row_number()over(partition by final.pos_hvid order by neg_hvid asc nulls first) as r_pos,
+            r_pos_max,
+            g.ratio,
+            dupes,
+            r_neg_priority,
+            neg_hvid,
+            case
+                when g.ratio = {ratio} and dupes = 1 then 'T'
+                when g.ratio = r_pos_max and r_pos_max < 5 and dupes = 1 then 'T'
+                else null
+            end as complete
+    from 
+        final
+    left join
+        get_ratio g on g.pos_hvid = final.pos_hvid
+    )
+    select * from final
+    """
+    )
+    #main_sdf.printSchema()
+    #display(main_sdf)
+    #main_sdf.createOrReplaceTempView("main_sdf")
+    #random_matching_sdf.write.mode('append').format('hive').saveAsTable('random_matching')
+    #display(random_matching_sdf)
+    random_matching_sdf.write.mode("overwrite").saveAsTable(f"cdh_hv_full_covid_exploratory.{match_store_table}")
+    
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC with claim_only as (
+# MAGIC   select distinct hvid 
+# MAGIC     from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc
+# MAGIC     where claim_covid = 'T'
+# MAGIC ),
+# MAGIC selection_1 as (
+# MAGIC select 
+# MAGIC   *, 
+# MAGIC   row_number()over(partition by pos_hvid order by neg_hvid asc nulls last) as r 
+# MAGIC from cdh_hv_full_covid_exploratory.match_sdf_1_to_1_no_test s
+# MAGIC join claim_only co on co.hvid = s.pos_hvid 
+# MAGIC ),
+# MAGIC neg_matches as (
+# MAGIC select count(distinct pos_hvid) 
+# MAGIC from selection_1 
+# MAGIC where r = 1 and neg_hvid is not null
+# MAGIC )
+# MAGIC select * from neg_matches
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC with claim_only as (
+# MAGIC   select distinct hvid 
+# MAGIC     from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc
+# MAGIC     where claim_covid = 'T'
+# MAGIC ),
+# MAGIC selection_1 as (
+# MAGIC select 
+# MAGIC   *, 
+# MAGIC   row_number()over(partition by pos_hvid order by neg_hvid asc nulls last) as r 
+# MAGIC from cdh_hv_full_covid_exploratory.match_sdf_1_to_1_no_test s
+# MAGIC join claim_only co on co.hvid = s.pos_hvid 
+# MAGIC ),
+# MAGIC neg_matches as (
+# MAGIC select count(distinct hvid)
+# MAGIC from selection_1 
+# MAGIC where r = 1 and neg_hvid is null
+# MAGIC )
+# MAGIC select * from neg_matches
+
+# COMMAND ----------
+
+# DBTITLE 1,Final Positive Cohort
+final_covid_pos_cohort = spark.sql("""
+with claim_only as (
+  select distinct hvid 
+    from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc
+    where claim_covid = 'T'
+),    
+selection_1 as (
+select 
+  *, 
+  row_number()over(partition by pos_hvid order by neg_hvid asc nulls last) as r 
+from cdh_hv_full_covid_exploratory.match_sdf_1_to_1 s
+join claim_only co on co.hvid = s.pos_hvid 
+),
+neg_matches as (
+select distinct pos_hvid, neg_hvid 
+from selection_1 
+where r = 1 and neg_hvid is not null 
+),
+final as (
+select 
+  p.*,
+  neg_hvid as neg_hvid_match,
+  row_number()over(partition by hvid order by date_format(first_covid_dt, 'yyyy-MM-dd') asc) as r
+from cdh_hv_full_covid_exploratory.covid_positive_only_pediatric p
+join neg_matches n on n.pos_hvid = p.hvid 
+where date_format(first_covid_dt, 'yyyy-MM-dd') <= '2021-06-28'
+)
+select * from final where r = 1
+""")
+
+final_covid_pos_cohort.printSchema()
+#display(final_covid_pos_cohort)
+
+# COMMAND ----------
+
+final_covid_pos_cohort = final_covid_pos_cohort.drop(final_covid_pos_cohort.r)
+spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_no_test""")
+final_covid_pos_cohort.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_no_test")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_no_test
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select count(*), count(distinct hvid) from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_no_test
+
+# COMMAND ----------
+
+# DBTITLE 1,Final Negative Selection
+final_covid_neg_cohort = spark.sql("""
+with neg_cohort as (
+select 
+  p.*, 
+  date_format(n.first_covid_dt, 'yyyy-MM') as pos_month
+from cdh_hv_full_covid_exploratory.covid_negative_only_pediatric p
+join cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_no_test n on n.neg_hvid_match = p.hvid 
+),
+claim_dates as (
+      select 
+        neg.hvid,
+        neg.first_covid_dt,
+        date_format(date_service, 'yyyy-MM-dd') as claim_dt,
+        row_number()over(partition by med.hvid order by date_format(date_service, 'yyyy-MM') asc) as enc_num
+      from 
+        cdh_hv_full_covid.medical_claims med
+      join 
+        neg_cohort neg on med.hvid = neg.hvid and pos_month = date_format(date_service, 'yyyy-MM')
+     where date_format(date_service, 'yyyy-MM-dd') < '2021-06-28'
+),
+index_date as (
+    select distinct 
+        hvid,
+        case 
+            when claim_dt is null then date_format(first_covid_dt, 'yyyy-MM-dd') 
+            else claim_dt
+        end as claim_dt
+from claim_dates 
+where enc_num = 1
+), 
+dedupe as (
+select 
+    n.*, 
+    claim_dt,
+    row_number()over(partition by n.hvid order by date_format(claim_dt, 'yyyy-MM-dd') asc) as r
+from
+    neg_cohort n
+left join
+    index_date i on i.hvid = n.hvid 
+),
+final as (
+select 
+    hvid,
+    age,
+    days_enrolled_in_period,
+    in_lab,
+    in_medical,
+    diag_covid,
+    diag_first_pos_dt,
+    lab_covid,
+    lab_first_pos_dt,
+    lab_first_neg_dt,
+    claim_covid,
+     claims_first_pos_dt,
+     has_diag_excl_cd,
+    has_claim_excl_cd,
+    covid_result,
+    first_covid_dt,
+    gender,
+    birth_yr,
+    pos_month,
+    case 
+        when claim_dt is null then date_format(pos_month, 'yyyy-MM-dd')
+        else claim_dt
+    end as claim_dt
+from 
+    dedupe
+where r = 1
+)
+select * from final
+""")
+
+final_covid_neg_cohort.printSchema()
+#display(final_covid_neg_cohort)
+#spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_no_test""")
+final_covid_neg_cohort.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_no_test")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select count(*), count (distinct hvid) from cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_no_test where claim_dt is null
+
+# COMMAND ----------
+
+# DBTITLE 1,New Diabetes
+def add_new_diabetes_columns(index_dt = 'first_covid_dt',cohort_table = 'final_covid_pos_cohort' ):
+    pediatric_codes = tuple(['E08','E080','E0800','E0801','E081','E0810','E0811','E082','E0821','E0822','E0829','E083','E0831','E08311','E08319','E0832','E08321','E083211','E083212','E083213','E083219','E08329','E083291','E083292','E083293','E083299','E0833','E08331','E083311','E083312','E083313','E083319','E08339','E083391','E083392','E083393','E083399','E0834','E08341','E083411','E083412','E083413','E083419','E08349','E083491','E083492','E083493','E083499','E0835','E08351','E083511','E083512','E083513','E083519','E08352','E083521','E083522','E083523','E083529','E08353','E083531','E083532','E083533','E083539','E08354','E083541','E083542','E083543','E083549','E08355','E083551','E083552','E083553','E083559','E08359','E083591','E083592','E083593','E083599','E0836','E0837','E0837X1','E0837X2','E0837X3','E0837X9','E0839','E084','E0840','E0841','E0842','E0843','E0844','E0849','E085','E0851','E0852','E0859','E086','E0861','E08610','E08618','E0862','E08620','E08621','E08622','E08628','E0863','E08630','E08638','E0864','E08641','E08649','E0865','E0869','E088','E089','E09','E090','E0900','E0901','E091','E0910','E0911','E092','E0921','E0922','E0929','E093','E0931','E09311','E09319','E0932','E09321','E093211','E093212','E093213','E093219','E09329','E093291','E093292','E093293','E093299','E0933','E09331','E093311','E093312','E093313','E093319','E09339','E093391','E093392','E093393','E093399','E0934','E09341','E093411','E093412','E093413','E093419','E09349','E093491','E093492','E093493','E093499','E0935','E09351','E093511','E093512','E093513','E093519','E09352','E093521','E093522','E093523','E093529','E09353','E093531','E093532','E093533','E093539','E09354','E093541','E093542','E093543','E093549','E09355','E093551','E093552','E093553','E093559','E09359','E093591','E093592','E093593','E093599','E0936','E0937','E0937X1','E0937X2','E0937X3','E0937X9','E0939','E094','E0940','E0941','E0942','E0943','E0944','E0949','E095','E0951','E0952','E0959','E096','E0961','E09610','E09618','E0962','E09620','E09621','E09622','E09628','E0963','E09630','E09638','E0964','E09641','E09649','E0965','E0969','E098','E099','E10','E101','E1010','E1011','E102','E1021','E1022','E1029','E103','E1031','E10311','E10319','E1032','E10321','E103211','E103212','E103213','E103219','E10329','E103291','E103292','E103293','E103299','E1033','E10331','E103311','E103312','E103313','E103319','E10339','E103391','E103392','E103393','E103399','E1034','E10341','E103411','E103412','E103413','E103419','E10349','E103491','E103492','E103493','E103499','E1035','E10351','E103511','E103512','E103513','E103519','E10352','E103521','E103522','E103523','E103529','E10353','E103531','E103532','E103533','E103539','E10354','E103541','E103542','E103543','E103549','E10355','E103551','E103552','E103553','E103559','E10359','E103591','E103592','E103593','E103599','E1036','E1037','E1037X1','E1037X2','E1037X3','E1037X9','E1039','E104','E1040','E1041','E1042','E1043','E1044','E1049','E105','E1051','E1052','E1059','E106','E1061','E10610','E10618','E1062','E10620','E10621','E10622','E10628','E1063','E10630','E10638','E1064','E10641','E10649','E1065','E1069','E108','E109','E11','E110','E1100','E1101','E111','E1110','E1111','E112','E1121','E1122','E1129','E113','E1131','E11311','E11319','E1132','E11321','E113211','E113212','E113213','E113219','E11329','E113291','E113292','E113293','E113299','E1133','E11331','E113311','E113312','E113313','E113319','E11339','E113391','E113392','E113393','E113399','E1134','E11341','E113411','E113412','E113413','E113419','E11349','E113491','E113492','E113493','E113499','E1135','E11351','E113511','E113512','E113513','E113519','E11352','E113521','E113522','E113523','E113529','E11353','E113531','E113532','E113533','E113539','E11354','E113541','E113542','E113543','E113549','E11355','E113551','E113552','E113553','E113559','E11359','E113591','E113592','E113593','E113599','E1136','E1137','E1137X1','E1137X2','E1137X3','E1137X9','E1139','E114','E1140','E1141','E1142','E1143','E1144','E1149','E115','E1151','E1152','E1159','E116','E1161','E11610','E11618','E1162','E11620','E11621','E11622','E11628','E1163','E11630','E11638','E1164','E11641','E11649','E1165','E1169','E118','E119','E13','E130','E1300','E1301','E131','E1310','E1311','E132','E1321','E1322','E1329','E133','E1331','E13311','E13319','E1332','E13321','E133211','E133212','E133213','E133219','E13329','E133291','E133292','E133293','E133299','E1333','E13331','E133311','E133312','E133313','E133319','E13339','E133391','E133392','E133393','E133399','E1334','E13341','E133411','E133412','E133413','E133419','E13349','E133491','E133492','E133493','E133499','E1335','E13351','E133511','E133512','E133513','E133519','E13352','E133521','E133522','E133523','E133529','E13353','E133531','E133532','E133533','E133539','E13354','E133541','E133542','E133543','E133549','E13355','E133551','E133552','E133553','E133559','E13359','E133591','E133592','E133593','E133599','E1336','E1337','E1337X1','E1337X2 ','E1337X3','E1337X9','E1339','E134','E1340','E1341','E1342','E1343','E1344','E1349','E135','E1351','E1352','E1359','E136','E1361','E13610','E13618','E1362','E13620','E13621','E13622','E13628','E1363','E13630','E13638','E1364','E13641','E13649','E1365','E1369','E138','E139'])
+
+    query = spark.sql(f"""
+    with claims_dm as (
+        select 
+            distinct mc.hvid,
+            'T' as claim_dm_30,
+            min(date_service) as claim_ndd_dt
+        from 
+            cdh_hv_full_covid.medical_claims as mc
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} ex_claims on ex_claims.hvid = mc.hvid
+        where
+          mc.hvid is not null and mc.hvid not in ('', ' ')  
+          and diagnosis_code in {pediatric_codes}
+          and (date_format(date_service, 'yyyy-MM-dd') >= date_add({index_dt}, 31))
+          and (date_format(date_service, 'yyyy-MM-dd') <= '2021-07-31')
+        group by
+            mc.hvid, claim_dm_30
+    ),
+    diagnosis_dm as (
+        select
+            distinct cd.hvid,
+            'T' as diag_dm_30,
+            min(enc_start_dt) as diag_ndd_dt
+        from
+            cdh_hv_full_covid.cdm_diag as cd
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+        where
+            cd.hvid is not null and cd.hvid not in ('', ' ')
+           and diag_cd in {pediatric_codes}
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_add({index_dt}, 31))
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') <= '2021-07-31')
+        group by
+            cd.hvid, diag_dm_30
+    ),
+    diagnosis_dm_grouping as (
+        select 
+            distinct cd.hvid,
+            case when (diag_cd like 'E08%')  then 'T' else null end as new_E08_cdm,
+            case when  (diag_cd like 'E09%') then 'T' else null end as new_E09_cdm,
+            case when diag_cd like 'E10%' then 'T' else null end as new_E10_cdm,
+            case when diag_cd like 'E11%' then 'T' else null end as new_E11_cdm,
+            case when diag_cd like 'E13%' then 'T' else null end as new_E13_cdm
+        from 
+            cdh_hv_full_covid.cdm_diag as cd
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+        left join 
+            diagnosis_dm dd on cd.hvid = dd.hvid
+        where
+          cd.hvid is not null and cd.hvid not in ('', ' ')  
+          and diag_cd in {pediatric_codes} 
+          and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_add({index_dt}, 31))
+          and (date_format(enc_start_dt, 'yyyy-MM-dd') <= '2021-07-31')
+          and (date_format(enc_start_dt, 'yyyy-MM-dd') = diag_ndd_dt)
+     ),
+    condition_dm_grouping as (
+        select 
+            distinct mc.hvid,
+            case when (diagnosis_code like 'E08%') then 'T' else null end as new_E08_claim,
+            case when (diagnosis_code like 'E09%') then 'T' else null end as new_E09_claim,
+            case when diagnosis_code like 'E10%' then 'T' else null end as new_E10_claim,
+            case when diagnosis_code like 'E11%' then 'T' else null end as new_E11_claim,
+            case when diagnosis_code like 'E13%' then 'T' else null end as new_E13_claim
+        from 
+            cdh_hv_full_covid.medical_claims as mc
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} ex_claims on ex_claims.hvid = mc.hvid
+        left join 
+            claims_dm dd on mc.hvid = dd.hvid
+        where
+          mc.hvid is not null and mc.hvid not in ('', ' ')  
+          and diagnosis_code in {pediatric_codes}
+          and (date_format(date_service, 'yyyy-MM-dd') >= date_add({index_dt}, 31))
+          and (date_format(date_service, 'yyyy-MM-dd') <= '2021-07-31')
+          and (date_format(date_service, 'yyyy-MM-dd') = claim_ndd_dt)
+    ),
+    final as( 
+    select
+        pos.*,
+        (year({index_dt})- (birth_yr))  as age_at_idx,
+        case
+            when (year({index_dt})- (birth_yr)) >= 0 and (year({index_dt})- (birth_yr)) <= 4 then '00-04'
+            when (year({index_dt})- (birth_yr)) >= 5 and (year({index_dt})- (birth_yr)) <=11 then '05-11'
+            when (year({index_dt})- (birth_yr)) >= 12 and (year({index_dt})- (birth_yr)) <=15 then '12-15'
+            when (year({index_dt})- (birth_yr)) >= 16 and (year({index_dt})- (birth_yr)) <=17 then '16-17'
+        end as age_group,
+        case
+            when diag_dm_30 = 'T' then 'T'
+            else null
+        end as diag_dm_31,
+        case
+            when claim_dm_30 = 'T' then 'T'
+            else null
+        end as claim_dm_31,
+        claim_ndd_dt,
+        diag_ndd_dt,
+        coalesce(claim_ndd_dt, diag_ndd_dt) as ndd_dt,
+        new_E08_cdm,
+        new_E09_cdm,
+        new_E10_cdm,
+        new_E11_cdm,
+        new_E13_cdm,
+        new_E08_claim,
+        new_E09_claim,
+        new_E10_claim,
+        new_E11_claim,
+        new_E13_claim,
+        row_number()over(partition by pos.hvid order by date_format({index_dt}, 'yyyy-MM-dd') asc) as r
+        from 
+            cdh_hv_full_covid_exploratory.{cohort_table} pos
+        left join
+           diagnosis_dm dm on dm.hvid = pos.hvid
+       left join
+           claims_dm cm on cm.hvid = pos.hvid
+       left join
+           diagnosis_dm_grouping ddg on ddg.hvid = pos.hvid
+       left join
+           condition_dm_grouping cdg on cdg.hvid = pos.hvid
+       )
+       select * from final where r = 1
+       """
+        )
+    return(query)
+
+# COMMAND ----------
+
+final_covid_pos_cohort = add_new_diabetes_columns(index_dt = 'first_covid_dt',cohort_table = 'final_covid_pos_cohort_1_to_1_no_test')
+final_covid_neg_cohort = add_new_diabetes_columns(index_dt = 'claim_dt',cohort_table = 'final_covid_neg_cohort_1_to_1_no_test' )
+
+final_covid_pos_cohort = final_covid_pos_cohort.drop(final_covid_pos_cohort.r)
+final_covid_neg_cohort = final_covid_neg_cohort.drop(final_covid_neg_cohort.r)
+
+spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_no_test""")
+spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_no_test""")
+
+final_covid_pos_cohort.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_no_test")
+final_covid_neg_cohort.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_no_test")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select 
+# MAGIC count(*) as missing
+# MAGIC from cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_no_test 
+# MAGIC where 
+# MAGIC coalesce (new_E08_cdm, new_E09_cdm,new_E10_cdm, new_E11_cdm,new_E13_cdm, new_E08_claim,new_E09_claim,new_E10_claim,new_E11_claim,new_E13_claim) is null and ndd_dt is not null
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select 
+# MAGIC count(*) as missing
+# MAGIC from cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_no_test 
+# MAGIC where 
+# MAGIC claim_dt is null
+
+# COMMAND ----------
+
+# DBTITLE 1,Prior Diabetes
+def add_prior_diabetes_columns(index_dt = 'first_covid_dt',cohort_table = 'final_covid_pos_cohort' ):
+    dka_codes = tuple(['E081', 'E0810','E0811','E091', 'E0910','E0911','E101', 'E1010','E1011','E111', 'E1110','E1111','E131', 'E1310','E1311'])
+    pediatric_codes = tuple(['E08','E080','E0800','E0801','E081','E0810','E0811','E082','E0821','E0822','E0829','E083','E0831','E08311','E08319','E0832','E08321','E083211','E083212','E083213','E083219','E08329','E083291','E083292','E083293','E083299','E0833','E08331','E083311','E083312','E083313','E083319','E08339','E083391','E083392','E083393','E083399','E0834','E08341','E083411','E083412','E083413','E083419','E08349','E083491','E083492','E083493','E083499','E0835','E08351','E083511','E083512','E083513','E083519','E08352','E083521','E083522','E083523','E083529','E08353','E083531','E083532','E083533','E083539','E08354','E083541','E083542','E083543','E083549','E08355','E083551','E083552','E083553','E083559','E08359','E083591','E083592','E083593','E083599','E0836','E0837','E0837X1','E0837X2','E0837X3','E0837X9','E0839','E084','E0840','E0841','E0842','E0843','E0844','E0849','E085','E0851','E0852','E0859','E086','E0861','E08610','E08618','E0862','E08620','E08621','E08622','E08628','E0863','E08630','E08638','E0864','E08641','E08649','E0865','E0869','E088','E089','E09','E090','E0900','E0901','E091','E0910','E0911','E092','E0921','E0922','E0929','E093','E0931','E09311','E09319','E0932','E09321','E093211','E093212','E093213','E093219','E09329','E093291','E093292','E093293','E093299','E0933','E09331','E093311','E093312','E093313','E093319','E09339','E093391','E093392','E093393','E093399','E0934','E09341','E093411','E093412','E093413','E093419','E09349','E093491','E093492','E093493','E093499','E0935','E09351','E093511','E093512','E093513','E093519','E09352','E093521','E093522','E093523','E093529','E09353','E093531','E093532','E093533','E093539','E09354','E093541','E093542','E093543','E093549','E09355','E093551','E093552','E093553','E093559','E09359','E093591','E093592','E093593','E093599','E0936','E0937','E0937X1','E0937X2','E0937X3','E0937X9','E0939','E094','E0940','E0941','E0942','E0943','E0944','E0949','E095','E0951','E0952','E0959','E096','E0961','E09610','E09618','E0962','E09620','E09621','E09622','E09628','E0963','E09630','E09638','E0964','E09641','E09649','E0965','E0969','E098','E099','E10','E101','E1010','E1011','E102','E1021','E1022','E1029','E103','E1031','E10311','E10319','E1032','E10321','E103211','E103212','E103213','E103219','E10329','E103291','E103292','E103293','E103299','E1033','E10331','E103311','E103312','E103313','E103319','E10339','E103391','E103392','E103393','E103399','E1034','E10341','E103411','E103412','E103413','E103419','E10349','E103491','E103492','E103493','E103499','E1035','E10351','E103511','E103512','E103513','E103519','E10352','E103521','E103522','E103523','E103529','E10353','E103531','E103532','E103533','E103539','E10354','E103541','E103542','E103543','E103549','E10355','E103551','E103552','E103553','E103559','E10359','E103591','E103592','E103593','E103599','E1036','E1037','E1037X1','E1037X2','E1037X3','E1037X9','E1039','E104','E1040','E1041','E1042','E1043','E1044','E1049','E105','E1051','E1052','E1059','E106','E1061','E10610','E10618','E1062','E10620','E10621','E10622','E10628','E1063','E10630','E10638','E1064','E10641','E10649','E1065','E1069','E108','E109','E11','E110','E1100','E1101','E111','E1110','E1111','E112','E1121','E1122','E1129','E113','E1131','E11311','E11319','E1132','E11321','E113211','E113212','E113213','E113219','E11329','E113291','E113292','E113293','E113299','E1133','E11331','E113311','E113312','E113313','E113319','E11339','E113391','E113392','E113393','E113399','E1134','E11341','E113411','E113412','E113413','E113419','E11349','E113491','E113492','E113493','E113499','E1135','E11351','E113511','E113512','E113513','E113519','E11352','E113521','E113522','E113523','E113529','E11353','E113531','E113532','E113533','E113539','E11354','E113541','E113542','E113543','E113549','E11355','E113551','E113552','E113553','E113559','E11359','E113591','E113592','E113593','E113599','E1136','E1137','E1137X1','E1137X2','E1137X3','E1137X9','E1139','E114','E1140','E1141','E1142','E1143','E1144','E1149','E115','E1151','E1152','E1159','E116','E1161','E11610','E11618','E1162','E11620','E11621','E11622','E11628','E1163','E11630','E11638','E1164','E11641','E11649','E1165','E1169','E118','E119','E13','E130','E1300','E1301','E131','E1310','E1311','E132','E1321','E1322','E1329','E133','E1331','E13311','E13319','E1332','E13321','E133211','E133212','E133213','E133219','E13329','E133291','E133292','E133293','E133299','E1333','E13331','E133311','E133312','E133313','E133319','E13339','E133391','E133392','E133393','E133399','E1334','E13341','E133411','E133412','E133413','E133419','E13349','E133491','E133492','E133493','E133499','E1335','E13351','E133511','E133512','E133513','E133519','E13352','E133521','E133522','E133523','E133529','E13353','E133531','E133532','E133533','E133539','E13354','E133541','E133542','E133543','E133549','E13355','E133551','E133552','E133553','E133559','E13359','E133591','E133592','E133593','E133599','E1336','E1337','E1337X1','E1337X2','E1337X3','E1337X9','E1339','E134','E1340','E1341','E1342','E1343','E1344','E1349','E135','E1351','E1352','E1359','E136','E1361','E13610','E13618','E1362','E13620','E13621','E13622','E13628','E1363','E13630','E13638','E1364','E13641','E13649','E1365','E1369','E138','E139'])
+    
+    filtered_claims_prior = spark.sql(f"""
+    with claims_dm as (
+        select 
+            distinct mc.hvid,
+            'T' as claim_dm    
+        from 
+            cdh_hv_full_covid.medical_claims as mc
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = mc.hvid
+        where
+          mc.hvid is not null and mc.hvid not in ('', ' ')  
+          and diagnosis_code in {pediatric_codes}
+          and (date_format(date_service, 'yyyy-MM-dd') >= date_sub({index_dt}, 395))
+          and (date_format(date_service, 'yyyy-MM-dd') < date_sub({index_dt},30)) 
+
+    ),
+    diagnosis_dm as (
+        select
+            distinct cd.hvid,
+            'T' as diag_dm
+        from
+            cdh_hv_full_covid.cdm_diag as cd
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+        where
+            cd.hvid is not null and cd.hvid not in ('', ' ')
+            and diag_cd in {pediatric_codes}
+
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_sub({index_dt}, 395))
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') < date_sub({index_dt},30))
+    ),
+    first_dka_dt_diag as (
+        select 
+            ex_claims.hvid,
+            min(date_format(enc_start_dt, 'yyyy-MM-dd')) as dka_first_diag_dt
+         from 
+            cdh_hv_full_covid.cdm_diag as cd
+         join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+         where
+            cd.hvid is not null and cd.hvid not in ('', ' ')  
+            and diag_cd in {dka_codes}
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_sub({index_dt},30))
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') <= ndd_dt) 
+         group by
+             ex_claims.hvid
+    ),
+    first_dka_dt_claim as (
+        select
+            ex_claims.hvid,
+            min(date_format(date_service, 'yyyy-MM-dd')) as dka_first_claim_dt
+         from 
+            cdh_hv_full_covid.medical_claims as mc
+         join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = mc.hvid
+         where
+            ex_claims.hvid is not null and ex_claims.hvid not in ('', ' ')  
+            and diagnosis_code in {dka_codes}
+            and (date_format(date_service, 'yyyy-MM-dd') >= date_sub({index_dt}, 30))
+            and (date_format(date_service, 'yyyy-MM-dd') <= ndd_dt)     
+        group by 
+            ex_claims.hvid
+    ),
+    diagnosis_dka_grouping as (
+        select 
+            distinct cd.hvid,
+            case when diag_cd in ('E081', 'E0810','E0811') then 'T' else null end as prior_dka_und_cdm,
+            case when diag_cd in ('E091', 'E0910','E0911') then 'T' else null end as prior_dka_dc_cdm,
+            case when diag_cd in ('E101', 'E1010','E1011') then 'T' else null end as prior_dka_t1_cdm,
+            case when diag_cd in ('E111', 'E1110','E1111') then 'T' else null end as prior_dka_t2_cdm,
+            case when diag_cd in ('E131', 'E1310','E1311') then 'T' else null end as prior_dka_oth_cdm
+        from 
+            cdh_hv_full_covid.cdm_diag as cd
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+        left join 
+            first_dka_dt_diag fddd on fddd.hvid = cd.hvid
+        where
+            cd.hvid is not null and cd.hvid not in ('', ' ')  
+            and diag_cd in {dka_codes}
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_sub({index_dt}, 30))
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') <= ndd_dt)
+            and  (date_format(enc_start_dt, 'yyyy-MM-dd') = dka_first_diag_dt)
+    ),
+    condition_dka_grouping as (
+        select 
+            distinct mc.hvid,
+            case when diagnosis_code in ('E081', 'E0810','E0811') then 'T' else null end as prior_dka_und_claim,
+            case when diagnosis_code in ('E091', 'E0910','E0911') then 'T' else null end as prior_dka_dc_claim,
+            case when diagnosis_code in ('E101', 'E1010','E1011') then 'T' else null end as prior_dka_t1_claim,
+            case when diagnosis_code in ('E111', 'E1110','E1111') then 'T' else null end as prior_dka_t2_claim,
+            case when diagnosis_code in ('E131', 'E1310','E1311') then 'T' else null end as prior_dka_oth_claim
+        from 
+            cdh_hv_full_covid.medical_claims as mc
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = mc.hvid
+        left join 
+            first_dka_dt_claim fddc on fddc.hvid = mc.hvid
+        where
+          mc.hvid is not null and mc.hvid not in ('', ' ')  
+          and diagnosis_code in {dka_codes}     
+          and (date_format(date_service, 'yyyy-MM-dd') >= date_sub({index_dt}, 30))
+          and (date_format(date_service, 'yyyy-MM-dd') <= ndd_dt) 
+          and  (date_format(date_service, 'yyyy-MM-dd') = dka_first_claim_dt)
+    ),
+    diagnosis_dm_grouping as (
+        select 
+            distinct cd.hvid,
+            case when (diag_cd like 'E08%') then 'T' else null end as prior_E08_cdm,
+            case when (diag_cd like 'E09%') then 'T' else null end as prior_E09_cdm,
+            case when diag_cd like 'E10%' then 'T' else null end as prior_E10_cdm,
+            case when diag_cd like 'E11%' then 'T' else null end as prior_E11_cdm,
+            case when diag_cd like 'E13%' then 'T' else null end as prior_E13_cdm
+        from 
+            cdh_hv_full_covid.cdm_diag as cd
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = cd.hvid
+        where
+            cd.hvid is not null and cd.hvid not in ('', ' ')  
+            and diag_cd in {pediatric_codes}
+
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') >= date_sub({index_dt}, 395))
+            and (date_format(enc_start_dt, 'yyyy-MM-dd') < date_sub({index_dt},30)) 
+    ),
+    condition_dm_grouping as (
+        select 
+            distinct mc.hvid,
+             case when (diagnosis_code like 'E08%') then 'T' else null end as prior_E08_claim,
+            case when (diagnosis_code like 'E09%') then 'T' else null end as prior_E09_claim,
+            case when diagnosis_code like 'E10%' then 'T' else null end as prior_E10_claim,
+            case when diagnosis_code like 'E11%' then 'T' else null end as prior_E11_claim,
+            case when diagnosis_code like 'E13%' then 'T' else null end as prior_E13_claim
+        from 
+            cdh_hv_full_covid.medical_claims as mc
+        join 
+            cdh_hv_full_covid_exploratory.{cohort_table} as ex_claims on ex_claims.hvid = mc.hvid
+        where
+          mc.hvid is not null and mc.hvid not in ('', ' ')  
+          and diagnosis_code in {pediatric_codes}     
+          and (date_format(date_service, 'yyyy-MM-dd') >= date_sub({index_dt}, 395))
+          and (date_format(date_service, 'yyyy-MM-dd') <= date_sub({index_dt},30))
+    ),
+    final as (
+    select
+        all_h.*,
+        claim_dm,
+        diag_dm, 
+        ddkag.prior_dka_und_cdm,
+        ddkag.prior_dka_dc_cdm,
+        ddkag.prior_dka_t1_cdm,
+        ddkag.prior_dka_t2_cdm,
+        ddkag.prior_dka_oth_cdm,
+        ddg.prior_E08_cdm,
+        ddg.prior_E09_cdm,
+        ddg.prior_E10_cdm,
+        ddg.prior_E11_cdm,
+        ddg.prior_E13_cdm,
+        cdkag.prior_dka_und_claim,
+        cdkag.prior_dka_dc_claim,
+        cdkag.prior_dka_t1_claim,
+        cdkag.prior_dka_t2_claim,
+        cdkag.prior_dka_oth_claim,
+        cdg.prior_E08_claim,
+        cdg.prior_E09_claim,
+        cdg.prior_E10_claim,
+        cdg.prior_E11_claim,
+        cdg.prior_E13_claim,
+        row_number()over(partition by all_h.hvid order by date_format({index_dt}, 'yyyy-MM-dd') asc) as r
+    from cdh_hv_full_covid_exploratory.{cohort_table} all_h
+    left join 
+        claims_dm claims on all_h.hvid = claims.hvid
+    left join 
+        diagnosis_dm diag on all_h.hvid = diag.hvid
+    left join
+       diagnosis_dm_grouping ddg on ddg.hvid = all_h.hvid
+    left join
+       condition_dm_grouping cdg on cdg.hvid = all_h.hvid
+    left join
+       diagnosis_dka_grouping ddkag on ddkag.hvid = all_h.hvid
+    left join
+       condition_dka_grouping cdkag on cdkag.hvid = all_h.hvid
+   )
+   select * from final where r = 1
+   """ 
+   ) 
+    return(filtered_claims_prior)
+
+# COMMAND ----------
+
+inc_diab_pos  = add_prior_diabetes_columns(index_dt = 'first_covid_dt',cohort_table = 'final_covid_pos_cohort_1_to_1_prev_no_test')
+inc_diab_neg = add_prior_diabetes_columns(index_dt = 'claim_dt',cohort_table = 'final_covid_neg_cohort_1_to_1_prev_no_test' )
+
+
+#spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc""")
+#spark.sql("""DROP TABLE IF EXISTS cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_inc""")
+inc_diab_pos = inc_diab_pos.drop(inc_diab_pos.r)
+inc_diab_neg  = inc_diab_neg.drop(inc_diab_neg.r)
+
+inc_diab_pos.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc_no_test")
+inc_diab_neg.write.mode("overwrite").saveAsTable("cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_inc_no_test")
+
+# COMMAND ----------
+
+# DBTITLE 1,Check Demo Breakdown
+def get_breakdown(cohort = 'final_covid_pos_cohort_1_to_1_prev_inc', index_dt = 'first_covid_dt', metric = 'age_grp_overall'):
+    new_diabetes_sdf = spark.sql(f"""
+        with positive as (
+            select
+                f.hvid,
+                age_at_idx,
+                age_group,
+                case
+                    when gender = 'U' and (lab_gender = 'M' or lab_gender = 'F')  then lab_gender
+                    when gender = 'U' and (claim_gender = 'M' or claim_gender ='F')  then claim_gender
+                else gender
+                end as gender,
+                days_enrolled_in_period,
+                covid_result,
+                coalesce(claim_dm,diag_dm) as prior,
+                coalesce(diag_dm_31,claim_dm_31) as new_dm,
+                coalesce(prior_dka_und_cdm, prior_dka_und_claim) as prior_dka_und,
+                coalesce(prior_dka_dc_cdm, prior_dka_dc_claim) as prior_dka_dc,
+                coalesce(prior_dka_t1_cdm, prior_dka_t1_claim) as prior_dka_t1,
+                coalesce(prior_dka_t2_cdm, prior_dka_t2_claim) as prior_dka_t2,
+                coalesce(prior_dka_oth_cdm, prior_dka_oth_claim) as prior_dka_oth,
+                coalesce(new_E08_cdm, new_E08_claim) as new_E08,
+                coalesce(new_E09_cdm, new_E09_claim) as new_E09,
+                coalesce(new_E10_cdm, new_E10_claim) as new_E10,
+                coalesce(new_E11_cdm, new_E11_claim) as new_E11,
+                coalesce(new_E13_cdm,new_E13_claim) as new_E13,
+                {index_dt},
+                ndd_dt,
+                coalesce(ndd_dt,'2021-07-31') as end_of_period,
+                datediff(coalesce(ndd_dt,'2021-07-31'), {index_dt}) as person_days
+            from
+                cdh_hv_full_covid_exploratory.{cohort} f
+            left join
+                cdh_hv_full_covid_exploratory.covid_full_hvids_demographics d on f.hvid = d.hvid
+            -- where {index_dt} is not null and birth_yr is not null and gender is not null
+            ), 
+            ndd_total as (
+                select 
+                    new_dm,
+                    count(distinct hvid) as total_ndd
+                from 
+                    positive
+                where 
+                    prior is null and new_dm = 'T' and days_enrolled_in_period >= 974    
+                group by 
+                    new_dm
+            ),
+            new_db_group_coalesce as (
+            select
+                covid,
+                prior,
+                days_enrolled_in_period,
+                hvid,
+                coalesce(new_dm, new_dka_und,new_dka_dc,new_dka_t1,new_dka_t2,new_dka_oth) as new_dm
+            from
+                positive
+            where
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 974
+            ),
+            dka_group_total as (
+            select
+                covid,
+                new_dm,
+                count(distinct hvid) as num
+            from
+                new_db_group_coalesce
+            where
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 974
+            group by 
+                prior, covid, new_dm
+             ),
+             age_grp_overall as (
+            select
+                age_group,
+                count(distinct hvid) as num
+            from positive
+            where 
+                days_enrolled_in_period >= 974
+            group by 
+                age_group
+           ),
+           gender_grp_overall as (
+            select 
+                gender,
+                count(distinct hvid) as num
+            from positive
+            where 
+                days_enrolled_in_period >= 974
+            group by 
+                gender
+            ),
+            age_grp_pos as (
+            select 
+                age_group,
+                count(distinct hvid) as num
+            from positive
+            where 
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 973
+            group by 
+                age_group
+            ),
+            gender_grp_pos as (
+            select 
+                gender,
+                count(distinct hvid) as num
+            from positive
+            where 
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 974
+            group by 
+                gender
+            ),
+            break_down as (
+              select
+                distinct 
+                hvid,
+                new_E08,
+                new_E09,
+                new_E10,
+                new_E11,
+                new_E13,
+                count(distinct hvid) as num
+            from
+                positive
+            where
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 974 
+            group by 
+               new_E08, new_E09, new_E10, new_E11, new_E13
+            ),
+            break_down_dka_total as (
+              select
+                hvid,
+                coalesce(prior_dka_und, prior_dka_dc,prior_dka_t1,prior_dka_t2, prior_dka_oth) as dka
+            from
+                positive
+            where
+                days_enrolled_in_period >= 974 and prior is null and new_dm = 'T'
+                and hvid is not null
+             ),
+             dka_sum as (
+             select 
+                 dka,
+                 count(distinct(hvid)) as total_dka
+             from  break_down_dka_total
+             group by
+                 dka
+             ),
+             break_down_dka as (
+              select
+                prior_dka_und,
+                prior_dka_dc,
+                prior_dka_t1,
+                prior_dka_t2,
+                prior_dka_oth,
+                count(distinct hvid) as num
+            from
+                positive
+            where
+                 days_enrolled_in_period >= 974 and prior is null and new_dm = 'T'
+            group by 
+                prior_dka_und, prior_dka_dc,prior_dka_t1, prior_dka_t2, prior_dka_oth
+               ),
+             ndd_count as (
+              select
+                count(distinct hvid) as num
+            from
+                positive
+            where
+                prior is null and new_dm = 'T' and days_enrolled_in_period >= 974
+               ),
+           person_day_age as (
+               select
+                   age_group,
+                   (sum(person_days) / 365.25) as py
+               from 
+                   positive
+               group by 
+                   age_group   
+               ),
+          person_day_gender as (
+               select
+                   gender,
+                   (sum(person_days) / 365.25) as py
+               from 
+                   positive
+               group by 
+                   gender   
+               )
+            select * 
+            from {metric}
+
+            """)
+    return (new_diabetes_sdf)
+
+# COMMAND ----------
+
+display(get_breakdown(cohort = 'final_covid_pos_cohort_1_to_1_prev_inc_no_test', index_dt = 'first_covid_dt', metric = 'age_grp_overall'))
+display(get_breakdown(cohort = 'final_covid_neg_cohort_1_to_1_prev_inc_no_test', index_dt = 'claim_dt', metric = 'age_grp_overall'))
+
+display(get_breakdown(cohort = 'final_covid_pos_cohort_1_to_1_prev_inc_no_test', index_dt = 'first_covid_dt', metric = 'gender_grp_overall'))
+display(get_breakdown(cohort = 'final_covid_neg_cohort_1_to_1_prev_inc_no_test', index_dt = 'claim_dt', metric = 'gender_grp_overall'))
+
+# COMMAND ----------
+
+display(get_breakdown(cohort = 'final_covid_pos_cohort_1_to_1_prev_inc_no_test', index_dt = 'first_covid_dt', metric = 'ndd_total'))
+display(get_breakdown(cohort = 'final_covid_neg_cohort_1_to_1_prev_inc_no_test', index_dt = 'claim_dt', metric = 'ndd_total'))
+
+# COMMAND ----------
+
+# DBTITLE 1,Survival Analysis for Cohort w/o negative test 
+df_survival = spark.sql(f"""
+with covid_pos as (
+    select 
+        f.hvid, 
+        1 as covid_positive,
+        case 
+            when coalesce(diag_dm_31,claim_dm_31) = 'T' and coalesce(claim_dm,diag_dm) is null then 1
+            else 0
+            end as new_dm,
+        case
+            when age_group = '00-04' or age_group = '05-11' then '00_11'
+            when age_group = '12-15' or age_group = '16-17' then '12_17'
+        end as age_grp, 
+         case
+            when gender = 'U' and (lab_gender = 'M' or lab_gender = 'F')  then lab_gender
+            when gender = 'U' and (claim_gender = 'M' or claim_gender ='F')  then claim_gender
+        else gender
+        end as gender,
+        datediff(coalesce(ndd_dt,'2021-07-31'), first_covid_dt) as person_days
+    from  
+        cdh_hv_full_covid_exploratory.final_covid_pos_cohort_1_to_1_prev_inc_no_test f
+    left join
+        cdh_hv_full_covid_exploratory.covid_full_hvids_demographics d on f.hvid = d.hvid
+),
+covid_neg as (
+    select
+        f.hvid,
+        0 as covid_positive,
+        case 
+            when coalesce(diag_dm_31,claim_dm_31) = 'T' and coalesce(claim_dm,diag_dm) is null then 1
+            else 0
+        end as new_dm,
+        case
+            when age_group = '00-04' or age_group = '05-11' then '00_11'
+            when age_group = '12-15' or age_group = '16-17' then '12_17'
+        end as age_grp, 
+        case
+            when gender = 'U' and (lab_gender = 'M' or lab_gender = 'F')  then lab_gender
+            when gender = 'U' and (claim_gender = 'M' or claim_gender ='F')  then claim_gender
+        else gender
+        end as gender,
+        datediff(coalesce(ndd_dt,'2021-07-31'), claim_dt) as person_days
+    from  
+        cdh_hv_full_covid_exploratory.final_covid_neg_cohort_1_to_1_prev_inc_no_test f
+    left join
+        cdh_hv_full_covid_exploratory.covid_full_hvids_demographics d on f.hvid = d.hvid
+),
+final as (
+    select * from covid_pos
+    union
+    select * from covid_neg
+)
+select * from final  
+""").toPandas()
+
+# COMMAND ----------
+
+encoded_pd = pd.get_dummies(
+    df_survival,
+    columns=['age_grp', 'gender'], 
+    prefix=['age_grp', 'gender'],
+    drop_first=False
+    )
+
+encoded_pd.head()
+
+# COMMAND ----------
+
+# drop unnecessary (baseline) fields
+survival_pd_overall = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+survival_pd_00_11 = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','gender_M'], axis=1)
+survival_pd_12_17 = encoded_pd.drop(['gender_F','hvid','gender_M','age_grp_00_11'], axis=1)
+survival_pd_M = encoded_pd.drop(['age_grp_12_17', 'gender_F','hvid','age_grp_00_11','age_grp_12_17'], axis=1)
+survival_pd_F = encoded_pd.drop(['age_grp_12_17', 'hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+survival_pd_int_age = encoded_pd.drop(['age_grp_12_17', 'hvid','gender_F','gender_M'], axis=1)
+survival_pd_int_gender = encoded_pd.drop(['age_grp_00_11','age_grp_12_17', 'hvid','gender_M'], axis=1)
+# review dataset
+survival_pd_overall.head(10)
+
+# COMMAND ----------
+
+cph2 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph2.fit(survival_pd_overall, 'person_days', 'new_dm')
+cph2.summary
+
+# COMMAND ----------
+
+survival_pd_00_11_only = encoded_pd[encoded_pd["age_grp_00_11"] == 1]
+survival_pd_00_11_final = survival_pd_00_11_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_00_11 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_00_11.fit(survival_pd_00_11_final, 'person_days', 'new_dm')
+cph_00_11.summary
+
+# COMMAND ----------
+
+survival_pd_12_17_only = encoded_pd[encoded_pd["age_grp_12_17"] == 1]
+survival_pd_12_17_final = survival_pd_12_17_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_12_17 = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_12_17.fit(survival_pd_12_17_final, 'person_days', 'new_dm')
+cph_12_17.summary
+
+# COMMAND ----------
+
+survival_pd_M_only = encoded_pd[encoded_pd["gender_M"] == 1]
+survival_pd_M_final = survival_pd_M_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_M = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_M.fit(survival_pd_M_final, 'person_days', 'new_dm')
+cph_M.summary
+
+# COMMAND ----------
+
+survival_pd_F_only = encoded_pd[encoded_pd["gender_F"] == 1]
+survival_pd_F_final = survival_pd_F_only.drop(['gender_F','hvid','age_grp_00_11','age_grp_12_17','gender_M'], axis=1)
+cph_F = CoxPHFitter(alpha=0.05) # 95% confidence interval
+cph_F.fit(survival_pd_F_final, 'person_days', 'new_dm')
+cph_F.summary

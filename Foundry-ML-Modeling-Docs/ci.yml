@@ -1,0 +1,17 @@
+env:
+  ROSETTA_API:
+    uri-role: rosetta-api
+  STEMMA_API:
+    uri-role: stemma-api
+  JEMMA_API:
+    uri-role: jemma-api
+    
+
+required-job-token-capabilities:
+  - rosetta
+
+
+jobs:
+  rosetta-publish:
+    steps:
+      - "python publish-rosetta.py"

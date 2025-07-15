@@ -1,0 +1,56 @@
+Create or Replace View 
+[{{database}}].bronze_census_bureau_vw 
+ (
+       `year` SMALLINT NOT NULL, 
+       `state` TINYINT NOT NULL, 
+       `county` VARCHAR(5) NOT NULL, --COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+       `age` TINYINT NOT NULL,
+       `single_race` TINYINT NOT NULL,
+       `gender` TINYINT NOT NULL,
+       `ethnicity` TINYINT NOT NULL,
+       `population` INT --NULL
+ )
+AS SELECT
+     CAST(`DATE` as TinyInt) + 2017 as `Year`
+  ,  CAST(`STATE` as TinyInt) as `State`
+  , COUNTY
+  ,  CASE WHEN age in (0,1,2,3,4) then 2
+        when age in (5,6,7,8,9) then 3
+        when age in (10,11,12,13,14) then 4
+        when age in (15,16,17,18,19) then 5
+        when age in (20,21,22,23,24) then 6
+        when age in (25,26,27,28,29) then 7
+        when age in (30,31,32,33,34) then 8
+        when age in (35,36,37,38,39) then 9
+        when age in (40,41,42,43,44) then 10
+        when age in (45,46,47,48,49) then 11
+        when age in (50,51,52,53,54) then 12
+        when age in (55,56,57,58,59) then 13
+        when age in (60,61,62,63,64) then 14
+        when age in (65,66,67,68,69) then 15
+        when age in (70,71,72,73,74) then 16
+        when age in (75,76,77,78,79) then 17
+        when age in (80,81,82,83,84) then 18
+        when age > 84 then 19
+     end as age
+  ,  CASE WHEN CAST(HISP AS TinyInt) = 1 THEN 2 ELSE 1 END AS ethnicity
+  ,  RACE11 AS single_race
+  , CASE WHEN SEX = 1 THEN 2 ELSE 1 END AS gender
+  , SUM(CAST(pop AS INT)) AS population
+FROM hive_metastore.wonder_census_bureau_etl.bronze_postcensal_pops_by_county_v2022 --WITH (NOLOCK)
+WHERE RACE11 BETWEEN 1 AND 6
+      AND AGE < 999
+      AND HISP > 0
+      AND SEX > 0
+      AND CAST(`DATE` AS TinyInt) > 2
+      GROUP BY
+      CAST(`DATE` AS TinyInt) + 2017
+      , CAST(STATE AS TinyInt)
+      , COUNTY
+      , AGE
+      , CAST(HISP AS TinyInt)
+      ,RACE11
+      ,CASE WHEN SEX = 1 THEN 2 ELSE 1 END
+ORDER BY Year
+       , State
+       , COUNTY

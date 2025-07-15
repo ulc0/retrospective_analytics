@@ -1,0 +1,23 @@
+{
+    "fields": [
+        {
+            "metadata": {},
+            "name": "domain_id",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "domain_name",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "domain_concept_id",
+            "nullable": true,
+            "type": "string"
+        }
+    ],
+    "type": "struct"
+}

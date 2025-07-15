@@ -1,0 +1,60 @@
+---
+mappings:
+- alias: "ri.foundry.main.dataset.038aff15-c5e3-4c3e-bf75-74296800cdb9"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.038aff15-c5e3-4c3e-bf75-74296800cdb9"
+- alias: "ri.foundry.main.dataset.1014fb29-bce7-4041-8db2-0d231d3362d0"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.1014fb29-bce7-4041-8db2-0d231d3362d0"
+- alias: "ri.foundry.main.dataset.72915da4-0e71-458c-893d-96f630eba9ba"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.72915da4-0e71-458c-893d-96f630eba9ba"
+- alias: "ri.foundry.main.dataset.7d3d6226-a29d-4a57-a850-2b546e6ac5e2"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.7d3d6226-a29d-4a57-a850-2b546e6ac5e2"
+- alias: "ri.foundry.main.dataset.903680ab-8838-4e9e-b4e4-7894ee6908cc"
+  modes:
+  - "BUILD"
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.903680ab-8838-4e9e-b4e4-7894ee6908cc"
+- alias: "ri.foundry.main.dataset.94e08aed-b25e-4e65-8e30-aa7ab1151d46"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.94e08aed-b25e-4e65-8e30-aa7ab1151d46"
+- alias: "ri.foundry.main.dataset.9d8753df-a1d5-4745-904a-7bc367a7cdf3"
+  modes:
+  - "BUILD"
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.9d8753df-a1d5-4745-904a-7bc367a7cdf3"
+- alias: "ri.foundry.main.dataset.d877c671-bf6d-4f46-8922-efd61ede2a52"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.d877c671-bf6d-4f46-8922-efd61ede2a52"
+- alias: "ri.models.main.model.2efd0777-3731-43e6-9ca2-6254ee81d16a"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.models.main.model.2efd0777-3731-43e6-9ca2-6254ee81d16a"
+- alias: "ri.models.main.model.472e9820-879b-44c3-bb52-8971d1ce56f2"
+  modes:
+  - "BUILD"
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.models.main.model.472e9820-879b-44c3-bb52-8971d1ce56f2"
+- alias: "ri.models.main.model.bfe5e3a1-45c2-4cc5-ad8e-9254fb440da0"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.models.main.model.bfe5e3a1-45c2-4cc5-ad8e-9254fb440da0"

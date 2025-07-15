@@ -1,0 +1,8 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC ### Create a respiratory cohort based on Feature_name table attributes
+-- MAGIC
+-- MAGIC * List of **feature_name** values to create a join_table
+-- MAGIC * for each vocabulary_id in the join_table, select distinct person_id that has a feature in the join table
+-- MAGIC
+-- MAGIC

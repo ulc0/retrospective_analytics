@@ -1,0 +1,10 @@
+{
+  "parentTemplateId" : "transforms",
+  "childTemplatesByPath" : {
+    "transforms-model-training" : "model-training"
+  },
+  "parentTemplateVersion" : "9.4.0",
+  "childTemplateVersionsByPath" : {
+    "transforms-model-training" : "1.623.0"
+  }
+}

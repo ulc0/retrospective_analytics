@@ -1,0 +1,17 @@
+.venv
+*__pycache__
+*__pycache__
+*.pyc
+*.pkl
+
+# dist/
+src/*.egg-info/
+*.egg-info/
+dump/
+*todo.txt
+.vscode/
+todo.txt
+todo.md
+paper_todo.md
+.RData
+.Rhistory

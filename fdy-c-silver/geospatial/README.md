@@ -1,0 +1,10 @@
+### References
+* [Microsoft Planetary Computer](https://planetarycomputer.microsoft.com/dataset/us-census#overview)
+* [Building a Geospatial DataLake](https://www.databricks.com/blog/2021/12/17/building-a-geospatial-lakehouse-part-1.html)
+  - [Geospatial DataLake Architecture](https://www.databricks.com/blog/2022/03/28/building-a-geospatial-lakehouse-part-2.html)
+  -[Mosaic by Databricks](https://github.com/databrickslabs/mosaic)
+* [Databricks processing geospatial at Scale](https://www.databricks.com/blog/2019/12/05/processing-geospatial-data-at-scale-with-databricks.html)
+ - [Supercharging Analytics with H3](https://www.databricks.com/blog/2023/01/12/supercharging-h3-geospatial-analytics.html)
+ - [Mosiac and S3](https://www.databricks.com/blog/2022/10/12/how-thasos-optimized-and-scaled-geospatial-workloads-mosaic-databricks.html)
+ - [Geopandas for Spark](https://ncar.github.io/PySpark4Climate/tutorials/pyspark-geo-analysis/geopandas-and-spark/)
+ - [Bricklayer for Spark](https://www.databricks.com/blog/2021/11/03/turning-2-trillion-data-points-of-traffic-critical-business-insights.html)

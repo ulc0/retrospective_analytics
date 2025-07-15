@@ -1,0 +1,1 @@
+"select facilitystate, count(*) as n_cases from cdh_pointclickcare_exploratory.qxv3_covid_diagnoses\ngroup by facilitystate\norder by n_cases desc\n"

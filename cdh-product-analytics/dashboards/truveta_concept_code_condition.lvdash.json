@@ -1,0 +1,1922 @@
+{
+  "datasets" : [ {
+    "name" : "d12e1ba0",
+    "displayName" : "Original IDD",
+    "query" : "select count(distinct personid),\r\n--,coalesce(IDDA,0) as IDDA,coalesce(IDDB,0) as IDDB,coalesce(IDDC,0) as IDDC,\r\n--coalesce(IDDD,0) as IDDD,coalesce(IDDE,0) as IDDE, greatest(coalesce(IDDA,0),coalesce(IDDB,0),\r\n--coalesce(IDDC,0),coalesce(IDDD,0),coalesce(IDDE,0) ) as IDD \r\n--from( select distinct c.personid, \r\ncase  when ct.conceptcode  in \r\n('Q87.11','Q90.0','Q90.1','Q90.2','Q90.9','Q91.0','Q91.1','Q91.2','Q91.3','Q91.4','Q91.5','Q91.6',\r\n'Q91.7','Q92.0','Q92.1','Q92.2','Q92.5','Q92.62','Q92.7','Q92.8','Q92.9','Q93.0','Q93.1','Q93.2','Q93.3',\r\n'Q93.4','Q93.5','Q93.51','Q93.59','Q93.7','Q93.81','Q93.88','Q93.89','Q93.9','Q95.2','Q95.3','Q99.2') then 'IDDA'   \r\nwhen ct.conceptcode in ('G80.0','G80.1','G80.2','G80.3','G80.4','G80.8','G80.9') then 'IDDB'  \r\nwhen ct.conceptcode in ('F84.0','F84.1','F84.2','F84.3','F84.4','F84.5','F84.8','F84.9') then 'IDDC'  \r\nwhen ct.conceptcode in ('Q86.0','F70','F71','F72','F73','F78','F78.A1','F78.A9','F79') then 'IDDD'  \r\nwhen ct.conceptcode in ('F82','F88','F89','G31.81','M95.2', 'Q04.0', 'Q04.1', 'Q04.2', 'Q04.3','Q04.4', 'Q04.5', \r\n'Q04.6', 'Q04.8', 'Q04.9','P04.3','Q67.6', 'Q76.7', 'Q67.8', 'Q68.1', 'Q74.3','Q70.00', 'Q70.01', 'Q70.02', 'Q70.03', \r\n'Q70.10', 'Q70.11', 'Q70.12', 'Q70.13', 'Q70.20', 'Q70.21', 'Q70.22', 'Q70.23', 'Q70.30', 'Q70.31', 'Q70.32', 'Q70.33', \r\n'Q70.4', 'Q70.9','Q85.1','Q87.1','Q87.19','Q87.2','Q87.3','Q87.5','Q87.81',\r\n'Q87.82','Q87.89','Q89.7','Q89.8','R41.83') then 'IDDE'  end\r\n as IDD from cdh_truveta.condition c \r\n --All pts,all diagnosis in universal dx table \r\n left join cdh_truveta.conditioncodeconceptmap m on \r\n c.codeconceptmapid=m.id left join cdh_truveta.concept ct \r\n on m.codeconceptid=ct.conceptid  --) as p  \r\ngroup by IDD\r\n--- pivot (       count(1)      for IDD in ('IDDA','IDDB','IDDC','IDDD','IDDE') ) )\r\n ",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "7fa3252a",
+    "displayName" : "IDD_Person_Pivot",
+    "query" : "SELECT\r\nfeaturename,count( distinct conceptcode),count(distinct personid)\r\n FROM edav_prd_cdh.cdh_ml.truveta_condition c \r\n-- join between feature table and truveta.concept\r\n join feature_idd f\r\non f.conceptid=c.conceptid\r\nGROUP BY featurename\r\norder by featurename",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "1f00241c",
+    "displayName" : "IDD_cohort",
+    "query" : "SELECT distinct f.featurename,c.sourceconceptid,c.personid, c.encounterid,\r\nrecordeddatetime, clinicalstatusconceptid,primarydiagnosisconceptid\r\n FROM edav_prd_cdh.cdh_ml.truveta_condition c join feature_idd f\r\non f.conceptid=c.conceptid\r\nORDER BY personid",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "318624e0",
+    "displayName" : "IDD_total",
+    "query" : "SELECT count( distinct *) FROM edav_prd_cdh.cdh_ml.truveta_condition c join feature_idd f\r\non f.conceptid=c.conceptid",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "5d64353d",
+    "displayName" : "IDD_cohort_person_date",
+    "query" : "SELECT \r\nfeaturename,personid,\r\ncount(distinct c.encounterid) as encounters, \r\n--count(distinct c.patientid) as patients, \r\nmin(recordeddatetime) as earliest,\r\nmax(recordeddatetime) as latest,\r\ncollect_set(primarydiagnosisconceptid) as primarydiagnoses,\r\ncollect_set(c.conceptid) as conceptids,\r\ncollect_set(conceptcode) as conceptcodes\r\n FROM edav_prd_cdh.cdh_ml.truveta_condition c join feature_idd f\r\non f.conceptid=c.conceptid\r\nGROUP BY personid,f.featurename",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "172d8050",
+    "displayName" : "IDD_FeatureSet",
+    "query" : "select * from (select\r\n  distinct ct.conceptid,ct.conceptcode,coalesce(oc.tar_concept_id,oc.src_concept_id) as omop_concept_id,\r\n  case\r\n    when ct.conceptcode in (\r\n      'Q87.11',\r\n      'Q90.0',\r\n      'Q90.1',\r\n      'Q90.2',\r\n      'Q90.9',\r\n      'Q91.0',\r\n      'Q91.1',\r\n      'Q91.2',\r\n      'Q91.3',\r\n      'Q91.4',\r\n      'Q91.5',\r\n      'Q91.6',\r\n      'Q91.7',\r\n      'Q92.0',\r\n      'Q92.1',\r\n      'Q92.2',\r\n      'Q92.5',\r\n      'Q92.62',\r\n      'Q92.7',\r\n      'Q92.8',\r\n      'Q92.9',\r\n      'Q93.0',\r\n      'Q93.1',\r\n      'Q93.2',\r\n      'Q93.3',\r\n      'Q93.4',\r\n      'Q93.5',\r\n      'Q93.51',\r\n      'Q93.59',\r\n      'Q93.7',\r\n      'Q93.81',\r\n      'Q93.88',\r\n      'Q93.89',\r\n      'Q93.9',\r\n      'Q95.2',\r\n      'Q95.3',\r\n      'Q99.2'\r\n    ) then 'IDDA'\r\n    when ct.conceptcode in (\r\n      'G80.0',\r\n      'G80.1',\r\n      'G80.2',\r\n      'G80.3',\r\n      'G80.4',\r\n      'G80.8',\r\n      'G80.9'\r\n    ) then 'IDDB'\r\n    when ct.conceptcode in (\r\n      'F84.0',\r\n      'F84.1',\r\n      'F84.2',\r\n      'F84.3',\r\n      'F84.4',\r\n      'F84.5',\r\n      'F84.8',\r\n      'F84.9'\r\n    ) then 'IDDC'\r\n    when ct.conceptcode in (\r\n      'Q86.0',\r\n      'F70',\r\n      'F71',\r\n      'F72',\r\n      'F73',\r\n      'F78',\r\n      'F78.A1',\r\n      'F78.A9',\r\n      'F79'\r\n    ) then 'IDDD'\r\n    when ct.conceptcode in (\r\n      'F82',\r\n      'F88',\r\n      'F89',\r\n      'G31.81',\r\n      'M95.2',\r\n      'Q04.0',\r\n      'Q04.1',\r\n      'Q04.2',\r\n      'Q04.3',\r\n      'Q04.4',\r\n      'Q04.5',\r\n      'Q04.6',\r\n      'Q04.8',\r\n      'Q04.9',\r\n      'P04.3',\r\n      'Q67.6',\r\n      'Q76.7',\r\n      'Q67.8',\r\n      'Q68.1',\r\n      'Q74.3',\r\n      'Q70.00',\r\n      'Q70.01',\r\n      'Q70.02',\r\n      'Q70.03',\r\n      'Q70.10',\r\n      'Q70.11',\r\n      'Q70.12',\r\n      'Q70.13',\r\n      'Q70.20',\r\n      'Q70.21',\r\n      'Q70.22',\r\n      'Q70.23',\r\n      'Q70.30',\r\n      'Q70.31',\r\n      'Q70.32',\r\n      'Q70.33',\r\n      'Q70.4',\r\n      'Q70.9',\r\n      'Q85.1',\r\n      'Q87.1',\r\n      'Q87.19',\r\n      'Q87.2',\r\n      'Q87.3',\r\n      'Q87.5',\r\n      'Q87.81',\r\n      'Q87.82',\r\n      'Q87.89',\r\n      'Q89.7',\r\n      'Q89.8',\r\n      'R41.83'\r\n    ) then 'IDDE'\r\n  end as featurename\r\nfrom edav_prd_cdh.cdh_truveta.concept ct \r\nleft join edav_prd_cdh.cdh_ml.omop_concept_condition oc\r\non ct.conceptcode=oc.concept_code\r\n) where featurename is not Null\r\norder by omop_concept_id"
+  }, {
+    "name" : "8a466c1d",
+    "displayName" : "truveta_condition_codeconcept",
+    "query" : "SELECT distinct * FROM edav_prd_cdh.cdh_ml.truveta_condition"
+  }, {
+    "name" : "b6fdfa34",
+    "displayName" : "code_local_valuesets_flu_covid",
+    "query" : "    select distinct \r\n     f.feature_name,\r\n      element_at(split(f.feature_name, '_'), -1) as virus_type_code,\r\n      c.conceptcode,\r\n      c.conceptid\r\n    from\r\n      edav_prd_cdh.cdh_truveta_lava_dev.code_local_valuesets f\r\n      join edav_prd_cdh.cdh_truveta.concept c \r\n      on f.concept_code = c.conceptcode\r\n    where\r\n      feature_name in ('diag_icd_covid', 'diag_icd_flu')",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "default"
+  }, {
+    "name" : "2a465013",
+    "displayName" : "Original_lava_resipiratory",
+    "query" : "    \r\nSELECT count( DISTINCT\r\n  o.personid),\r\n  count(distinct o.encounterid),\r\n--  o.codeconceptmapid,\r\n--  o.recordeddatetime,\r\n  condit.virus_type AS virus_type_code\r\nFROM\r\n     condition o\r\n    JOIN conditioncodeconceptmap cm\r\n      ON o.codeconceptmapid = cm.id\r\n    JOIN (\r\n      -- COVID concepts\r\n      SELECT\r\n        'covid' AS virus_type,\r\n        cn.conceptid\r\n      FROM\r\n        edav_prd_cdh.cdh_truveta_lava_dev.code_diag_icd_covid codes\r\n          JOIN concept cn\r\n            ON cn.conceptcode = codes.diag_icd_covid_code\r\n      WHERE\r\n        cn.codesystem = 'ICD10CM'\r\n      UNION\r\n      -- Flu concepts\r\n      SELECT\r\n        'flu' AS virus_type,\r\n        cn.conceptid\r\n      FROM\r\n        edav_prd_cdh.cdh_truveta_lava_dev.code_diag_icd_flu codes\r\n          JOIN concept cn\r\n            ON cn.conceptcode = codes.diag_icd_flu_code\r\n      WHERE\r\n        cn.codesystem = 'ICD10CM'\r\n    ) AS condit\r\n      ON condit.conceptid = cm.codeconceptid\r\nWHERE\r\n  o.RecordedDateTime >= '2022-08-01'\r\n  group by virus_type\r\n--ORDER BY personid,recordeddatetime,encounterid",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "bd64fdf1",
+    "displayName" : "lava_respiratory codeset_matches_original",
+    "query" : "--- 'diag_icd_covid','diag_icd_flu'\r\nSELECT\r\n  virus_type,\r\n  count(DISTINCT o.personid),\r\n  count(DISTINCT o.encounterid) --  o.encounterid,\r\n  --  o.codeconceptmapid,\r\n  --  o.recordeddatetime,\r\n  --  condit.virus_type AS virus_type_code\r\nFROM\r\n  condition o\r\n  JOIN conditioncodeconceptmap cm ON o.codeconceptmapid = cm.id\r\n  JOIN (\r\n    select\r\n      distinct f.feature_name,\r\n      element_at(split(f.feature_name, '_'), -1) as virus_type,\r\n      c.conceptcode,\r\n      c.conceptid\r\n    from\r\n      edav_prd_cdh.cdh_truveta_lava_dev.code_local_valuesets f\r\n      join edav_prd_cdh.cdh_truveta.concept c on f.concept_code = c.conceptcode\r\n    where\r\n      feature_name in ('diag_icd_covid', 'diag_icd_flu')\r\n  ) AS condit ON condit.conceptid = cm.codeconceptid\r\nWHERE\r\n  o.RecordedDateTime >= '2022-08-01'\r\nGROUP BY\r\n  virus_type --ORDER BY\r\n  --  personid,\r\n  --  recordeddatetime,\r\n  --  encounterid",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "27ff7c20",
+    "displayName" : "lava_respiratory_combtable_matches_original",
+    "query" : "--- 'diag_icd_covid','diag_icd_flu'\r\nSELECT\r\n  feature_name as virus_type,\r\n--  date_format(recordeddatetime,'YYYY-MM') as month,\r\n  count(DISTINCT personid),\r\n    count(DISTINCT encounterid) --  o.encounterid,\r\n  from\r\n(SELECT\r\n  distinct ft.feature_name,\r\n  tc.personid,\r\n   tc.encounterid,\r\n  tc.recordeddatetime\r\nFROM\r\n  edav_prd_cdh.cdh_ml.truveta_condition tc -- condition+conditioncodeconceptmap\r\n  join edav_prd_cdh.cdh_truveta.concept tcc \r\n  on tc.conceptid = tcc.conceptid\r\n  join edav_prd_cdh.cdh_truveta_lava_dev.code_local_valuesets ft --feature table\r\n  on ft.concept_code = tcc.conceptcode\r\nwhere\r\n  tc.RecordedDateTime >= '2022-08-01' and\r\n  ft.feature_name in ('diag_icd_covid', 'diag_icd_flu') --feature filter\r\nORDER BY\r\n---  personid,\r\n  recordeddatetime,\r\n  feature_name)\r\n  group by feature_name",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "202afd3c",
+    "displayName" : "lava_respiratory_combtable_with_missing_vocabularies",
+    "query" : "--- 'diag_icd_covid','diag_icd_flu'\r\nSELECT\r\n  f.feature_name,\r\n  count(DISTINCT personid),\r\n  count(DISTINCT encounterid)\r\nFROM\r\n  edav_prd_cdh.cdh_ml.truveta_condition tc\r\n  join (\r\n    select\r\n      distinct feature_name,\r\n      tcc.conceptid\r\n    from\r\n      edav_prd_cdh.cdh_truveta.concept tcc\r\n      join edav_prd_cdh.cdh_ml.ml_code_local_valuesets ft\r\n       on ft.concept_code = tcc.conceptcode\r\n    where\r\n      ft.feature_name in ('diag_icd_covid', 'diag_icd_flu')\r\n  ) f on f.conceptid = tc.conceptid\r\nGROUP BY\r\n  f.feature_name --ORDER BY\r\n  --  personid,\r\n  --  recordeddatetime,\r\n  --  encounterid",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "7e9db6d9",
+    "displayName" : "ml_code_local_valuesets",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_ml.ml_code_local_valuesets\r\nwhere feature_name like '%flu%'"
+  }, {
+    "name" : "6cc16dbd",
+    "displayName" : "lava_respiratory codeset with SNOMED",
+    "query" : "--- 'diag_icd_covid','diag_icd_flu'\r\n--- uses cdh_ml.ml_code_local_valuesets ... \r\n---  the lava code_local_valuesets augumented with additional vocabulary synonyms based on OMOP standard conceptid\r\nSELECT\r\n  feature_name,\r\n  count(DISTINCT o.personid),\r\n  count(distinct o.encounterid) --,\r\n  --  o.codeconceptmapid,\r\n--  o.recordeddatetime,\r\n--  condit.virus_type AS virus_type_code\r\nFROM\r\n  condition o\r\n  JOIN conditioncodeconceptmap cm ON o.codeconceptmapid = cm.id\r\n  JOIN (\r\n  --- must be select DISTINCT here\r\n    select distinct \r\n     f.feature_name,\r\n      element_at(split(f.feature_name, '_'), -1) as virus_type,\r\n      c.conceptcode,\r\n      c.conceptid\r\n    from\r\n      edav_prd_cdh.cdh_ml.ml_code_local_valuesets f\r\n      join edav_prd_cdh.cdh_truveta.concept c \r\n      on f.concept_code = c.conceptcode\r\n    where\r\n      feature_name in ('diag_icd_covid', 'diag_icd_flu')    \r\n  ) AS condit ON condit.conceptid = cm.codeconceptid\r\nWHERE\r\n  o.RecordedDateTime >= '2022-08-01'\r\ngroup BY\r\n  feature_name",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "047b284e",
+    "displayName" : "ak21_deaths_original",
+    "query" : "--Deaths: code for edav_prd_cdh.cdh_truveta_exploratory.ak21_truveta_encounterv2\r\nwith conids as (select conceptid from cdh_truveta.concept where ConceptCode in ('1065237', '1065240', '2703594', '2703596') \r\n                ),\r\n\r\n     mapids as (Select id from cdh_truveta.conditioncodeconceptmap where  codeconceptid in (select conceptid from conids) union\r\n                Select id from cdh_truveta.labresultcodeconceptmap where  codeconceptid in (select conceptid from conids) union\r\n                Select id from cdh_truveta.medicationcodeconceptmap where  codeconceptid in (select conceptid from conids) union\r\n                Select id from cdh_truveta.observationcodeconceptmap where  codeconceptid in (select conceptid from conids) union\r\n                Select id from cdh_truveta.procedurecodeconceptmap where  codeconceptid in (select conceptid from conids) \r\n               ),\r\n\r\n        patenc as (select personid from cdh_truveta.condition where codeconceptmapid in (select id from mapids)  union\r\n                 select personid from cdh_truveta.procedure where codeconceptmapid in (select id from mapids)  union\r\n                 select personid from cdh_truveta.observation where codeconceptmapid in (select id from mapids) union\r\n                 select personid from cdh_truveta.labresult where codeconceptmapid in (select id from mapids)  union\r\n                 select personid from cdh_truveta.medicationadministration where codeconceptmapid in (select id from mapids)  union\r\n                 select personid from cdh_truveta.medicationrequest where codeconceptmapid in (select id from mapids)   \r\n               ) \r\n\r\n          select distinct personid,id,startdatetime,enddatetime,classconceptid,typeconceptid,dischargedispositionconceptid,'dead' as clr \r\n          from cdh_truveta.encounter where personid in (select personid from patenc)\r\n"
+  }, {
+    "name" : "07e2c4ff",
+    "displayName" : "ak21 Deaths Concepts",
+    "query" : "select * from cdh_truveta.concept where ConceptCode in ('1065237', '1065240', '2703594', '2703596') or conceptclass like 'EncounterDischarge%'\r\norder by codesystem",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "925452ab",
+    "displayName" : "omop_concept_condition",
+    "query" : "SELECT * from edav_prd_cdh.cdh_premier_omop.concept_observation\r\nwhere raw_concept_code like 'Q93.8%'",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "a535bb10",
+    "displayName" : "a1c_results May 2024 data",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_truveta_exploratory.a1c_results"
+  }, {
+    "name" : "974f9003",
+    "displayName" : "a1c_results comparison",
+    "query" : "(SELECT \"may2024\" as version,count(*) as records, count(DISTINCT EncounterId) as encounters,\r\ncount(DISTINCT Id) as ids, count(DISTINCT personId) as persons, \r\ncount(DISTINCT patientid) as patients\r\n FROM edav_prd_cdh.cdh_truveta_exploratory.a1c_results) union\r\n(SELECT \"new\" as version,count(*) as records, count(DISTINCT EncounterId) as encounters,\r\ncount(DISTINCT Id) as ids, count(DISTINCT personId) as persons, \r\ncount(DISTINCT patientid) as patients\r\n FROM edav_prd_cdh.cdh_ml.A1C_results ) union\r\n (SELECT \"join\" as version,count(*) as records, count(DISTINCT EncounterId) as encounters,\r\ncount(DISTINCT Id) as ids, count(DISTINCT personId) as persons, \r\ncount(DISTINCT patientid) as patients\r\n FROM edav_prd_cdh.cdh_ml.a1c_results_join)"
+  }, {
+    "name" : "e91ec6f3",
+    "displayName" : "a1c_results counts comparison",
+    "query" : "SELECT ex.*, ml.personid as ml_personid\r\n FROM edav_prd_cdh.cdh_truveta_exploratory.a1c_results ex \r\n left join\r\n  edav_prd_cdh.cdh_ml.A1C_results ml\r\n on ml.id=ex.id \r\n --where ex.encounterid='a92da87c-74db-985e-5701-d4e4aaa805ca'\r\n where ml.personid is NULL"
+  }, {
+    "name" : "4b3edc64",
+    "displayName" : "invalid_truveta_concept_codemap",
+    "query" : "-- duplicates without distinct\r\nselect cc.id,\r\ncc.id as codeconditionmapid,\r\nc.codesystem as tru_vocabulary,\r\nc.conceptcode as tru_concept_code,\r\nc.conceptname \r\nfrom edav_prd_cdh.cdh_truveta.conditioncodeconceptmap  cc\r\nleft join edav_prd_cdh.cdh_truveta.concept c\r\non cc.codeconceptid=c.conceptid\r\norder by id,conceptcode,codesystem\r\n\r\n",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "28a1da7c",
+    "displayName" : "truveta_condition_sample",
+    "query" : "SELECT distinct *\r\nFROM edav_prd_cdh.cdh_truveta.condition tc\r\nwhere tc.codeconceptmapid<100\r\norder by tc.personId,tc.patientid,tc.encounterid, tc.sequencenumber,tc.codeconceptmapid,tc.recordeddatetime",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "707b0d35",
+    "displayName" : "truveta_concept_codemap_omop",
+    "query" : "select \r\ncc.id as codeconditionmapid,\r\noc.tar_concept_id as ohdsi_concept_id,\r\nc.conceptcode as tru_concept_code,\r\noc.concept_code as ohdsi_concept_code,\r\noc.src_vocabulary_id as ohdsi_vocabulary,\r\nc.codesystem as tru_vocabulary,\r\nc.conceptid as truveta_conceptid,\r\nc.conceptname \r\nfrom edav_prd_cdh.cdh_truveta.conditioncodeconceptmap  cc\r\nleft join edav_prd_cdh.cdh_truveta.concept c\r\non cc.codeconceptid=c.conceptid\r\nleft join edav_prd_cdh.cdh_ml.omop_concept_condition oc\r\non oc.concept_code=c.conceptcode --and oc.src_vocabulary_id=c.codesystem\r\norder by codeconditionmapid,conceptcode,codesystem",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "d9601dcb",
+    "displayName" : "Condition Truveta IN Strategy filtered by list",
+    "query" : "-- filter all conditions to only include ones where there is at least one mapping that maps to a code in my tbl_codes view\r\n-- this DOES NOT return the conceptcode to the record\r\nSELECT distinct\r\n   EncounterId, PatientId, PersonId, recordedDateTime, SequenceNumber,CodeConceptMapId\r\nFROM\r\n  Condition c\r\nWHERE\r\n  c.CodeConceptMapId IN (\r\n    SELECT\r\n      ccm.Id\r\n    FROM\r\n      ConditionCodeConceptMap ccm\r\n    WHERE\r\n      ccm.CodeConceptId IN (\r\n        SELECT\r\n          CodeConceptId\r\n        FROM\r\n          Concept cc\r\n        WHERE\r\n          (\r\n            cc.conceptcode in (\r\n    'J10.1',\r\n    'J10.2'\r\n--    'J10.8',\r\n--    'J11.0',\r\n--    'J11.00',\r\n--    'J11.08',\r\n--    'J11.1',\r\n--    'J11.2',\r\n--    'J11.8'\r\n            )\r\n          )\r\n      )\r\n  )\r\n  ORDER BY EncounterId, PatientId, PersonId, recordedDateTime, SequenceNumber,CodeConceptMapId",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "74b5fc9d",
+    "displayName" : "Condition Truveta JOIN Strategy",
+    "query" : "-- filter all conditions to only include ones where there is at least one mapping that maps to a code in my tbl_codes view\r\n-- this DOES NOT return the conceptcode to the record\r\nSELECT\r\n  DISTINCT c.*\r\nFROM\r\n  Condition c\r\n  JOIN ConditionCodeConceptMap cc \r\n    ON c.CodeConceptMapId = cc.Id\r\n  JOIN concept co\r\n    on cc.CodeConceptId=co.ConceptId\r\nwhere\r\n  co.conceptcode in (\r\n    'J10.1',\r\n    'J10.2'\r\n--    'J10.8',\r\n--    'J11.0',\r\n--    'J11.00',\r\n--    'J11.08',\r\n--    'J11.1',\r\n--    'J11.2',\r\n--    'J11.8'\r\n  )",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "c1c50282",
+    "displayName" : "Condition Truveta Concept filtered by list",
+    "query" : "-- filter all conditions to only include ones where there is at least one mapping that maps to a code in my tbl_codes view \r\n--SELECT  \r\n-- *\r\n--FROM Condition \r\n--WHERE CodeConceptMapId IN ( \r\n--select codeconceptid FROM ConditionCodeConceptMap where id in (\r\nselect * --distinct conceptid\r\nfrom concept \r\n  WHERE conceptcode IN ('J10.1',\r\n'J10.2',\r\n'J10.8',\r\n'J11.0',\r\n'J11.00',\r\n'J11.08',\r\n'J11.1',\r\n'J11.2',\r\n'J11.8'\r\n)\r\norder by conceptcode\r\n--)\r\n--)",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "4ba99277",
+    "displayName" : "truveta_concepts_filter_condition",
+    "query" : "select conceptcode, codesystem, conceptname, conceptid,conceptclass\r\nfrom concept \r\n  WHERE domain='Condition'\r\n  order by conceptCode,codesystem",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  }, {
+    "name" : "6e4f1af8",
+    "displayName" : "concept_condition",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_ml.omop_concept_condition"
+  }, {
+    "name" : "6a75c0e6",
+    "displayName" : "Untitled dataset",
+    "query" : "select distinct codesystem from concept  \r\n",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_truveta"
+  } ],
+  "pages" : [ {
+    "name" : "65735825",
+    "displayName" : "Overview",
+    "layout" : [ {
+      "widget" : {
+        "name" : "57e33fe1",
+        "textbox_spec" : "###Truveta [Condition to Concept Code](https://learn.truveta.com/studio/docs/transitioning-to-new-lookup-tables-1#1-conditioncodeconceptmap-table)  \n\n**IN** strategy does not return a concept_code, but filters to the list of **table_index_codes** which is created by Prose methods\n```sql\n%%sql \nSELECT\n    *   \nFROM \n   Condition condition \nWHERE\n   condition.Id IN (SELECT ConditionId \n   FROM ConditionCodes \n   WHERE CodeConceptId IN (SELECT ConceptId FROM tbl_index_codes));\n```\n\n**JOIN** strategy is computationally expensive and if used should be done once and only once, as it is a three way join with a select distinct, although even the select distinct will not eliminate all duplicates\n```sql\nSELECT DISTINCT c.*\nFROM Condition c\nJOIN ConditionCodeConceptMap cc ON c.CodeConceptMapId = cc.Id\nJOIN tbl_index_codes ic ON cc.CodeConceptId = ic.ConceptId;\n```\n"
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 4,
+        "width" : 6,
+        "height" : 8
+      }
+    }, {
+      "widget" : {
+        "name" : "feb52cb5",
+        "textbox_spec" : "Truveta **conditions** table has duplicates by design  \nFrom [Truveta Conditions](https://learn.truveta.com/studio/docs/conditions)  documentation  \n> **EncounterId** - Records in general are not always associated with an encounter. This will vary depending on the record type (conditions, labs, medications). For conditions specifically, conditions can be entered in a patients chart outside of the context of an encounter by a clinician, the patient, or an interface. These will often manifest as \"Problem List\" or \"Medical History\" conditions and it is not expected that they be associated with an encounter. Similarly billing conditions may be ingested from the EHR and may not be explicitly tied to an encounter, though when Truveta makes Patient Accounts available, they may be able to link to an encounter through a hospital account's primary encounter. **Truveta has made the decision to pull in conditions from as many sources as possible to increase the sensitivity of detecting patients who may need diagnoses represented from multiple data entry workflows to fully represent all of their comorbidities.**"
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 4
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "0ddec915",
+    "displayName" : "condition 'JOIN' conditionCodeConceptMap",
+    "layout" : [ {
+      "widget" : {
+        "name" : "3ccdff3a",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "8a466c1d",
+            "fields" : [ {
+              "name" : "CodeConceptId",
+              "expression" : "`CodeConceptId`"
+            }, {
+              "name" : "sourceconceptid",
+              "expression" : "`sourceconceptid`"
+            }, {
+              "name" : "personid",
+              "expression" : "`personid`"
+            }, {
+              "name" : "patientid",
+              "expression" : "`patientid`"
+            }, {
+              "name" : "encounterid",
+              "expression" : "`encounterid`"
+            }, {
+              "name" : "RecordedDateTime",
+              "expression" : "`RecordedDateTime`"
+            }, {
+              "name" : "ClinicalStatusConceptId",
+              "expression" : "`ClinicalStatusConceptId`"
+            }, {
+              "name" : "PrimaryDiagnosisConceptId",
+              "expression" : "`PrimaryDiagnosisConceptId`"
+            }, {
+              "name" : "BodySiteMapId",
+              "expression" : "`BodySiteMapId`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "CodeConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100000,
+              "title" : "CodeConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CodeConceptId"
+            }, {
+              "fieldName" : "sourceconceptid",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "sourceconceptid",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "sourceconceptid"
+            }, {
+              "fieldName" : "personid",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100002,
+              "title" : "personid",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "personid"
+            }, {
+              "fieldName" : "patientid",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "patientid",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "patientid"
+            }, {
+              "fieldName" : "encounterid",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100004,
+              "title" : "encounterid",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "encounterid"
+            }, {
+              "fieldName" : "RecordedDateTime",
+              "dateTimeFormat" : "YYYY-MM-DD HH:mm:ss.SSS",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "datetime",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100005,
+              "title" : "RecordedDateTime",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "RecordedDateTime"
+            }, {
+              "fieldName" : "ClinicalStatusConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100006,
+              "title" : "ClinicalStatusConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ClinicalStatusConceptId"
+            }, {
+              "fieldName" : "PrimaryDiagnosisConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100007,
+              "title" : "PrimaryDiagnosisConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "PrimaryDiagnosisConceptId"
+            }, {
+              "fieldName" : "BodySiteMapId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100008,
+              "title" : "BodySiteMapId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "BodySiteMapId"
+            } ]
+          },
+          "invisibleColumns" : [ ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 7
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "7ef330f7",
+    "displayName" : "Concepts",
+    "layout" : [ {
+      "widget" : {
+        "name" : "0c818eb8",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "c1c50282",
+            "fields" : [ {
+              "name" : "ConceptId",
+              "expression" : "`ConceptId`"
+            }, {
+              "name" : "ConceptName",
+              "expression" : "`ConceptName`"
+            }, {
+              "name" : "CodeSystem",
+              "expression" : "`CodeSystem`"
+            }, {
+              "name" : "ConceptCode",
+              "expression" : "`ConceptCode`"
+            }, {
+              "name" : "Domain",
+              "expression" : "`Domain`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "ConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 0,
+              "title" : "ConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptId"
+            }, {
+              "fieldName" : "ConceptName",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 1,
+              "title" : "ConceptName",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptName"
+            }, {
+              "fieldName" : "CodeSystem",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 2,
+              "title" : "CodeSystem",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CodeSystem"
+            }, {
+              "fieldName" : "ConceptCode",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 3,
+              "title" : "ConceptCode",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptCode"
+            }, {
+              "fieldName" : "Domain",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 4,
+              "title" : "Domain",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "Domain"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "ConceptDefinition",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 5,
+            "title" : "ConceptDefinition",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "ConceptClass",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 6,
+            "title" : "ConceptClass",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : true,
+            "description" : "Filtered to 'J10.1', 'J10.2', 'J10.8','J11.0', 'J11.00','J11.08','J11.1','J11.2', 'J11.8' but Concept Code not in table",
+            "title" : "cdh_truveta.concept"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "1c468337",
+        "textbox_spec" : "**condition** columns that map to **concept**\n```python\n#primarydiagnosisconceptid\nprimarydiagnosisconceptidMap=\n{0:\"The field has not been mapped.\".\n1067557:\t\"Field is not present in source\",\n1067561:\t\"The value is exceptional (missing, omitted, incomplete, improper). No information as to the reason for being an exceptional value is provided. This is the most general exceptional value. It is also the default exceptional value.\",\n1200405:\"No\",\n1200406:\"Yes\"}\n\n#SourceProvenanceConceptId\n# no conditions extracted from clinical textx\nspDict={3056721:\t\"This data was extracted by Truveta from clinical texts including notes, reports, and narratives in the EHR.\",\n3056722:\t\"This data is from structured field in the EHR.\"}\n\n# categoryconceptid discrete \n\n#severityconceptid discrete\n\n\n```\n"
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 4,
+        "width" : 6,
+        "height" : 7
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "758083c2",
+    "displayName" : "'IN' Strategy",
+    "layout" : [ {
+      "widget" : {
+        "name" : "1f8c0cca",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "d9601dcb",
+            "fields" : [ {
+              "name" : "EncounterId",
+              "expression" : "`EncounterId`"
+            }, {
+              "name" : "PatientId",
+              "expression" : "`PatientId`"
+            }, {
+              "name" : "CodeConceptMapId",
+              "expression" : "`CodeConceptMapId`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "EncounterId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 4,
+              "title" : "EncounterId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "EncounterId"
+            }, {
+              "fieldName" : "PatientId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 5,
+              "title" : "PatientId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "PatientId"
+            }, {
+              "fieldName" : "CodeConceptMapId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 6,
+              "title" : "CodeConceptMapId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CodeConceptMapId"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "PersonId",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 9,
+            "title" : "PersonId",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "numberFormat" : "0",
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "SequenceNumber",
+            "type" : "integer",
+            "displayAs" : "number",
+            "order" : 11,
+            "title" : "SequenceNumber",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "dateTimeFormat" : "YYYY-MM-DD HH:mm:ss.SSS",
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "recordedDateTime",
+            "type" : "datetime",
+            "displayAs" : "datetime",
+            "order" : 100003,
+            "title" : "recordedDateTime",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : true,
+            "description" : "- Filtered to 'J10.1', 'J10.2', 'J10.8','J11.0', 'J11.00','J11.08','J11.1','J11.2', 'J11.8' but Concept Code not in table\n- Null EncounterID\n- Appears to ",
+            "title" : "cdh_truveta.condition filtered conceptcodes using IN syntax"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 10
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "87fb423c",
+    "displayName" : "'JOIN' Strategy",
+    "layout" : [ {
+      "widget" : {
+        "name" : "580b80a7",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "74b5fc9d",
+            "fields" : [ {
+              "name" : "AbatementDateTime",
+              "expression" : "`AbatementDateTime`"
+            }, {
+              "name" : "CategoryConceptId",
+              "expression" : "`CategoryConceptId`"
+            }, {
+              "name" : "ClinicalStatusConceptId",
+              "expression" : "`ClinicalStatusConceptId`"
+            }, {
+              "name" : "CodeConceptMapId",
+              "expression" : "`CodeConceptMapId`"
+            }, {
+              "name" : "EncounterId",
+              "expression" : "`EncounterId`"
+            }, {
+              "name" : "Id",
+              "expression" : "`Id`"
+            }, {
+              "name" : "OnsetDateTime",
+              "expression" : "`OnsetDateTime`"
+            }, {
+              "name" : "PatientId",
+              "expression" : "`PatientId`"
+            }, {
+              "name" : "PersonId",
+              "expression" : "`PersonId`"
+            }, {
+              "name" : "PrimaryDiagnosisConceptId",
+              "expression" : "`PrimaryDiagnosisConceptId`"
+            }, {
+              "name" : "RecordedDateTime",
+              "expression" : "`RecordedDateTime`"
+            }, {
+              "name" : "SequenceNumber",
+              "expression" : "`SequenceNumber`"
+            }, {
+              "name" : "SeverityConceptId",
+              "expression" : "`SeverityConceptId`"
+            }, {
+              "name" : "SourceProvenanceConceptId",
+              "expression" : "`SourceProvenanceConceptId`"
+            }, {
+              "name" : "SourceRecordId",
+              "expression" : "`SourceRecordId`"
+            }, {
+              "name" : "VerificationStatusConceptId",
+              "expression" : "`VerificationStatusConceptId`"
+            }, {
+              "name" : "BodySiteMapId",
+              "expression" : "`BodySiteMapId`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "AbatementDateTime",
+              "dateTimeFormat" : "YYYY-MM-DD HH:mm:ss.SSS",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "datetime",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100000,
+              "title" : "AbatementDateTime",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "AbatementDateTime"
+            }, {
+              "fieldName" : "CategoryConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "CategoryConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CategoryConceptId"
+            }, {
+              "fieldName" : "ClinicalStatusConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100002,
+              "title" : "ClinicalStatusConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ClinicalStatusConceptId"
+            }, {
+              "fieldName" : "CodeConceptMapId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "CodeConceptMapId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CodeConceptMapId"
+            }, {
+              "fieldName" : "EncounterId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100004,
+              "title" : "EncounterId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "EncounterId"
+            }, {
+              "fieldName" : "Id",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100005,
+              "title" : "Id",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "Id"
+            }, {
+              "fieldName" : "OnsetDateTime",
+              "dateTimeFormat" : "YYYY-MM-DD HH:mm:ss.SSS",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "datetime",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100006,
+              "title" : "OnsetDateTime",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "OnsetDateTime"
+            }, {
+              "fieldName" : "PatientId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100007,
+              "title" : "PatientId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "PatientId"
+            }, {
+              "fieldName" : "PersonId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100008,
+              "title" : "PersonId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "PersonId"
+            }, {
+              "fieldName" : "PrimaryDiagnosisConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100009,
+              "title" : "PrimaryDiagnosisConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "PrimaryDiagnosisConceptId"
+            }, {
+              "fieldName" : "RecordedDateTime",
+              "dateTimeFormat" : "YYYY-MM-DD HH:mm:ss.SSS",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "datetime",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100010,
+              "title" : "RecordedDateTime",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "RecordedDateTime"
+            }, {
+              "fieldName" : "SequenceNumber",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100011,
+              "title" : "SequenceNumber",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "SequenceNumber"
+            }, {
+              "fieldName" : "SeverityConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100012,
+              "title" : "SeverityConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "SeverityConceptId"
+            }, {
+              "fieldName" : "SourceProvenanceConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100013,
+              "title" : "SourceProvenanceConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "SourceProvenanceConceptId"
+            }, {
+              "fieldName" : "SourceRecordId",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100014,
+              "title" : "SourceRecordId",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "SourceRecordId"
+            }, {
+              "fieldName" : "VerificationStatusConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100015,
+              "title" : "VerificationStatusConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "VerificationStatusConceptId"
+            }, {
+              "fieldName" : "BodySiteMapId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100016,
+              "title" : "BodySiteMapId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "BodySiteMapId"
+            } ]
+          },
+          "invisibleColumns" : [ ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : true,
+            "description" : "Filtered to 'J10.1', 'J10.2', 'J10.8','J11.0', 'J11.00','J11.08','J11.1','J11.2', 'J11.8' but Concept Code not in table",
+            "title" : "cdh_truveta.condition filtered conceptcodes using IN syntax"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 6,
+        "width" : 6,
+        "height" : 5
+      }
+    }, {
+      "widget" : {
+        "name" : "a19c4b5f",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "c1c50282",
+            "fields" : [ {
+              "name" : "ConceptId",
+              "expression" : "`ConceptId`"
+            }, {
+              "name" : "ConceptName",
+              "expression" : "`ConceptName`"
+            }, {
+              "name" : "CodeSystem",
+              "expression" : "`CodeSystem`"
+            }, {
+              "name" : "ConceptCode",
+              "expression" : "`ConceptCode`"
+            }, {
+              "name" : "Domain",
+              "expression" : "`Domain`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "ConceptId",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 0,
+              "title" : "ConceptId",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptId"
+            }, {
+              "fieldName" : "ConceptName",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 1,
+              "title" : "ConceptName",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptName"
+            }, {
+              "fieldName" : "CodeSystem",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 2,
+              "title" : "CodeSystem",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "CodeSystem"
+            }, {
+              "fieldName" : "ConceptCode",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 3,
+              "title" : "ConceptCode",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "ConceptCode"
+            }, {
+              "fieldName" : "Domain",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 4,
+              "title" : "Domain",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "Domain"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "ConceptDefinition",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 5,
+            "title" : "ConceptDefinition",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "ConceptClass",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 6,
+            "title" : "ConceptClass",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : true,
+            "description" : "Filtered to 'J10.1', 'J10.2', 'J10.8','J11.0', 'J11.00','J11.08','J11.1','J11.2', 'J11.8' but Concept Code not in table",
+            "title" : "cdh_truveta.concept"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 6
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "44e829ce",
+    "displayName" : "Truveta Concept Codes",
+    "layout" : [ {
+      "widget" : {
+        "name" : "e71be722",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4ba99277",
+            "fields" : [ {
+              "name" : "conceptid",
+              "expression" : "`conceptid`"
+            }, {
+              "name" : "codesystem",
+              "expression" : "`codesystem`"
+            }, {
+              "name" : "conceptcode",
+              "expression" : "`conceptcode`"
+            }, {
+              "name" : "conceptname",
+              "expression" : "`conceptname`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "conceptid",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 0,
+              "title" : "conceptid",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "conceptid"
+            }, {
+              "fieldName" : "codesystem",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 1,
+              "title" : "codesystem",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "codesystem"
+            }, {
+              "fieldName" : "conceptcode",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 2,
+              "title" : "conceptcode",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "conceptcode"
+            }, {
+              "fieldName" : "conceptname",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 4,
+              "title" : "conceptname",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "conceptname"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "conceptclass",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 3,
+            "title" : "conceptclass",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "title" : "cdh_truveta.concept",
+            "showDescription" : true,
+            "description" : "filtered to Domain 'condition'"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 3,
+        "height" : 5
+      }
+    }, {
+      "widget" : {
+        "name" : "57821dca",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4b3edc64",
+            "fields" : [ {
+              "name" : "codeconditionmapid",
+              "expression" : "`codeconditionmapid`"
+            }, {
+              "name" : "tru_vocabulary",
+              "expression" : "`tru_vocabulary`"
+            }, {
+              "name" : "tru_concept_code",
+              "expression" : "`tru_concept_code`"
+            }, {
+              "name" : "conceptname",
+              "expression" : "`conceptname`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "codeconditionmapid",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "codeconditionmapid",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "codeconditionmapid"
+            }, {
+              "fieldName" : "tru_vocabulary",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100002,
+              "title" : "tru_vocabulary",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "tru_vocabulary"
+            }, {
+              "fieldName" : "tru_concept_code",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "tru_concept_code",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "tru_concept_code"
+            }, {
+              "fieldName" : "conceptname",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100004,
+              "title" : "conceptname",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "conceptname"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "numberFormat" : "0",
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "id",
+            "type" : "integer",
+            "displayAs" : "number",
+            "order" : 100000,
+            "title" : "id",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : true,
+            "title" : "cdh_truveta.conditioncodemap",
+            "description" : "intermediate between cdh_truveta.concept  and cdh_truveta.condition "
+          }
+        }
+      },
+      "position" : {
+        "x" : 3,
+        "y" : 0,
+        "width" : 3,
+        "height" : 5
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "301980ae",
+    "displayName" : "Untitled page 1",
+    "pageType" : "PAGE_TYPE_CANVAS"
+  } ],
+  "uiSettings" : {
+    "theme" : { }
+  }
+}

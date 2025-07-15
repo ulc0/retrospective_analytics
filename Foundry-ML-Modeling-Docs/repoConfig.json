@@ -1,0 +1,10 @@
+{
+  "verticalRulerColumn": 120,
+  "fileHidePatterns": [
+    "**/.*",
+    "repoConfig.json",
+    "templateConfig.json",
+    "ci.yml",
+    "*.py"
+  ]
+}

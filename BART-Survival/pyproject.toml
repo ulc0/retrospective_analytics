@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bart_survival"
+authors = [
+    {name = "Jacob Tiegs", email = "tiegsjacob@gmail.com"},
+]
+description = "Survival analyses with Bayesian Additivie Regression Trees using PyMC-BART as BART backend."
+version = "0.1.1"
+readme = "README.md"
+dependencies = [
+    "numpy",
+    "scipy",
+    'pymc; python_version<="5.10.3"',
+    'pymc-bart',
+    "cloudpickle"
+]
+
+[project.urls]
+Homepage = "https://github.com/CDCgov/BART-Survival"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["bart_survival"]  
+exclude = ["additional"]
+namespaces = false
+

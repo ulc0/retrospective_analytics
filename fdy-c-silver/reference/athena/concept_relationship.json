@@ -1,0 +1,41 @@
+{
+    "fields": [
+        {
+            "metadata": {},
+            "name": "concept_id_1",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "concept_id_2",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "relationship_id",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "valid_start_date",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "valid_end_date",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "invalid_reason",
+            "nullable": true,
+            "type": "string"
+        }
+    ],
+    "type": "struct"
+}

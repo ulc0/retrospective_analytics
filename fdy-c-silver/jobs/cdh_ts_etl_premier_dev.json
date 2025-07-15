@@ -1,0 +1,399 @@
+{
+    "job_id": 568208545658323,
+    "creator_user_name": "ulc0@cdc.gov",
+    "run_as_user_name": "ulc0@cdc.gov",
+    "run_as_owner": true,
+    "settings": {
+        "name": "edav_prd_cdh.cdh_fs_etl_premier_dev",
+        "email_notifications": {
+            "no_alert_for_skipped_runs": false
+        },
+        "webhook_notifications": {},
+        "timeout_seconds": 0,
+        "max_concurrent_runs": 100,
+        "tasks": [
+            {
+                "task_key": "pat_key_list",
+                "depends_on": [
+                    {
+                        "task_key": "medrec_key_list"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/pat_key_list",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_demographics",
+                "depends_on": [
+                    {
+                        "task_key": "medrec_key_list"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_demographics",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_encounter_index",
+                "depends_on": [
+                    {
+                        "task_key": "ra_encounter_index"
+                    },
+                    {
+                        "task_key": "pd_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_encounter_index",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_cpt_encounters",
+                "depends_on": [
+                    {
+                        "task_key": "fs_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_cpt_encounters",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_icd_encounters",
+                "depends_on": [
+                    {
+                        "task_key": "fs_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_icd_encounters",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_genlab_order",
+                "depends_on": [
+                    {
+                        "task_key": "fs_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_genlab_order",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_vitals_order",
+                "depends_on": [
+                    {
+                        "task_key": "fs_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_vitals_order",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_pharmacy_code",
+                "depends_on": [
+                    {
+                        "task_key": "fs_pharmacy_name"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/fp/fs_pharmacy_code",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_pharmacy_cat",
+                "depends_on": [
+                    {
+                        "task_key": "fs_pharmacy_code"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/fp/fs_pharmacy_cat",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_pharmacy_name",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/fp/fs_pharmacy_name",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "patbill_events",
+                "depends_on": [
+                    {
+                        "task_key": "fs_encounter_index"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/patbill_events",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_pharmacy_events",
+                "depends_on": [
+                    {
+                        "task_key": "patbill_events"
+                    },
+                    {
+                        "task_key": "fs_pharmacy_code"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_pharmacy_events",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "pd_encounter_index",
+                "depends_on": [
+                    {
+                        "task_key": "medrec_key_list"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/pd_encounter_index",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "ra_encounter_index",
+                "depends_on": [
+                    {
+                        "task_key": "pat_key_list"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/ra_encounter_index",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_lab_events",
+                "depends_on": [
+                    {
+                        "task_key": "patbill_events"
+                    },
+                    {
+                        "task_key": "fs_lab_code"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/fs_lab_events",
+                    "base_parameters": {
+                        "task_key": "{{task_key}}"
+                    },
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_lab_code",
+                "depends_on": [
+                    {
+                        "task_key": "fs_lab_name"
+                    }
+                ],
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/fp/fs_lab_code",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "fs_lab_name",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/fp/fs_lab_name",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            },
+            {
+                "task_key": "medrec_key_list",
+                "run_if": "ALL_SUCCESS",
+                "notebook_task": {
+                    "notebook_path": "premier/etl/medrec_key_list",
+                    "source": "GIT"
+                },
+                "existing_cluster_id": "1109-202017-y39l9koa",
+                "timeout_seconds": 0,
+                "email_notifications": {},
+                "notification_settings": {
+                    "no_alert_for_skipped_runs": false,
+                    "no_alert_for_canceled_runs": false,
+                    "alert_on_last_attempt": false
+                }
+            }
+        ],
+        "git_source": {
+            "git_url": "https://github.com/cdcent/cdh-ml-featurestore",
+            "git_provider": "gitHub",
+            "git_branch": "exploratory"
+        },
+        "format": "MULTI_TASK"
+    },
+    "created_time": 1686939835986
+}

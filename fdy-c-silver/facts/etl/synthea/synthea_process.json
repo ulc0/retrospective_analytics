@@ -1,0 +1,7 @@
+{
+    "PATIENT": "patient_id",
+    "START": "observation_datetime",
+    "ENCOUNTER": "string",
+    "CODE": "concept_code",
+    "SYSTEM": "vocabulary_id",
+}

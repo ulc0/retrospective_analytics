@@ -1,0 +1,83 @@
+{
+    "patcpt": {
+        "dataset": "patcpt",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "coalesce(PROC_DATE,e.observation_datetime)",
+        "vocabulary_id": "'HCPCS'",
+        "concept_code": "CPT_CODE",
+        "where_clause": "  "
+    },
+    "paticd_diag": {
+        "dataset": "paticd_diag",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "(CASE WHEN (ICD_PRI_SEC = 'A' OR ICD_POA='Y') THEN e.observation_datetime else coalesce(e.observation_period_end_date,e.observation_datetime) END  )  ",
+        "vocabulary_id": "icd_version",
+        "concept_code": "ICD_CODE",
+        "where_clause": "  "
+    },
+    "paticd_proc": {
+        "dataset": "paticd_proc",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "coalesce(PROC_DATE,e.observation_datetime)",
+        "vocabulary_id": "icd_version",
+        "concept_code": "ICD_CODE",
+        "where_clause": "  "
+    },
+    "genlab": {
+        "dataset": "genlab",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "collection_datetime",
+        "vocabulary_id": "LAB_TEST_CODE_TYPE",
+        "concept_code": "lab_test_code",
+        "where_clause": " WHERE  collection_datetime is not NULL "
+    },
+    "lab_sens": {
+        "dataset": "lab_sens",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "collection_datetime",
+        "vocabulary_id": "SUSC_TEST_METHOD_CODE_TYPE",
+        "concept_code": "SUSC_TEST_METHOD_CODE",
+        "where_clause": " WHERE  collection_datetime is not NULL "
+    },
+    "vitals": {
+        "dataset": "vitals",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "e.observation_datetime",
+        "vocabulary_id": "LAB_TEST_CODE_TYPE",
+        "concept_code": "LAB_TEST_CODE",
+        "where_clause": " WHERE  e.observation_datetime is not NULL "
+    },
+    "stdrx": {
+        "dataset": "patbill",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "COALESCE(serv_date,e.observation_datetime)",
+        "vocabulary_id": "'STDRX'",
+        "concept_code": "std_chg_code",
+        "where_clause": " WHERE  startswith(std_chg_code,'250') "
+    },
+    "stdlab": {
+        "dataset": "patbill",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "COALESCE(serv_date,e.observation_datetime)",
+        "vocabulary_id": "'STDLAB'",
+        "concept_code": "std_chg_code",
+        "where_clause": " WHERE  startswith(std_chg_code,'300') "
+    },
+    "stdchg": {
+        "dataset": "patbill",
+        "observation_period_id": "PAT_KEY",
+        "person_id": "patientuid",
+        "observation_datetime": "COALESCE(serv_date,e.observation_datetime)",
+        "vocabulary_id": "'STDCHG'",
+        "concept_code": "std_chg_code",
+        "where_clause": " WHERE NOT startswith(std_chg_code,'250') AND NOT startswith(std_chg_code,'300') "
+    }
+}

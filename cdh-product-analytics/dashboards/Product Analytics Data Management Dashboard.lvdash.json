@@ -1,0 +1,1922 @@
+{
+  "datasets" : [ {
+    "name" : "4ebc6801",
+    "displayName" : "DataTable User, Notebook and Query Counts",
+    "query" : "select\r\n  datatable,\r\n  count(distinct email) as user_count,\r\n  count(distinct notebookid) as notebooks,\r\n  count(distinct commandid) as queries,\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as latest_date\r\nFROM\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube\r\nwhere\r\n  :date_min <= event_date\r\n  and event_date <= :date_max\r\ngroup by\r\n  datatable\r\nhaving\r\n  count(distinct notebookid) >= :min_notebooks\r\norder by\r\n  queries desc",
+    "parameters" : [ {
+      "displayName" : "date_min",
+      "keyword" : "date_min",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now-60d/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "date_max",
+      "keyword" : "date_max",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "min_notebooks",
+      "keyword" : "min_notebooks",
+      "dataType" : "INTEGER",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "INTEGER",
+          "values" : [ {
+            "value" : "5"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "f445a43f",
+    "displayName" : "Schema User, Notebook and Query Counts",
+    "query" : "select\r\n  data_asset_provider,\r\n  table_schema_type,\r\n  table_schema,\r\n  count(distinct email) as user_count,\r\n  count(distinct notebookid) as notebooks,\r\n  count(distinct commandid) as queries,\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as latest_date\r\nFROM\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube\r\ngroup by\r\n  data_asset_provider,\r\n  table_schema_type,\r\n  table_schema\r\n  \r\nhaving\r\n  count(distinct notebookid) >= :min_notebooks\r\norder by\r\n  queries desc",
+    "parameters" : [ {
+      "displayName" : "min_notebooks",
+      "keyword" : "min_notebooks",
+      "dataType" : "INTEGER",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "INTEGER",
+          "values" : [ {
+            "value" : "2"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "aa5fb7c0",
+    "displayName" : "Dataset User, Notebook and Query Counts",
+    "query" : "select\r\n  ds as data_set,\r\n  count(distinct email) as user_count,\r\n  count(distinct notebookid) as notebooks,\r\n  count(distinct commandid) as queries,\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as latest_date\r\nFROM\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube\r\nwhere\r\n  :date_min <= event_date\r\n  and event_date <= :date_max\r\ngroup by\r\n  ds\r\nhaving\r\n  count(distinct notebookid) >= :min_notebooks\r\norder by\r\n  queries desc",
+    "parameters" : [ {
+      "displayName" : "date_min",
+      "keyword" : "date_min",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now-365d/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "date_max",
+      "keyword" : "date_max",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "min_notebooks",
+      "keyword" : "min_notebooks",
+      "dataType" : "INTEGER",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "INTEGER",
+          "values" : [ {
+            "value" : "5"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "157c0c8c",
+    "displayName" : "Costs By Queries and Usage",
+    "query" : "select\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as most_recent_date,\r\n  count(distinct event_date) as execution_counts,\r\n  notebookid,\r\n  concat('https://adb-5189663741904016.16.azuredatabricks.net/editor/notebooks/',notebookid) as notebook_url,\r\n  round(sum(execution_time), 1) as total_execution_time,\r\n  round(avg(execution_time), 1) as avg_execution_time,\r\n  round(stddev(execution_time), 2) as stddev_execution_time,\r\n  max(commandtext) as commandtext,\r\n  max(table_count) as table_count,\r\n  max(column_count) as column_count,\r\n  max(tables) as tables,\r\n  max(columns) as columns\r\nfrom\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube_collected_columns\r\nwhere\r\n  :date_min <= event_date\r\n  and event_date <= :date_max\r\ngroup by notebookid\r\norder by avg_execution_time desc,\r\n  execution_counts desc,\r\n  total_execution_time desc",
+    "parameters" : [ {
+      "displayName" : "date_min",
+      "keyword" : "date_min",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now-90d/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "date_max",
+      "keyword" : "date_max",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now/d"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "ed80c3b9",
+    "displayName" : "DataColumn User, Notebook and Query Counts",
+    "query" : "select\r\n  concat(table_schema, '.', full_column_name) as column_name,\r\n  count(distinct email) as user_count,\r\n  count(distinct notebookid) as notebooks,\r\n  count(distinct commandid) as queries,\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as latest_date\r\nFROM\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube\r\nwhere\r\n  :date_min <= event_date\r\n  and event_date <= :date_max\r\ngroup by\r\n  concat(table_schema, '.', full_column_name)\r\n  having count(distinct notebookid)>= :min_notebooks\r\norder by\r\n  queries desc",
+    "parameters" : [ {
+      "displayName" : "date_min",
+      "keyword" : "date_min",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "2024-05-01T00:00:00.000"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "date_max",
+      "keyword" : "date_max",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "2025-05-12T00:00:00.000"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "min_notebooks",
+      "keyword" : "min_notebooks",
+      "dataType" : "INTEGER",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "INTEGER",
+          "values" : [ {
+            "value" : "5"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "19607bd7",
+    "displayName" : "Execution Times by table combinations",
+    "query" : "select\r\n  notebookid,\r\n  round(avg(execution_time)) as avg,\r\n  round(max(execution_time)) as max,\r\n  round(sum(execution_time)) as total,\r\n  count(*) as runs,\r\n  array_contains(tables, 'cdh_premier_v2.patdemo') as pd,\r\n  array_contains(tables, 'cdh_premier_v2.patbill') as pb,\r\n  array_contains(tables, 'cdh_truveta.concept') as tc,\r\n  (pd or pb or tc) as known,\r\n  tables,\r\n  min(event_date) as earliest_date,\r\n  max(event_date) as latest_date,\r\n  collect_set(commandtext) as commandtext\r\nfrom\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_cube_collected_columns\r\n--where\r\n--  :date_min <= event_date\r\n--  and event_date <= :date_max\r\ngroup by\r\n  tables,\r\n  notebookid\r\norder by\r\n  runs desc"
+  }, {
+    "name" : "d1665344",
+    "displayName" : "Execution Times by notebook",
+    "query" : "select\r\n  notebookid,\r\n  concat('https://adb-5189663741904016.16.azuredatabricks.net/editor/notebooks/',notebookid) as notebook_url,\r\n  event_date,\r\n  rank() OVER(order by execution_time desc) as usage_rank,\r\n  execution_time,\r\n  clusterid,\r\n  email\r\n--  collect_set(commandid) as commandid,\r\n--  collect_set(clusterid) as clusterid,\r\n--  collect_set(email) as email\r\n--  count(*) as execution_counts,\r\n--  min(event_date) as earliest_execution,\r\n--  max(event_date) as most_recent_execution,\r\n--  max(execution_time) as max_usage,\r\n--  avg(execution_time) as avg_usage,\r\n--  std(execution_time) as stddev_usage\r\nfrom\r\n  edav_prd_cdh.cdh_engineering_etl.product_analytics_core_usage_grouped\r\nwhere \r\n--   usage_rank <= :highest_rank and \r\n   :date_min <= event_date and event_date <= :date_max\r\n--group by\r\n--  notebookid,execution_time\r\n--having count(distinct notebookid) >= :min_notebooks\r\n  limit :highest_rank",
+    "parameters" : [ {
+      "displayName" : "date_max",
+      "keyword" : "date_max",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "date_min",
+      "keyword" : "date_min",
+      "dataType" : "DATE",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "DATE",
+          "values" : [ {
+            "value" : "now-60d/d"
+          } ]
+        }
+      }
+    }, {
+      "displayName" : "highest_rank",
+      "keyword" : "highest_rank",
+      "dataType" : "INTEGER",
+      "defaultSelection" : {
+        "values" : {
+          "dataType" : "INTEGER",
+          "values" : [ {
+            "value" : "25"
+          } ]
+        }
+      }
+    } ]
+  }, {
+    "name" : "701a1d04",
+    "displayName" : "Table Columns unused based on current usage",
+    "query" : "select\r\n  concat(s.table_schema,'.',s.table_name) as datatable,\r\n  max(u.event_date) as most_recent_use,\r\n  count(distinct s.column_name) as column_count,\r\n  column_count - count(distinct u.column_name) as count_unused,\r\n  if(column_count=count_unused,True,False) as table_unused,\r\n  round(count_unused/column_count*100,1) as percent_unused,\r\n  array_intersect(collect_set(u.column_name), collect_set(s.column_name) ) as unused_columns,\r\n  collect_set(s.column_name) as all_columns\r\nfrom\r\n  edav_prd_cdh.information_schema.columns s\r\n    left join edav_prd_cdh.cdh_engineering_etl.product_analytics_cube u\r\n      on s.table_schema = u.table_schema\r\n      and s.table_name = u.table_name\r\n      and s.column_name = u.column_name\r\nwhere s.table_schema in \r\n  ('cdh_truveta','cdh_truveta_lava',\r\n  'cdh_premier_lava_dev', 'cdh_premier_v2',\r\n  'cdh_premier_lava','cdh_premier_lava_dev')\r\ngroup by\r\n  s.table_schema,\r\n  s.table_name\r\norder by\r\n  count_unused desc --  ) x"
+  }, {
+    "name" : "b9680094",
+    "displayName" : "product_analytics_core_usage",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_engineering_etl.product_analytics_core_usage order by event_time desc"
+  }, {
+    "name" : "731f129e",
+    "displayName" : "product_analytics_schemas",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_engineering_etl.product_analytics_schemas"
+  }, {
+    "name" : "b6da4046",
+    "displayName" : "product_analytics_cube",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_engineering_etl.product_analytics_cube"
+  }, {
+    "name" : "3a3790b0",
+    "displayName" : "product_analytics_cube_collected_columns",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_engineering_etl.product_analytics_cube_collected_columns"
+  }, {
+    "name" : "8e4a89c9",
+    "displayName" : "product_analytics_core_usage_grouped",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_engineering_etl.product_analytics_core_usage_grouped"
+  } ],
+  "pages" : [ {
+    "name" : "fb1bc260",
+    "displayName" : "Documentation",
+    "layout" : [ {
+      "widget" : {
+        "name" : "1c040372",
+        "textbox_spec" : "### Product Analytics Documentation\n\n**Product Analytics** data tables are built every morning from two core system sources, notebook usage and table/column Delta lineage:\n* **[SILVER_USAGE_TBL](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_prd_cdh/cdh_engineering_etl/analytics_cluster_silver?o=5189663741904016&activeTab=lineage)** - daily snapshot of usage from EDAV audit logs\n* **[CORE_USAGE_TBL](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_prd_cdh/cdh_engineering_etl/product_analytics_core_usage?o=5189663741904016&activeTab=lineage)** - core usage table at notebookid/commandid level with commandtext, clusterid, (user) email, event_date, and (rounded) runtime\n* **[CORE_USAGE_TBL_GROUPED](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_prd_cdh/cdh_engineering_etl/product_analytics_core_usage?o=5189663741904016&activeTab=lineage)** - core usage table at notebookid/commandid level with clusterid, (user) email, event_date, and (rounded) runtime (no commandtext)\n* **[EDAV_LINEAGE_TBL](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_project_audit_logs/cdh/column_lineage?o=5189663741904016)** - Databricks Delta Column level Lineage Table at notebookid level\n* **[ANALYTICS_TBL](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_prd_cdh/cdh_engineering_etl/product_analytics_cube?o=5189663741904016&activeTab=lineage)** - Product Analytics primary table, as an inner Join of CORE_USAGE_TBL and EDAV_LINEAGE_TBL by notebookid with column match\n* **[ANALYTICS_TBL_GROUPED](https://adb-5189663741904016.16.azuredatabricks.net/explore/data/edav_prd_cdh/cdh_engineering_etl/product_analytics_core_usage_grouped?o=5189663741904016&activeTab=lineage)** - ANALYTICS_TBL at the notebookid level\n\n\n\n```mermaid\nANALYTICS_CLUSTER_SILVER\n```"
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 5
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "3c9f23a4",
+    "displayName" : "Commands By Execution Time",
+    "layout" : [ {
+      "widget" : {
+        "name" : "38e0aee2",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "19607bd7",
+            "fields" : [ {
+              "name" : "runs",
+              "expression" : "`runs`"
+            }, {
+              "name" : "latest_date",
+              "expression" : "`latest_date`"
+            }, {
+              "name" : "avg",
+              "expression" : "`avg`"
+            }, {
+              "name" : "max",
+              "expression" : "`max`"
+            }, {
+              "name" : "total",
+              "expression" : "`total`"
+            }, {
+              "name" : "pb",
+              "expression" : "`pb`"
+            }, {
+              "name" : "tc",
+              "expression" : "`tc`"
+            }, {
+              "name" : "pd",
+              "expression" : "`pd`"
+            }, {
+              "name" : "commandtext",
+              "expression" : "`commandtext`"
+            }, {
+              "name" : "tables",
+              "expression" : "`tables`"
+            }, {
+              "name" : "earliest_date",
+              "expression" : "`earliest_date`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "runs",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 0,
+              "title" : "runs",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "runs"
+            }, {
+              "fieldName" : "latest_date",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 1,
+              "title" : "latest",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "latest_date"
+            }, {
+              "fieldName" : "avg",
+              "numberFormat" : "0.00",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "float",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 2,
+              "title" : "avg",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "Avg Time",
+              "displayName" : "avg"
+            }, {
+              "fieldName" : "max",
+              "numberFormat" : "0.00",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "float",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 3,
+              "title" : "max",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "Maximum Execution Time",
+              "displayName" : "max"
+            }, {
+              "fieldName" : "total",
+              "numberFormat" : "0.00",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "float",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 4,
+              "title" : "total",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "Total Execution Time",
+              "displayName" : "total"
+            }, {
+              "fieldName" : "pb",
+              "booleanValues" : [ "", "patbill" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "boolean",
+              "displayAs" : "boolean",
+              "visible" : true,
+              "order" : 6,
+              "title" : "pb",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "join with patbill",
+              "displayName" : "pb"
+            }, {
+              "fieldName" : "tc",
+              "booleanValues" : [ "", "tc" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "boolean",
+              "displayAs" : "boolean",
+              "visible" : true,
+              "order" : 7,
+              "title" : "tc",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "join with truveta.concept",
+              "displayName" : "tc"
+            }, {
+              "fieldName" : "pd",
+              "booleanValues" : [ "", "patdemo" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "boolean",
+              "displayAs" : "boolean",
+              "visible" : true,
+              "order" : 8,
+              "title" : "pd",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "description" : "join with patbill",
+              "displayName" : "pd"
+            }, {
+              "fieldName" : "commandtext",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "complex",
+              "displayAs" : "json",
+              "visible" : true,
+              "order" : 9,
+              "title" : "commandtext",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "commandtext"
+            }, {
+              "fieldName" : "tables",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "complex",
+              "displayAs" : "json",
+              "visible" : true,
+              "order" : 10,
+              "title" : "tables",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "tables"
+            }, {
+              "fieldName" : "earliest_date",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 11,
+              "title" : "earliest ",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "earliest_date"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "known",
+            "type" : "boolean",
+            "displayAs" : "boolean",
+            "order" : 5,
+            "title" : "known",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "notebookid",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 12,
+            "title" : "notebookid",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 2,
+        "width" : 6,
+        "height" : 8
+      }
+    }, {
+      "widget" : {
+        "name" : "b3145113",
+        "queries" : [ {
+          "name" : "dashboards/01f030ec59b11045a8328f2de0fc4f66/datasets/01f030ec59b11c18a88985fc0df10a1e_earliest_date",
+          "query" : {
+            "datasetName" : "19607bd7",
+            "fields" : [ {
+              "name" : "earliest_date",
+              "expression" : "`earliest_date`"
+            }, {
+              "name" : "earliest_date_associativity",
+              "expression" : "COUNT_IF(`associative_filter_predicate_group`)"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 2,
+          "widgetType" : "filter-date-range-picker",
+          "encodings" : {
+            "fields" : [ {
+              "fieldName" : "earliest_date",
+              "displayName" : "earliest_date",
+              "queryName" : "dashboards/01f030ec59b11045a8328f2de0fc4f66/datasets/01f030ec59b11c18a88985fc0df10a1e_earliest_date"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "title" : "Earliest Date Range"
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 2,
+        "height" : 2
+      }
+    }, {
+      "widget" : {
+        "name" : "56f36eee",
+        "queries" : [ {
+          "name" : "dashboards/01f030ec59b11045a8328f2de0fc4f66/datasets/01f030ec59b11c18a88985fc0df10a1e_latest_date",
+          "query" : {
+            "datasetName" : "19607bd7",
+            "fields" : [ {
+              "name" : "latest_date",
+              "expression" : "`latest_date`"
+            }, {
+              "name" : "latest_date_associativity",
+              "expression" : "COUNT_IF(`associative_filter_predicate_group`)"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 2,
+          "widgetType" : "filter-date-range-picker",
+          "encodings" : {
+            "fields" : [ {
+              "fieldName" : "latest_date",
+              "displayName" : "latest_date",
+              "queryName" : "dashboards/01f030ec59b11045a8328f2de0fc4f66/datasets/01f030ec59b11c18a88985fc0df10a1e_latest_date"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "title" : "Most Recent Date Range"
+          }
+        }
+      },
+      "position" : {
+        "x" : 2,
+        "y" : 0,
+        "width" : 2,
+        "height" : 2
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "7075f8b6",
+    "displayName" : "Table/Column Use",
+    "layout" : [ {
+      "widget" : {
+        "name" : "576251dc",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "701a1d04",
+            "fields" : [ {
+              "name" : "datatable",
+              "expression" : "`datatable`"
+            }, {
+              "name" : "most_recent_use",
+              "expression" : "`most_recent_use`"
+            }, {
+              "name" : "count_unused",
+              "expression" : "`count_unused`"
+            }, {
+              "name" : "percent_unused",
+              "expression" : "`percent_unused`"
+            }, {
+              "name" : "unused_columns",
+              "expression" : "`unused_columns`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "datatable",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100000,
+              "title" : "datatable",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "datatable"
+            }, {
+              "fieldName" : "most_recent_use",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "most_recent_use",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "most_recent_use"
+            }, {
+              "fieldName" : "count_unused",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "count_unused",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "count_unused"
+            }, {
+              "fieldName" : "percent_unused",
+              "numberFormat" : "0.00",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "float",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100005,
+              "title" : "percent_unused",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "percent_unused"
+            }, {
+              "fieldName" : "unused_columns",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "complex",
+              "displayAs" : "json",
+              "visible" : true,
+              "order" : 100006,
+              "title" : "unused_columns",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "unused_columns"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "numberFormat" : "0",
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "column_count",
+            "type" : "integer",
+            "displayAs" : "number",
+            "order" : 100002,
+            "title" : "column_count",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "table_unused",
+            "type" : "boolean",
+            "displayAs" : "boolean",
+            "order" : 100004,
+            "title" : "table_unused",
+            "allowSearch" : false,
+            "alignContent" : "right",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          }, {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "all_columns",
+            "type" : "complex",
+            "displayAs" : "json",
+            "order" : 100007,
+            "title" : "all_columns",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 11
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "a547b300",
+    "displayName" : "Notebook Runs by Table, Column, Schema and Dataset",
+    "layout" : [ {
+      "widget" : {
+        "name" : "ae75d470",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4ebc6801",
+            "fields" : [ {
+              "name" : "datatable",
+              "expression" : "`datatable`"
+            }, {
+              "name" : "notebooks",
+              "expression" : "`notebooks`"
+            } ],
+            "parameterValues" : [ {
+              "keyword" : "date_min",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2024-05-01T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "date_max",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2025-05-12T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "min_notebooks",
+              "selection" : {
+                "values" : {
+                  "dataType" : "INTEGER",
+                  "values" : [ {
+                    "value" : "5"
+                  } ]
+                }
+              }
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "datatable",
+              "axis" : {
+                "hideLabels" : true
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "displayName" : "datatable"
+            },
+            "y" : {
+              "fieldName" : "notebooks",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 3
+                }
+              },
+              "axis" : {
+                "hideLabels" : false,
+                "title" : "number of notebooks run"
+              },
+              "displayName" : "number of notebooks run"
+            },
+            "extra" : [ {
+              "fieldName" : "datatable",
+              "displayName" : "datatable"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "DataTable Notebook Runs",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "20aa0161",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "ed80c3b9",
+            "fields" : [ {
+              "name" : "column_name",
+              "expression" : "`column_name`"
+            }, {
+              "name" : "notebooks",
+              "expression" : "`notebooks`"
+            } ],
+            "parameterValues" : [ {
+              "keyword" : "min_notebooks",
+              "selection" : { }
+            } ],
+            "filters" : [ {
+              "expression" : "`earliest_date` IN (`earliest_date`) OR TRUE"
+            }, {
+              "expression" : "`latest_date` IN (`latest_date`) OR TRUE"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "column_name",
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "axis" : {
+                "hideLabels" : true
+              },
+              "displayName" : "column_name"
+            },
+            "y" : {
+              "fieldName" : "notebooks",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 5
+                }
+              },
+              "axis" : {
+                "hideLabels" : false
+              },
+              "displayName" : "notebooks"
+            }
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "Column Notebook Runs",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 1,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "1ffacbc5",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4ebc6801",
+            "fields" : [ {
+              "name" : "datatable",
+              "expression" : "`datatable`"
+            }, {
+              "name" : "user_count",
+              "expression" : "`user_count`"
+            } ],
+            "parameterValues" : [ {
+              "keyword" : "date_min",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2024-05-01T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "date_max",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2025-05-12T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "min_notebooks",
+              "selection" : {
+                "values" : {
+                  "dataType" : "INTEGER",
+                  "values" : [ {
+                    "value" : "1"
+                  } ]
+                }
+              }
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "datatable",
+              "axis" : {
+                "hideLabels" : true
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "displayName" : "datatable"
+            },
+            "y" : {
+              "fieldName" : "user_count",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 3
+                }
+              },
+              "axis" : {
+                "hideLabels" : false,
+                "title" : "number of notebooks run"
+              },
+              "displayName" : "number of notebooks run"
+            },
+            "extra" : [ {
+              "fieldName" : "datatable",
+              "displayName" : "datatable"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "DataTable User Counts",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 2,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "d189c67b",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "ed80c3b9",
+            "fields" : [ {
+              "name" : "column_name",
+              "expression" : "`column_name`"
+            }, {
+              "name" : "user_count",
+              "expression" : "`user_count`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "column_name",
+              "axis" : {
+                "hideLabels" : true
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "displayName" : "column_name"
+            },
+            "y" : {
+              "fieldName" : "user_count",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 3
+                }
+              },
+              "axis" : {
+                "hideLabels" : false,
+                "title" : "number of notebooks run"
+              },
+              "displayName" : "number of notebooks run"
+            },
+            "extra" : [ {
+              "fieldName" : "column_name",
+              "displayName" : "column_name"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "Column User Counts",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 3,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "c53e19e9",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4ebc6801",
+            "fields" : [ {
+              "name" : "datatable",
+              "expression" : "`datatable`"
+            }, {
+              "name" : "queries",
+              "expression" : "`queries`"
+            } ],
+            "parameterValues" : [ {
+              "keyword" : "date_min",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2024-05-01T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "date_max",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2025-05-12T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "min_notebooks",
+              "selection" : { }
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "datatable",
+              "axis" : {
+                "hideLabels" : true
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "displayName" : "datatable"
+            },
+            "y" : {
+              "fieldName" : "queries",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 3
+                }
+              },
+              "axis" : {
+                "hideLabels" : false,
+                "title" : "number of notebooks run"
+              },
+              "displayName" : "number of notebooks run"
+            },
+            "extra" : [ {
+              "fieldName" : "datatable",
+              "displayName" : "datatable"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "DataTable Query Counts",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 4,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "a621bd33",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "ed80c3b9",
+            "fields" : [ {
+              "name" : "column_name",
+              "expression" : "`column_name`"
+            }, {
+              "name" : "queries",
+              "expression" : "`queries`"
+            } ],
+            "parameterValues" : [ {
+              "keyword" : "date_min",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2024-05-01T00:00:00.000"
+                  } ]
+                }
+              }
+            }, {
+              "keyword" : "date_max",
+              "selection" : {
+                "values" : {
+                  "dataType" : "DATE",
+                  "values" : [ {
+                    "value" : "2025-05-12T00:00:00.000"
+                  } ]
+                }
+              }
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "bar",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "column_name",
+              "axis" : {
+                "hideLabels" : true
+              },
+              "scale" : {
+                "type" : "categorical",
+                "sort" : {
+                  "by" : "y-reversed"
+                }
+              },
+              "displayName" : "column_name"
+            },
+            "y" : {
+              "fieldName" : "queries",
+              "scale" : {
+                "type" : "quantitative",
+                "domain" : {
+                  "min" : 3
+                }
+              },
+              "axis" : {
+                "hideLabels" : false,
+                "title" : "number of notebooks run"
+              },
+              "displayName" : "number of notebooks run"
+            },
+            "extra" : [ {
+              "fieldName" : "column_name",
+              "displayName" : "column_name"
+            } ]
+          },
+          "frame" : {
+            "showTitle" : true,
+            "showDescription" : false,
+            "title" : "Column Query Counts",
+            "description" : ""
+          }
+        }
+      },
+      "position" : {
+        "x" : 5,
+        "y" : 0,
+        "width" : 1,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "c6eae847",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "4ebc6801",
+            "fields" : [ {
+              "name" : "datatable",
+              "expression" : "`datatable`"
+            }, {
+              "name" : "user_count",
+              "expression" : "`user_count`"
+            }, {
+              "name" : "notebooks",
+              "expression" : "`notebooks`"
+            }, {
+              "name" : "queries",
+              "expression" : "`queries`"
+            }, {
+              "name" : "earliest_date",
+              "expression" : "`earliest_date`"
+            }, {
+              "name" : "latest_date",
+              "expression" : "`latest_date`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "datatable",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100000,
+              "title" : "datatable",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "datatable"
+            }, {
+              "fieldName" : "user_count",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "user_count",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "user_count"
+            }, {
+              "fieldName" : "notebooks",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100002,
+              "title" : "notebooks",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "notebooks"
+            }, {
+              "fieldName" : "queries",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "queries",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "queries"
+            }, {
+              "fieldName" : "earliest_date",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100004,
+              "title" : "earliest_date",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "earliest_date"
+            }, {
+              "fieldName" : "latest_date",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100005,
+              "title" : "latest_date",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "latest_date"
+            } ]
+          },
+          "invisibleColumns" : [ ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 6,
+        "width" : 6,
+        "height" : 14
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  }, {
+    "name" : "970e84f6",
+    "displayName" : "Notebooks By Execution Time",
+    "layout" : [ {
+      "widget" : {
+        "name" : "1608b587",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "d1665344",
+            "fields" : [ {
+              "name" : "notebookid",
+              "expression" : "`notebookid`"
+            }, {
+              "name" : "event_date",
+              "expression" : "`event_date`"
+            }, {
+              "name" : "usage_rank",
+              "expression" : "`usage_rank`"
+            }, {
+              "name" : "execution_time",
+              "expression" : "`execution_time`"
+            }, {
+              "name" : "clusterid",
+              "expression" : "`clusterid`"
+            }, {
+              "name" : "email",
+              "expression" : "`email`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "notebookid",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100000,
+              "title" : "notebookid",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "notebookid"
+            }, {
+              "fieldName" : "event_date",
+              "dateTimeFormat" : "YYYY-MM-DD",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "date",
+              "displayAs" : "datetime",
+              "visible" : true,
+              "order" : 100001,
+              "title" : "event_date",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "event_date"
+            }, {
+              "fieldName" : "usage_rank",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100002,
+              "title" : "usage_rank",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "usage_rank"
+            }, {
+              "fieldName" : "execution_time",
+              "numberFormat" : "0.00",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "float",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 100003,
+              "title" : "execution_time",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "execution_time"
+            }, {
+              "fieldName" : "clusterid",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100004,
+              "title" : "clusterid",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "clusterid"
+            }, {
+              "fieldName" : "email",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 100005,
+              "title" : "email",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "email"
+            } ]
+          },
+          "invisibleColumns" : [ {
+            "booleanValues" : [ "false", "true" ],
+            "imageUrlTemplate" : "{{ @ }}",
+            "imageTitleTemplate" : "{{ @ }}",
+            "imageWidth" : "",
+            "imageHeight" : "",
+            "linkUrlTemplate" : "{{ @ }}",
+            "linkTextTemplate" : "{{ @ }}",
+            "linkTitleTemplate" : "{{ @ }}",
+            "linkOpenInNewTab" : true,
+            "name" : "notebook_url",
+            "type" : "string",
+            "displayAs" : "string",
+            "order" : 100001,
+            "title" : "notebook_url",
+            "allowSearch" : false,
+            "alignContent" : "left",
+            "allowHTML" : false,
+            "highlightLinks" : false,
+            "useMonospaceFont" : false,
+            "preserveWhitespace" : false
+          } ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 0,
+        "width" : 6,
+        "height" : 4
+      }
+    }, {
+      "widget" : {
+        "name" : "e4d2feb7",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "d1665344",
+            "fields" : [ {
+              "name" : "email",
+              "expression" : "`email`"
+            }, {
+              "name" : "notebookid",
+              "expression" : "`notebookid`"
+            }, {
+              "name" : "sum(execution_time)",
+              "expression" : "SUM(`execution_time`)"
+            } ],
+            "disaggregated" : false
+          }
+        } ],
+        "spec" : {
+          "version" : 3,
+          "widgetType" : "histogram",
+          "encodings" : {
+            "x" : {
+              "fieldName" : "notebookid",
+              "scale" : {
+                "type" : "categorical"
+              },
+              "displayName" : "notebookid"
+            },
+            "y" : {
+              "fieldName" : "sum(execution_time)",
+              "scale" : {
+                "type" : "quantitative"
+              },
+              "displayName" : "Sum of execution_time"
+            },
+            "extra" : [ {
+              "fieldName" : "email",
+              "displayName" : "email"
+            } ]
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 4,
+        "width" : 2,
+        "height" : 5
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  } ]
+}
