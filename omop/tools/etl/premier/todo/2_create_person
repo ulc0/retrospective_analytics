@@ -1,0 +1,67 @@
+INSERT INTO cdh_premier_omop.person
+  (
+    person_id,
+    gender_concept_id,
+    year_of_birth,
+    month_of_birth,
+    day_of_birth,
+    race_concept_id,
+    ethnicity_concept_id,
+    person_source_value,
+    gender_source_value,
+--         gender_source_concept_id,
+    race_source_value,
+--       race_source_concept_id,
+    ethnicity_source_value,
+--      ethnicity_source_concept_id,
+    x_srcid,
+    x_srcloadid,
+    x_srcfile
+)
+
+  select
+    pat.id as person_id,
+    case pat.gender
+        when 'M' then 8507
+        when 'F' then 8532
+        when 'A' then 8570
+        when 'U' then 8551
+        when 'O' then 8521
+        when null then null
+        else 8551
+    end as gender_concept_id,
+    coalesce(pat.year_of_birth,1885) as year_of_birth,
+    pat.month_of_birth as month_of_birth,
+    pat.day_of_birth as day_of_birth,
+    case pat.race
+        when 'White' then 8527
+        when 'Black' then 8516
+        when 'Asian' then 8515
+        when 'American Indian or Alaska Native' then 8657
+        when 'Native Hawaiian or Other Pacific Islander' then 8557
+        when 'Other' then 8522
+        else 8552
+    end as race_concept_id,
+    case pat.ethnicity
+        when   'Hispanic' then 38003563
+        when  'Not' then 38003564
+        else 0
+    end as ethnicity_concept_id,
+--     loc.location_id as location_id,
+--     prov.provider_id as provider_id,
+    -- coalesce( cs.care_site_id, prov.care_site_id ) as care_site_id,
+    pat.person_source_value as person_source_value,
+    pat.gender_source_value  as gender_source_value,
+--      0 as gender_source_concept_id,
+    pat.race_source_value as race_source_value,
+--     0 as race_source_concept_id,
+    pat.ethnicity_source_value as ethnicity_source_value,
+--     0 as ethnicity_source_concept_id
+    pat.id as x_srcid,
+    pat.load_id as x_srcloadid,
+    'STAGE_PERSON' as x_srcfile
+  from cdh_premier_omop_etl.stage_person pat
+	--	left join cdh_premier_omop.person pers on cast(pat.person_source_value as bigint) = pers.person_id
+	--	where pers.person_id is null
+		where pat.load_id = 1
+        ;

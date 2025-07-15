@@ -1,0 +1,1 @@
+"SELECT\nDiagnosisId,ICDcode,ICDDesc\n FROM dimdiagnosis WHERE ICDCode = 'A08.1' OR ICDcode = 'A08.11' ORDER BY DiagnosisId;"

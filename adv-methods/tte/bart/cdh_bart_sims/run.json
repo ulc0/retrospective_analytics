@@ -1,0 +1,8 @@
+{
+  "CORES": "4",
+  "TUNE": "200",
+  "SPLIT_RULES": "[pmb.ContinuousSplitRule(), pmb.ContinuousSplitRule(), pmb.OneHotSplitRule(), pmb.OneHotSplitRule()]",
+  "M": "200",
+  "run_name": "",
+  "DRAWS": "200",
+}

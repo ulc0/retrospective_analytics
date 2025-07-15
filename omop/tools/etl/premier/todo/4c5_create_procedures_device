@@ -1,0 +1,62 @@
+-- procedure 5
+
+	INSERT INTO cdh_premier_omop.device_exposure_temp
+	(
+		person_id,
+		device_concept_id,
+		device_exposure_start_date,
+		device_exposure_start_datetime,
+		device_type_concept_id,
+		quantity,
+		-- provider_id,
+		visit_occurrence_id,
+		--          visit_detail_id,
+		device_source_value,
+		device_source_concept_id,
+		x_srcid,
+		x_srcloadid,
+		x_srcfile
+	)
+	select
+		person_id,
+		device_concept_id,
+		device_exposure_start_date,
+		device_exposure_start_datetime,
+		device_type_concept_id,
+		quantity,
+		-- provider_id,
+		visit_occurrence_id,
+		--         visit_detail_id,
+		device_source_value,
+		device_source_concept_id,
+		x_srcid,
+		x_srcloadid,
+		x_srcfile
+	from
+	(
+		select
+			p.person_id as person_id,
+			coalesce(src.tar_concept_id, 0 ) as device_concept_id,
+			coalesce( s.procedure_date, v.visit_start_date )   as device_exposure_start_date,
+			coalesce( s.procedure_date, v.visit_start_date )   as device_exposure_start_datetime,
+			44818705 as device_type_concept_id,   -- inferred from procedure code
+			s.quantity as quantity,
+			-- pr.provider_id  as provider_id,
+			v.visit_occurrence_id as visit_occurrence_id,
+			--   		vd.visit_detail_id as visit_detail_id,
+			s.procedure_source_value as device_source_value,
+			coalesce( src.src_concept_id, 0) as device_source_concept_id,
+			 s.id as x_srcid,
+			 s.load_id as x_srcloadid,
+			'STAGE_PROCEDURE' as x_srcfile
+		from cdh_premier_omop_etl.stage_procedure_temp s
+		join cdh_premier_omop.person p on  p.person_source_value = s.person_source_value
+		left join cdh_premier_omop.visit_occurrence v on s.visit_source_value = v.visit_source_value and p.person_id = v.person_id
+		--		  left join cdh_premier_omop.visit_detail vd on s.visit_detail_source_value = vd.visit_detail_source_value and p.person_id = vd.person_id
+		join cdh_premier_omop.concept_device src on s.procedure_source_value = src.clean_concept_code
+		and s.procedure_code_source_type = src.src_vocabulary_id 
+		-- left join cdh_premier_omop.provider_source_value pr on s.provider_source_value = pr.provider_source_value
+		where s.procedure_date is not null
+		and s.load_id = 1
+	) a
+	;

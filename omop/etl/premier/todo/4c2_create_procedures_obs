@@ -1,0 +1,74 @@
+-- procedure pt 2
+
+
+	INSERT INTO cdh_premier_omop.observation_temp
+	(
+		 person_id
+		, observation_concept_id
+		, observation_date
+		, observation_datetime
+		, observation_type_concept_id
+		, qualifier_concept_id
+		, value_as_concept_id
+		, visit_occurrence_id
+--          , visit_detail_id
+		, observation_source_value
+		, observation_source_concept_id
+		-- , provider_id
+		, qualifier_source_value
+--	    , obs_event_field_concept_id
+		, x_srcid
+		, x_srcloadid
+		, x_srcfile
+	)
+	select
+		person_id
+		, observation_concept_id
+		, observation_date
+		, observation_datetime
+		, observation_type_concept_id
+		, qualifier_concept_id
+		, value_as_concept_id
+		, visit_occurrence_id
+--           , visit_detail_id
+		, observation_source_value
+		, observation_source_concept_id
+		-- , provider_id
+		, qualifier_source_value
+--    , obs_event_field_concept_id
+		, x_srcid
+		, x_srcloadid
+		, x_srcfile		
+	from
+	(
+		select
+			p.person_id as person_id
+			, coalesce(src.tar_concept_id, 0 )  as observation_concept_id
+			, coalesce(s.procedure_date, v.visit_start_date) as observation_date
+			, cast(coalesce(s.procedure_date, v.visit_start_date) as timestamp)  as observation_datetime
+			, 38000280 as observation_type_concept_id  -- 'Observation recorded from EHR'  -- TODO: may need to be changed
+			, mod.src_concept_id as qualifier_concept_id
+			, src.val_concept_id as value_as_concept_id
+			, v.visit_occurrence_id as visit_occurrence_id
+ --   		, vd.visit_detail_id as visit_detail_id
+			, s.procedure_source_value as observation_source_value
+			, src.src_concept_id as observation_source_concept_id
+			-- , pr.provider_id
+			, s.code_modifier as qualifier_source_value
+	--    , 0 as obs_event_field_concept_id
+			, s.id as x_srcid
+			, s.load_id as x_srcloadid
+			, 'STAGE_PROCEDURE' as x_srcfile
+		from cdh_premier_omop_etl.stage_procedure_temp s
+		join cdh_premier_omop.person p on  p.person_source_value = s.person_source_value
+		left join cdh_premier_omop.visit_occurrence v on s.visit_source_value = v.visit_source_value and p.person_id = v.person_id
+--    	left join cdh_premier_omop.visit_detail vd on s.visit_detail_source_value = vd.visit_detail_source_value and p.person_id = vd.person_id
+		join cdh_premier_omop.concept_observation src on s.procedure_source_value = src.clean_concept_code
+		and s.procedure_code_source_type = src.src_vocabulary_id 
+		left join cdh_premier_omop.concept_modifier mod on s.code_modifier = mod.concept_code
+			and mod.vocabulary_id = src.src_vocabulary_id
+		-- left join cdh_premier_omop.provider_source_value pr on s.provider_source_value = pr.provider_source_value
+		where s.procedure_date is not null
+		and s.load_id = 1
+
+     ) a  ;

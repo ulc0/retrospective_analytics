@@ -1,0 +1,7 @@
+{
+    "PATIENT": "patient_id",
+    "START": "visit_start_date",
+    "ENCOUNTER": "string",
+    "CODE": "code",
+    "SYSTEM": "vocabulary_id",
+}

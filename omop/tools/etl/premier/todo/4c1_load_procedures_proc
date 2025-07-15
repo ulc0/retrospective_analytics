@@ -1,0 +1,70 @@
+-- procedue -> procedure
+
+	INSERT INTO cdh_premier_omop.procedure_occurrence_temp
+	(
+		person_id,
+		procedure_concept_id,
+		procedure_date,
+		procedure_datetime,
+		procedure_type_concept_id,
+		modifier_concept_id,
+		quantity,
+		-- provider_id,
+		visit_occurrence_id,
+	--	visit_detail_id,
+		procedure_source_value,
+		procedure_source_concept_id,
+	  modifier_source_value,
+	  x_srcid,
+	  x_srcloadid,
+	  x_srcfile
+	)
+	select
+	  person_id,
+		procedure_concept_id,
+		procedure_date,
+		procedure_datetime,
+		procedure_type_concept_id,
+		modifier_concept_id,
+		quantity,
+		-- provider_id,
+		visit_occurrence_id,
+	--	visit_detail_id,
+		procedure_source_value,
+		procedure_source_concept_id,
+	  modifier_source_value,
+	  x_srcid,
+	  x_srcloadid,
+	  x_srcfile
+	from
+	(
+		select
+			p.person_id as person_id,
+			coalesce( src.tar_concept_id, 0 )  as procedure_concept_id,
+			 s.procedure_date as procedure_date,
+			cast(s.procedure_date as timestamp) as procedure_datetime,
+			coalesce(s.procedure_source_type_value ,0) as procedure_type_concept_id,
+			mod.src_concept_id as modifier_concept_id,
+			s.quantity  as quantity,
+			-- v.provider_id as provider_id,
+			v.visit_occurrence_id as visit_occurrence_id,
+	--    	vd.visit_detail_id as visit_detail_id,
+			s.procedure_source_value as procedure_source_value,
+			src.src_concept_id as procedure_source_concept_id,
+			s.code_modifier as modifier_source_value,
+			s.id as x_srcid,
+			s.load_id as x_srcloadid,
+			'STAGE_PROCEDURE' as x_srcfile
+		from cdh_premier_omop_etl.stage_procedure_temp s
+		join cdh_premier_omop.person p on  p.person_source_value = s.person_source_value
+		left join cdh_premier_omop.visit_occurrence v on s.visit_source_value = v.visit_source_value and p.person_id = v.person_id
+	--    left join cdh_premier_omop.visit_detail vd on s.visit_detail_source_value = vd.visit_detail_source_value and p.person_id = vd.person_id
+		left join cdh_premier_omop.concept_procedure src on s.procedure_source_value = src.clean_concept_code
+			and s.procedure_code_source_type = src.src_vocabulary_id 
+		left join cdh_premier_omop.concept_modifier mod on s.code_modifier = mod.concept_code
+			and mod.vocabulary_id = src.src_vocabulary_id
+		--left join cdh_premier_omop.provider_source_value pr on s.provider_source_value = pr.provider_source_value
+		where s.procedure_date is not null
+		and s.load_id = 1
+	) a
+	;

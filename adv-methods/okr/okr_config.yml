@@ -1,0 +1,5 @@
+condition:
+    name: "Hypertension"
+    diagnosis_label: "HT"
+    diagnosis_codes: ['I10', 'I110', 'I119', 'I12', 'I120', 'I129', 'I13', 'I130', 'I131', 'I1310', 'I1311', 'I132', 'I15', 'I150', 'I151', 'I152', 'I158','I159', 'I16', 'I160', 'I161', 'I169', '4011', '4019', '40210', '40290', '40511', '40519', '40591', '40599', '4041', '4049'] 
+    keywords: ["hypertension", "hipertension", "high blood pressure"]

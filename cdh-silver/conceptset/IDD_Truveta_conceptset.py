@@ -1,0 +1,27 @@
+IDD={'IDDA':['Q87.11','Q90.0','Q90.1','Q90.2','Q90.9','Q91.0','Q91.1','Q91.2','Q91.3','Q91.4','Q91.5','Q91.6','Q91.7','Q92.0','Q92.1','Q92.2','Q92.5','Q92.62','Q92.7','Q92.8','Q92.9','Q93.0','Q93.1','Q93.2','Q93.3','Q93.4','Q93.5','Q93.51','Q93.59','Q93.7','Q93.81','Q93.88','Q93.89','Q93.9','Q95.2','Q95.3','Q99.2'], 
+'IDDB':['G80.0','G80.1','G80.2','G80.3','G80.4','G80.8','G80.9'], 
+'IDDC':['F84.0','F84.1','F84.2','F84.3','F84.4','F84.5','F84.8','F84.9'], 
+'IDDD':['Q86.0','F70','F71','F72','F73','F78','F78.A1','F78.A9','F79'], 
+'IDDE':['F82','F88','F89','G31.81','M95.2', 'Q04.0', 'Q04.1', 'Q04.2', 'Q04.3','Q04.4', 'Q04.5', 'Q04.6', 'Q04.8', 'Q04.9','P04.3','Q67.6', 'Q76.7', 'Q67.8', 'Q68.1', 'Q74.3','Q70.00', 'Q70.01', 'Q70.02', 'Q70.03', 'Q70.10', 'Q70.11', 'Q70.12', 'Q70.13', 'Q70.20', 'Q70.21', 'Q70.22', 'Q70.23', 'Q70.30', 'Q70.31', 'Q70.32', 'Q70.33', 'Q70.4', 'Q70.9','Q85.1','Q87.1','Q87.19','Q87.2','Q87.3','Q87.5','Q87.81','Q87.82','Q87.89','Q89.7','Q89.8','R41.83'],
+}
+               
+discharge_map_dict={"Expired":"09Expired"
+               "Custodial/Suportive faciilty":"01Hom Health Org",
+               "Alternative home":"01Hom Health Org",
+               "Home" : "02Home" ,
+               "Hospice":"03Hospice",
+               "Left against advice":"10Left Against Advise",
+               "Left without being seen":"10Left Against Advise",
+               "Long-term care":"07Long Term Care",
+               "Other": "04Other Facility",
+               "Cancer research/childrens hospital": "04Other Facility",
+               "Federal hospital": "04Other Facility",
+               "Critical accesss hospital": "04Other Facility",
+                "Other healthcare facility": "04Other Facility",
+                "Re-admitted": "04Other Facility",
+                "Court/law enforcement": "04Other Facility",
+               "Psychiatric hospital": "05Psychiatric",  
+               "Rehabilitation":"08Rehabilitation",                 
+               "Short term general hospital":"08Short Term Care"  ,
+               "Still patient": "06SNF","Skilled nursing facility": "06SNF" , 
+}

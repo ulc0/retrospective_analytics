@@ -1,0 +1,205 @@
+{
+  "datasets" : [ {
+    "name" : "dataset1",
+    "displayName" : "truveta_code_local_valuesets",
+    "query" : "SELECT *  FROM edav_prd_cdh.cdh_truveta_lava_dev.code_local_valuesets\r\n--where data_product_id='truveta_respiratory' and parent_concept_code='covid_ed_immunosuppressed'\r\n"
+  }, {
+    "name" : "ce5120ad",
+    "displayName" : "premier_code_local_valuesets",
+    "query" : "SELECT distinct * FROM edav_prd_cdh.cdh_premier_lava_dev.code_local_valuesets\r\norder by  data_product_id\r\n--where data_product_id='premier_core'\r\n"
+  }, {
+    "name" : "edb05cdd",
+    "displayName" : "lava_conceptsets",
+    "query" : "SELECT DISTINCT\r\n  feature_name,\r\n  v.concept_code,\r\n  concept_name,\r\n  src_domain_id as domain_id,\r\n  src_vocabulary_id as vocabulary_id\r\nFROM\r\n  edav_prd_cdh.cdh_truveta_lava_dev.code_local_valuesets v\r\n    left join concept_condition c\r\n      on c.concept_code = v.concept_code\r\nwhere\r\n  feature_name not in ('med_treatment_flu','encounter_class','ethnicity',\r\n  'date_range_authoredondatetime','race','overall_grouping','sex','viz_app',\r\n    'gender','health_insurance','health_settings','high_risk_patients',\r\n    'viz_view_by', 'viz_metric', 'viz_metric_subcategory', \r\n    'hhs_regions', 'prov_urban_rural_3zip','diagnosis_type_covid_flu',\r\n    'high_risk_covid','medication','med_treatment_covid',\r\n'state','high_risk_flu','high_risk_medical_condition','prov_region'\r\n  ) and feature_name not like 'range_%'\r\nORDER BY\r\n  vocabulary_id,feature_name",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_ml"
+  }, {
+    "name" : "a1b83f20",
+    "displayName" : "omop_concept_condition",
+    "query" : "SELECT *\r\nFROM edav_prd_cdh.cdh_ml.concept_condition",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_premier_omop"
+  }, {
+    "name" : "b9d1c952",
+    "displayName" : "concept_drug",
+    "query" : "SELECT raw_concept_code as concept_code, clean_concept_code, src_vocabulary_id, src_domain_id, \r\nCAST(src_concept_id as LONG) as src_concept_id, \r\nCAST(tar_concept_id as LONG) as tar_concept_id\r\nFROM edav_prd_cdh.cdh_premier_omop.concept_drug\r\n",
+    "catalog" : "edav_prd_cdh",
+    "schema" : "cdh_premier_omop"
+  }, {
+    "name" : "8168e754",
+    "displayName" : "cdh_concept_duplicate",
+    "query" : "SELECT * FROM edav_prd_cdh.cdh_ml.concept_condition\r\nwhere contains(concept_code,'O33.7')"
+  } ],
+  "pages" : [ {
+    "name" : "page1",
+    "displayName" : "New Page",
+    "layout" : [ {
+      "widget" : {
+        "name" : "table1",
+        "queries" : [ {
+          "name" : "main_query",
+          "query" : {
+            "datasetName" : "a1b83f20",
+            "fields" : [ {
+              "name" : "src_vocabulary_id",
+              "expression" : "`src_vocabulary_id`"
+            }, {
+              "name" : "src_domain_id",
+              "expression" : "`src_domain_id`"
+            }, {
+              "name" : "src_concept_id",
+              "expression" : "`src_concept_id`"
+            }, {
+              "name" : "tar_concept_id",
+              "expression" : "`tar_concept_id`"
+            }, {
+              "name" : "concept_code",
+              "expression" : "`concept_code`"
+            } ],
+            "disaggregated" : true
+          }
+        } ],
+        "spec" : {
+          "version" : 1,
+          "widgetType" : "table",
+          "encodings" : {
+            "columns" : [ {
+              "fieldName" : "src_vocabulary_id",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 0,
+              "title" : "src_vocabulary_id",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "src_vocabulary_id"
+            }, {
+              "fieldName" : "src_domain_id",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 1,
+              "title" : "src_domain_id",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "src_domain_id"
+            }, {
+              "fieldName" : "src_concept_id",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 2,
+              "title" : "src_concept_id",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "src_concept_id"
+            }, {
+              "fieldName" : "tar_concept_id",
+              "numberFormat" : "0",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "integer",
+              "displayAs" : "number",
+              "visible" : true,
+              "order" : 3,
+              "title" : "tar_concept_id",
+              "allowSearch" : false,
+              "alignContent" : "right",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "tar_concept_id"
+            }, {
+              "fieldName" : "concept_code",
+              "booleanValues" : [ "false", "true" ],
+              "imageUrlTemplate" : "{{ @ }}",
+              "imageTitleTemplate" : "{{ @ }}",
+              "imageWidth" : "",
+              "imageHeight" : "",
+              "linkUrlTemplate" : "{{ @ }}",
+              "linkTextTemplate" : "{{ @ }}",
+              "linkTitleTemplate" : "{{ @ }}",
+              "linkOpenInNewTab" : true,
+              "type" : "string",
+              "displayAs" : "string",
+              "visible" : true,
+              "order" : 4,
+              "title" : "concept_code",
+              "allowSearch" : false,
+              "alignContent" : "left",
+              "allowHTML" : false,
+              "highlightLinks" : false,
+              "useMonospaceFont" : false,
+              "preserveWhitespace" : false,
+              "displayName" : "concept_code"
+            } ]
+          },
+          "invisibleColumns" : [ ],
+          "allowHTMLByDefault" : false,
+          "itemsPerPage" : 25,
+          "paginationSize" : "default",
+          "condensed" : true,
+          "withRowNumber" : false,
+          "frame" : {
+            "showTitle" : false
+          }
+        }
+      },
+      "position" : {
+        "x" : 0,
+        "y" : 4,
+        "width" : 6,
+        "height" : 6
+      }
+    } ],
+    "pageType" : "PAGE_TYPE_CANVAS"
+  } ]
+}

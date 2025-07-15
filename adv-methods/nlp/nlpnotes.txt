@@ -1,0 +1,16 @@
+mpox_data_set_presentation_run9
+
+scispacy scibert
+-linker
+-umls
+-ner
+scispacy en_ner_bc5cdr_md
+-ner
+
+=======
+
+
+# https://mvnrepository.com/artifact/ml.combust.mleap/mleap-spark
+'
+ml.combust.mleap:mleap-spark_2.12:0.23.0
+

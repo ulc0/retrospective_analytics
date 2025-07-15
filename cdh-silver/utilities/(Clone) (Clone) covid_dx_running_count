@@ -1,0 +1,6 @@
+--running count of dx for may 2020
+SELECT sum(count(*)) over(ORDER BY onsetdatetime) AS total_dx, onsetdatetime
+FROM cdh_pointclickcare_exploratory.qxv3_covid_diagnoses
+WHERE year(onsetdatetime) == 2020 
+AND month(onsetdatetime) == 5
+GROUP BY(onsetdatetime)"

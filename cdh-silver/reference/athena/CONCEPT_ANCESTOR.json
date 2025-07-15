@@ -1,0 +1,29 @@
+{
+    "fields": [
+        {
+            "metadata": {},
+            "name": "ancestor_concept_id",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "descendant_concept_id",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "min_levels_of_separation",
+            "nullable": true,
+            "type": "string"
+        },
+        {
+            "metadata": {},
+            "name": "max_levels_of_separation",
+            "nullable": true,
+            "type": "string"
+        }
+    ],
+    "type": "struct"
+}

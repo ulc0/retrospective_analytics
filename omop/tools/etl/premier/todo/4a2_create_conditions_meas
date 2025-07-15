@@ -1,0 +1,57 @@
+-- condition to measurement
+insert into cdh_premier_omop.measurement_temp
+(
+    person_id,
+    measurement_concept_id,
+    measurement_date,
+    measurement_datetime,
+    measurement_type_concept_id,
+    value_as_concept_id,
+    visit_occurrence_id,
+    measurement_source_value,
+    measurement_source_concept_id,
+--     provider_id,
+    x_srcid,
+    x_srcloadid,
+    x_srcfile
+)
+select
+    person_id
+    , measurement_concept_id
+    , measurement_date
+    , measurement_datetime
+    , measurement_type_concept_id
+    , value_as_concept_id
+    , visit_occurrence_id
+    , measurement_source_value
+    , measurement_source_concept_id
+--     , provider_id
+    , x_srcid
+    , x_srcloadid
+    , x_srcfile
+from
+(
+    select 
+        p.person_id as person_id
+        , coalesce(src.tar_concept_id, 0 )  as measurement_concept_id
+        , s.start_date as measurement_date
+        , s.start_date as measurement_datetime
+        , 44818701 as measurement_type_concept_id  -- 'From physical examination' -- TODO: may need to be changed
+        , src.val_concept_id as value_as_concept_id
+        , v.visit_occurrence_id as visit_occurrence_id
+        , s.condition_source_value as measurement_source_value
+        , coalesce(src.src_concept_id, 0) as measurement_source_concept_id
+  --      , pr.provider_id
+        , s.id as x_srcid
+        , s.load_id as x_srcloadid
+        , 'STAGE_CONDITION' as x_srcfile
+    from cdh_premier_omop_etl.stage_condition_temp s
+    join cdh_premier_omop.person p on  p.person_source_value = s.person_source_value
+    left join cdh_premier_omop.visit_occurrence v on s.visit_source_value = v.visit_source_value  and p.person_id = v.person_id
+    join cdh_premier_omop.concept_measurement src on s.condition_source_value = src.clean_concept_code
+        and s.condition_code_source_type = src.src_vocabulary_id
+--       left join cdh_premier_omop.provider_source_value pr on s.provider_source_value = pr.provider_source_value
+    where s.start_date is not null
+    and s.load_id = 1
+) a
+;

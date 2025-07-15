@@ -1,0 +1,83 @@
+{
+    "patcpt": {
+        "dataset": "patcpt",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "coalesce(PROC_DATE,e.visit_start_date)",
+        "vocabulary_id": "'HCPCS'",
+        "code": "CPT_CODE",
+        "where_clause": "  "
+    },
+    "paticd_diag": {
+        "dataset": "paticd_diag",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "(CASE WHEN (ICD_PRI_SEC = 'A' OR ICD_POA='Y') THEN e.visit_start_date else coalesce(e.visit_end_date,e.visit_start_date) END  )  ",
+        "vocabulary_id": "icd_version",
+        "code": "ICD_CODE",
+        "where_clause": "  "
+    },
+    "paticd_proc": {
+        "dataset": "paticd_proc",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "coalesce(PROC_DATE,e.visit_start_date)",
+        "vocabulary_id": "icd_version",
+        "code": "ICD_CODE",
+        "where_clause": "  "
+    },
+    "genlab": {
+        "dataset": "genlab",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "concept_set_datetime",
+        "vocabulary_id": "LAB_TEST_CODE_TYPE",
+        "code": "lab_test_code",
+        "where_clause": " WHERE  concept_set_datetime is not NULL "
+    },
+    "lab_sens": {
+        "dataset": "lab_sens",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "concept_set_datetime",
+        "vocabulary_id": "SUSC_TEST_METHOD_CODE_TYPE",
+        "code": "SUSC_TEST_METHOD_CODE",
+        "where_clause": " WHERE  concept_set_datetime is not NULL "
+    },
+    "vitals": {
+        "dataset": "vitals",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "e.visit_start_date",
+        "vocabulary_id": "LAB_TEST_CODE_TYPE",
+        "code": "LAB_TEST_CODE",
+        "where_clause": " WHERE  e.visit_start_date is not NULL "
+    },
+    "stdrx": {
+        "dataset": "patbill",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "COALESCE(serv_date,e.visit_start_date)",
+        "vocabulary_id": "'STDRX'",
+        "code": "std_chg_code",
+        "where_clause": " WHERE  startswith(std_chg_code,'250') "
+    },
+    "stdlab": {
+        "dataset": "patbill",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "COALESCE(serv_date,e.visit_start_date)",
+        "vocabulary_id": "'STDLAB'",
+        "code": "std_chg_code",
+        "where_clause": " WHERE  startswith(std_chg_code,'300') "
+    },
+    "stdchg": {
+        "dataset": "patbill",
+        "visit_occurrence_number": "PAT_KEY",
+        "person_id": "patientuid",
+        "visit_start_date": "COALESCE(serv_date,e.visit_start_date)",
+        "vocabulary_id": "'STDCHG'",
+        "code": "std_chg_code",
+        "where_clause": " WHERE NOT startswith(std_chg_code,'250') AND NOT startswith(std_chg_code,'300') "
+    }
+}

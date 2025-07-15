@@ -1,0 +1,1 @@
+"select State, Day, avg(avgPain) as avgPain, avg(avgCMI) as avgCMI, avg(avgADL) as avgADL, count(numResidents) as numResidents\nfrom cdh_pointclickcare_exploratory.qxv3_test_extended\nwhere State in ({{ State_param }})\ngroup by State, Day\norder by Day"

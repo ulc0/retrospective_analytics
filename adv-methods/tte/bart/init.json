@@ -1,0 +1,9 @@
+{
+  "LAMBDA": "np.exp(2 + 0.4*(x_mat[:,0] + x_mat[:,1]))",
+  "n": "100",
+  "x_vars": "2",
+  "cens_ind": "False",
+  "ALPHA": "3",
+  "ALPHA_F": "",
+  "cens_scale": "60"
+}

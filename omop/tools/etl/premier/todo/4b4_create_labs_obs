@@ -1,0 +1,83 @@
+-- labs -> observation
+
+   insert into cdh_premier_omop.observation_temp
+    (
+      person_id,
+      observation_concept_id,
+      observation_date,
+      observation_datetime,
+      observation_type_concept_id,
+      value_as_number,
+      value_as_string,
+      value_as_concept_id,
+      unit_concept_id,
+      -- provider_id,
+      visit_occurrence_id,
+      observation_source_value,
+      observation_source_concept_id,
+      unit_source_value,
+      qualifier_source_value,
+      x_srcid,
+      x_srcloadid,
+      x_srcfile
+    )     
+    select 
+      person_id,
+      observation_concept_id,
+      observation_date,
+      observation_datetime,
+      observation_type_concept_id,
+      value_as_number,
+      value_as_string,
+      value_as_concept_id,
+      unit_concept_id,
+      -- provider_id,
+      visit_occurrence_id,
+      observation_source_value,
+      observation_source_concept_id,
+      unit_source_value,
+      qualifier_source_value,
+      x_srcid,
+      x_srcloadid,
+      x_srcfile
+      x_updatedate
+    from
+    (
+      select 
+          p.person_id as person_id,
+          coalesce( src.tar_concept_id, 0 ) as observation_concept_id,
+          s.measurement_date as observation_date,
+          cast( s.measurement_date as timestamp ) as observation_datetime,
+          coalesce( cast(s.measurement_source_type_value as int), 38000280 )  as observation_type_concept_id,
+          cast( s.value_as_number as numeric ) as value_as_number,
+          s.value_as_string as value_as_string,
+          src.val_concept_id as value_as_concept_id,
+          tarunit.concept_id as unit_concept_id,
+          -- pr.provider_id as provider_id,
+          v.visit_occurrence_id as visit_occurrence_id,
+          s.measurement_source_value as observation_source_value,
+          src.src_concept_id as observation_source_concept_id,
+          s.unit_source_value as unit_source_value,
+          null as qualifier_source_value,
+          s.id as x_srcid,
+          s.load_id as x_srcloadid,
+          'STAGE_LAB' as x_srcfile
+      from cdh_premier_omop_etl.stage_lab_temp s
+      join cdh_premier_omop.person p on  p.person_source_value = s.person_source_value
+      left join cdh_premier_omop.visit_occurrence v on s.visit_source_value = v.visit_source_value and p.person_id = v.person_id
+      join cdh_premier_omop.concept_observation src on s.measurement_source_value = src.raw_concept_code   -- loinc has dashes
+            and s.measurement_source_type = src.src_vocabulary_id
+      left join cdh_premier_omop.concept srcunit on s.unit_source_value = srcunit.concept_code
+          and srcunit.domain_id = 'Unit'
+          and srcunit.invalid_reason is null
+      left join cdh_premier_omop.concept_relationship crunit on srcunit.concept_id = crunit.concept_id_1
+          and crunit.relationship_id = 'Maps to'
+          and crunit.invalid_reason is null
+      left join cdh_premier_omop.concept tarunit on crunit.concept_id_2 = tarunit.concept_id
+          and tarunit.standard_concept = 'S'
+          and tarunit.invalid_reason is null
+     -- left join cdh_premier_omop.provider_source_value pr on s.provider_source_value = pr.provider_source_value
+      where s.load_id = 1
+      and s.measurement_date is not null
+      ) a
+    ;

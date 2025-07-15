@@ -1,0 +1,71 @@
+﻿Table,PrimaryKey,ForeignKey,Name,Description
+CareSite,0,Location,LocationId,The id of the Location where the encounter event took place.
+CareSite,0,CareSite,ParentCareSiteId,The id of the parent Care Site.
+Claim,0,Person,PersonId,System generated identifier of person.
+ClaimLine,0,Person,PersonId,Foreign key reference to the person the claim line is associated.
+ClaimLine,0,Claim,ClaimId,Foreign Key reference for Claim.
+ClaimLineCodes,0,Person,PersonId,Foreign key reference to the person the claim line is associated.
+ClaimLineCodes,0,ClaimLine,ClaimLineId,Foreign Key reference for Claim Line.
+ConceptLink,0,Concept,ConceptId1,Concept Id1 - typically ancestor
+ConceptLink,0,Concept,ConceptId2,Concept Id2 - typically descendant
+Condition,0,Person,PersonId,Foreign key reference linking the condition to Person
+Condition,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+Condition,0,ConditionCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+Condition,0,BodySiteMap,BodySiteMapId,"Normalization Id for the location of the condition, such as 'left arm', etc."
+DeviceUse,0,Person,PersonId,Foreign key reference linking the condition to Person
+DeviceUse,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+DeviceUse,0,Procedure,ProcedureId,The id of the Procedure associated with this event.
+DeviceUse,0,DeviceUseCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+DeviceUse,0,BodySiteMap,BodySiteMapId,Normalization Id for the body site where the device was used.
+Encounter,0,Person,PersonId,Foreign key reference linking the condition to Person
+Encounter,0,Location,FacilityLocationId,The id of the facility location where the encounter took place.
+Encounter,0,CareSite,CareSiteId,The id of the care site in which this event occurred.
+EncounterHistory,0,Person,PersonId,Foreign Key reference to Patient used to join across tables.
+EncounterHistory,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+EncounterHistory,0,CareSite,CareSiteId,The id of the care site in which this event occurred.
+EncounterParticipant,0,Person,PersonId,Foreign key reference linking the condition to Person
+EncounterParticipant,0,Encounter,EncounterId,Foreign Key reference to Encounter used to join across tables.
+EncounterParticipant,0,Practitioner,PractitionerId,The id of the Practitioner who served as the participant.
+EventReference,0,Person,PersonId,Foreign key reference linking the condition to Person
+Extract,0,Person,PersonId,Foreign key reference linking the condition to Person
+Extract,0,ExtractSchema,ExtractSchemaId,The id of the category that references the schema used to validate the data contained in Detail.
+Immunization,0,Person,PersonId,Foreign key reference linking the condition to Person
+Immunization,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+Immunization,0,ImmunizationCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+LabResult,0,Person,PersonId,Foreign key reference linking the condition to Person
+LabResult,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+LabResult,0,ServiceRequest,ServiceRequestId,The id of the ServiceRequest that led to the creation of this LabResult.
+LabResult,0,LabResultCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+MedicationAdministration,0,Person,PersonId,Foreign key reference linking the condition to Person
+MedicationAdministration,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+MedicationAdministration,0,MedicationRequest,RequestId,The id of the MedicationRequest that triggered this administration.
+MedicationAdministration,0,MedicationCodeConceptMap,CodeConceptMapId,Normalization Id for the medication as an encoded concept provided by the source healthcare system linked to a Truveta concept.
+MedicationAdministration,0,BodySiteMap,BodySiteMapId,Normalization Id for subject's body where the medication was administered.
+MedicationDispense,0,Person,PersonId,Foreign key reference linking the medication dispense event to Person
+MedicationDispense,0,Practitioner,DispenserPractitionerId,The id of the practitioner who performed the medication dispense.
+MedicationDispense,0,MedicationCodeConceptMap,CodeConceptMapId,Normalization Id for the medication as an encoded concept provided by the source healthcare system linked to a Truveta concept.
+MedicationRequest,0,Person,PersonId,Foreign key reference to the person the medication request is associated.
+MedicationRequest,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+MedicationRequest,0,Practitioner,RequesterPractitionerId,The id of the Practitioner who requested this medication.
+MedicationRequest,0,MedicationCodeConceptMap,CodeConceptMapId,Normalization Id for the medication as an encoded concept provided by the source healthcare system linked to a Truveta concept.
+MedicationStatement,0,Person,PersonId,Foreign key reference to the person the medication is associated
+MedicationStatement,0,MedicationAdherenceReasonConceptMap,AdherenceReasonConceptMapId,Normalization Id for the reason that the patient is adherent or nonadherent to their medication regimen.
+MedicationStatement,0,MedicationCodeConceptMap,CodeConceptMapId,Normalization Id for the medication as an encoded concept provided by the source healthcare system linked to a Truveta concept.
+MedicationStatement,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+MedicationStatement,0,BodySiteMap,BodySiteMapId,Normalization Id for subject's body where the medication was administered.
+Observation,0,Person,PersonId,Foreign key reference linking the condition to Person
+Observation,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+Observation,0,ObservationCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+Observation,0,BodySiteMap,BodySiteMapId,"Normalization Id for the location of the observation, such as 'left arm', etc."
+ObservationComponent,0,Person,PersonId,Foreign key reference linking the condition to Person
+ObservationComponent,0,Observation,ObservationId,Observation associated with the component finding
+PractitionerQualification,0,Practitioner,PractitionerId,System generated key for Practitioner.
+Procedure,0,Person,PersonId,Foreign key reference linking the procedure to Person
+Procedure,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+Procedure,0,ServiceRequest,ServiceRequestId,The id of the service request that initiated the procedure.
+Procedure,0,ProcedureCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
+Procedure,0,BodySiteMap,BodySiteMapId,"Normalization Id for the location of the procedure, such as 'left arm', etc."
+ServiceRequest,0,Person,PersonId,Foreign key reference linking the condition to Person.
+ServiceRequest,0,Encounter,EncounterId,The id of the Encounter in which this event occurred.
+ServiceRequest,0,Practitioner,RequesterPractitionerId,The id of the practitioner who is created the ServiceRequest.
+ServiceRequest,0,ServiceRequestCodeConceptMap,CodeConceptMapId,Normalization Id for the encoded concept provided by the source healthcare system linked to a Truveta concept.
